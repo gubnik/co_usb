@@ -1,23 +1,14 @@
-> [!IMPORTANT]
-> This is an experimental project until this notice is removed
+#include "boost/capy/ex/run_async.hpp"
+#include "boost/capy/ex/this_coro.hpp"
+#include "boost/capy/task.hpp"
+#include "co_usb/executor.hpp"
+#include "co_usb/raii/device_handle.hpp"
+#include "co_usb/transfer.hpp"
+#include <boost/capy.hpp>
+#include <co_usb/co_usb.hpp>
+#include <libusb-1.0/libusb.h>
+#include <print>
 
-# co_usb
-
-Modern C++ library using C++20 coroutines and [Boost.Capy](https://github.com/cppalliance/capy) to
-create a lightweight interface for [libusb-1.0](https://libusb.info/).
-
-# Design philosophy
-
-The library is designed to *not get in your way* of writing regular `libusb` or `Boost.Capy` code.
-Its interface consists of primitive awaitables satisfying [IoAwaitable](https://develop.capy.cpp.al/capy/4.coroutines/4d.io-awaitable.html)
-protocol and minimal RAII wrappers around `libusb` primitives (context, device handle etc.).
-
-# Goal usage
-
-> [!CAUTION]
-> This may not be functioning code *just yet*!
-
-```cpp
 constexpr uint8_t total    = 8;
 constexpr uint16_t dev_vid = 0x9f9f;
 constexpr uint16_t dev_pid = 0x9f9f;
@@ -59,4 +50,3 @@ int main (int argc, char **argv)
         dispatch_transfers(std::move(devh)));
     hl.run();
 }
-```

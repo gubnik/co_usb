@@ -14,6 +14,6 @@ FetchContent_Declare(capy
     GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(capy)
 
-add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/src/example.cpp)
 target_link_libraries(${PROJECT_NAME} Boost::capy usb-1.0)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
