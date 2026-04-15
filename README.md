@@ -39,7 +39,8 @@ boost::capy::task<void> read_ctrl_in(libusb_context *ctx)
             std::println(stderr, "Cannot open device!");
             continue;
         }
-        auto [ec, n] = co_await co_usb::transfer_awaitable(tfer, devh, boost::capy::mutable_buffer{data, 1024});
+        auto ep = co_usb::ep{co_usb::bulk, devh, 0x81};
+        auto [ec, n] = co_await ep.read_some(tfer, boost::capy::mutable_buffer{data, 1024});
         std::println("{}", std::span{data, 1024});
     }
 }

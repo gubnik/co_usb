@@ -26,8 +26,8 @@ int main(int argc, char **argv)
     libusb_device_handle *devh = libusb_open_device_with_vid_pid(hl.usb_context(), 0x8087, 0x0aaa);
     if (!devh)
     {
-        std::println(stderr, "Niggerlicious device!");
-        return 0;
+        std::println(stderr, "Cannot open device!");
+        return 1;
     }
     boost::capy::run_async(hl.get_executor())(read_ctrl_in(devh));
     hl.run();
