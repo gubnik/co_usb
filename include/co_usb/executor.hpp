@@ -2,6 +2,7 @@
 
 #include "boost/capy/ex/execution_context.hpp"
 #include "boost/capy/ex/frame_allocator.hpp"
+#include <bits/types/struct_timeval.h>
 #include <coroutine>
 #include <libusb-1.0/libusb.h>
 #include <mutex>
@@ -38,15 +39,26 @@ struct handler_loop : public boost::capy::execution_context
 
     void run()
     {
+        std::jthread handler_thread{
+            [&, this](std::stop_token st){
+                timeval tv;
+                tv.tv_sec = 0;
+                tv.tv_usec = 10'000;
+                while(!st.stop_requested())
+                {
+                    libusb_handle_events_timeout(m_ctx, &tv);
+                }
+            }
+        };
         while (!m_queue.empty())
         {
             std::unique_lock lock{m_mtx};
             auto h = m_queue.front();
             m_queue.pop();
             boost::capy::safe_resume(h);
-            lock.unlock();
-            libusb_handle_events(m_ctx);
         }
+        handler_thread.request_stop();
+        handler_thread.join();
     }
     
     void enqueue(std::coroutine_handle<> h)
@@ -64,6 +76,7 @@ struct handler_loop : public boost::capy::execution_context
 
   private:
     libusb_context *m_ctx;
+    std::thread m_thread;
     std::thread::id m_owner;
     std::queue<std::coroutine_handle<>> m_queue;
     std::mutex m_mtx;
