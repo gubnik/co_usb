@@ -1,0 +1,120 @@
+#pragma once
+
+#include "boost/capy/ex/execution_context.hpp"
+#include "boost/capy/ex/frame_allocator.hpp"
+#include <coroutine>
+#include <libusb-1.0/libusb.h>
+#include <mutex>
+#include <queue>
+#include <stdexcept>
+#include <thread>
+
+namespace co_usb
+{
+
+struct handler_loop : public boost::capy::execution_context
+{
+    struct executor_type;
+
+    handler_loop()
+        : boost::capy::execution_context(this)
+    {
+        auto ret = libusb_init(&m_ctx);
+        if (ret < 0)
+            throw std::runtime_error{"Cannot initialize usb context"};
+    }
+
+    ~handler_loop()
+    {
+        shutdown();
+        destroy();
+        libusb_exit(m_ctx);
+    }
+
+    libusb_context * usb_context() noexcept
+    {
+        return m_ctx;
+    }
+
+    void run()
+    {
+        while (!m_queue.empty())
+        {
+            std::unique_lock lock{m_mtx};
+            auto h = m_queue.front();
+            m_queue.pop();
+            boost::capy::safe_resume(h);
+            lock.unlock();
+            libusb_handle_events(m_ctx);
+        }
+    }
+    
+    void enqueue(std::coroutine_handle<> h)
+    {
+        std::unique_lock lock{m_mtx};
+        m_queue.push(h);
+    }
+
+    bool is_running_on_this_thread() const noexcept
+    {
+        return std::this_thread::get_id() == m_owner;
+    }
+
+    executor_type get_executor() noexcept;
+
+  private:
+    libusb_context *m_ctx;
+    std::thread::id m_owner;
+    std::queue<std::coroutine_handle<>> m_queue;
+    std::mutex m_mtx;
+};
+
+class handler_loop::executor_type
+{
+    friend class handler_loop;
+    handler_loop* loop_ = nullptr;
+
+    explicit executor_type(handler_loop& loop) noexcept
+        : loop_(&loop)
+    {
+    }
+
+public:
+    executor_type() = default;
+
+    boost::capy::execution_context& context() const noexcept
+    {
+        return *loop_;
+    }
+
+    void on_work_started() const noexcept {}
+    void on_work_finished() const noexcept {}
+
+    std::coroutine_handle<> dispatch(
+        boost::capy::continuation& c) const
+    {
+        if (loop_->is_running_on_this_thread())
+            return c.h;
+        loop_->enqueue(c.h);
+        return std::noop_coroutine();
+    }
+
+    void post(boost::capy::continuation& c) const
+    {
+        loop_->enqueue(c.h);
+    }
+
+    bool operator==(executor_type const& other) const noexcept
+    {
+        return loop_ == other.loop_;
+    }
+};
+
+inline
+handler_loop::executor_type
+handler_loop::get_executor() noexcept
+{
+    return executor_type{*this};
+}
+
+}
