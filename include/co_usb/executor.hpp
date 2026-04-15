@@ -3,10 +3,8 @@
 #include "boost/capy/ex/execution_context.hpp"
 #include "boost/capy/ex/frame_allocator.hpp"
 #include <bits/types/struct_timeval.h>
-#include <condition_variable>
 #include <coroutine>
 #include <libusb-1.0/libusb.h>
-#include <mutex>
 #include <queue>
 #include <stdexcept>
 #include <stop_token>
@@ -24,23 +22,7 @@ struct handler_loop : public boost::capy::execution_context
         auto ret = libusb_init(&m_ctx);
         if (ret < 0)
             throw std::runtime_error{"Cannot initialize usb context"};
-    }
-
-    ~handler_loop ()
-    {
-        shutdown();
-        destroy();
-        libusb_exit(m_ctx);
-    }
-
-    libusb_context *usb_context () noexcept
-    {
-        return m_ctx;
-    }
-
-    void run ()
-    {
-        auto t = std::jthread(
+        m_thread_opt = std::jthread(
             [&] (std::stop_token st)
             {
                 timeval tv;
@@ -57,7 +39,23 @@ struct handler_loop : public boost::capy::execution_context
                     }
                 }
             });
-        t.join();
+    }
+
+    ~handler_loop ()
+    {
+        shutdown();
+        destroy();
+        libusb_exit(m_ctx);
+    }
+
+    libusb_context *usb_context () noexcept
+    {
+        return m_ctx;
+    }
+
+    void run ()
+    {
+        m_thread_opt->join();
     }
 
     void enqueue (std::coroutine_handle<> h)
@@ -74,7 +72,7 @@ struct handler_loop : public boost::capy::execution_context
 
   private:
     libusb_context *m_ctx;
-    std::thread m_thread;
+    std::optional<std::jthread> m_thread_opt;
     std::thread::id m_owner;
     std::stop_token m_st;
     std::queue<std::coroutine_handle<>> m_queue;

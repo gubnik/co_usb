@@ -32,8 +32,7 @@ struct transfer_env
  */
 struct transfer_awaitable
 {
-    transfer_awaitable (libusb_transfer *tfer, libusb_device_handle *devh)
-        : transfer(tfer), devh(devh)
+    transfer_awaitable (libusb_transfer *tfer) : transfer(tfer)
     {
     }
 
@@ -66,10 +65,10 @@ struct transfer_awaitable
     {
         io_env->frame_allocator->deallocate(
             transfer->user_data, sizeof(transfer_env), alignof(transfer_env));
-        if (transfer->status == LIBUSB_TRANSFER_COMPLETED)
-            return {std::error_code{}, (size_t)transfer->actual_length};
         switch (transfer->status)
         {
+        case LIBUSB_TRANSFER_COMPLETED:
+            return {std::error_code{}, (size_t)transfer->actual_length};
         case LIBUSB_TRANSFER_TIMED_OUT:
             return {std::make_error_code(std::errc::timed_out),
                     (size_t)transfer->actual_length};
@@ -93,7 +92,6 @@ struct transfer_awaitable
     }
 
     libusb_transfer *transfer         = nullptr;
-    libusb_device_handle *devh        = nullptr;
     boost::capy::io_env const *io_env = nullptr;
     boost::capy::continuation cont;
 };

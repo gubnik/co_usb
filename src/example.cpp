@@ -17,7 +17,7 @@ boost::capy::task<void> process_transfer (co_usb::device_handle::raw devh)
                               0);
     for (;;)
     {
-        auto [ec, n] = co_await co_usb::transfer_awaitable(tfer, devh);
+        auto [ec, n] = co_await co_usb::transfer_awaitable(tfer);
         std::println("{}", std::span{data, n});
     }
 }
