@@ -22,13 +22,15 @@ struct device_handle
     device_handle (device_handle &&other)
     {
         release();
-        m_devh = other.m_devh;
+        m_devh       = other.m_devh;
+        other.m_devh = nullptr;
     }
 
     device_handle &operator=(device_handle &&other)
     {
         release();
-        m_devh = other.m_devh;
+        m_devh       = other.m_devh;
+        other.m_devh = nullptr;
         return *this;
     }
 
