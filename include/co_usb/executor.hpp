@@ -3,10 +3,13 @@
 #include "boost/capy/ex/execution_context.hpp"
 #include "boost/capy/ex/frame_allocator.hpp"
 #include <bits/types/struct_timeval.h>
+#include <condition_variable>
 #include <coroutine>
 #include <libusb-1.0/libusb.h>
+#include <mutex>
 #include <queue>
 #include <stdexcept>
+#include <stop_token>
 #include <thread>
 
 namespace co_usb
@@ -37,19 +40,24 @@ struct handler_loop : public boost::capy::execution_context
 
     void run ()
     {
-        timeval tv;
-        tv.tv_sec  = 0;
-        tv.tv_usec = 10'000;
-        for (;;)
-        {
-            libusb_handle_events_timeout(m_ctx, &tv);
-            while (!m_queue.empty())
+        auto t = std::jthread(
+            [&] (std::stop_token st)
             {
-                auto h = m_queue.front();
-                m_queue.pop();
-                boost::capy::safe_resume(h);
-            }
-        }
+                timeval tv;
+                tv.tv_sec  = 0;
+                tv.tv_usec = 10'000;
+                while (!st.stop_requested())
+                {
+                    libusb_handle_events_timeout(m_ctx, &tv);
+                    while (!m_queue.empty() && !st.stop_requested())
+                    {
+                        auto h = m_queue.front();
+                        m_queue.pop();
+                        boost::capy::safe_resume(h);
+                    }
+                }
+            });
+        t.join();
     }
 
     void enqueue (std::coroutine_handle<> h)
@@ -68,6 +76,7 @@ struct handler_loop : public boost::capy::execution_context
     libusb_context *m_ctx;
     std::thread m_thread;
     std::thread::id m_owner;
+    std::stop_token m_st;
     std::queue<std::coroutine_handle<>> m_queue;
 };
 

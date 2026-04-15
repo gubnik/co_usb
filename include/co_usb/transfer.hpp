@@ -45,6 +45,8 @@ struct transfer_awaitable
     std::coroutine_handle<> await_suspend (std::coroutine_handle<> h,
                                            boost::capy::io_env const *env)
     {
+        if (env->stop_token.stop_requested())
+            return h;
         io_env          = env;
         cont            = {h};
         transfer_env *d = (transfer_env *)env->frame_allocator->allocate(
