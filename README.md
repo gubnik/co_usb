@@ -25,18 +25,22 @@ boost::capy::task<void> read_ctrl_in(libusb_context *ctx)
     auto tfer = libusb_alloc_transfer(0);
     
     co_usb::device_handle devh{};
-    while (auto [st, dev] = co_await co_usb::hotplug(ctx))
+    for (;;)
     {
-        if (st == LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT)
+        auto [st, dev] = co_await co_usb::hotplug_event(ctx);
+        if (st == co_usb::hotplug::left)
         {
             devh.reset();
             continue;
         }
-        auto ret = libusb_open(ctx, &devh.get());
-        if (ret != LIBUSB_SUCCESS)
+        else if (st == co_usb::hotplug::arrived)
         {
-            std::println(stderr, "Cannot open device!");
-            continue;
+            auto ret = libusb_open(ctx, &devh.get());
+            if (ret != LIBUSB_SUCCESS)
+            {
+                std::println(stderr, "Cannot open device!");
+                continue;
+            }
         }
         auto ep = co_usb::ep{co_usb::bulk, devh, 0x81};
         auto [ec, n] = co_await ep.read_some(tfer, boost::capy::mutable_buffer{data, 1024});

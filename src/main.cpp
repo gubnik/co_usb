@@ -6,17 +6,17 @@
 #include <libusb-1.0/libusb.h>
 #include <print>
 
-static char data[1024];
+static uint8_t data[1024];
 
 boost::capy::task<void> read_ctrl_in(libusb_device_handle *devh)
 {
     auto env = co_await boost::capy::this_coro::environment;
     auto tfer = libusb_alloc_transfer(0);
-    
+    libusb_fill_bulk_transfer(tfer, devh, 0x81, data, 1024, nullptr, nullptr, 0);
     for (;;)
     {
-        auto [ec, n] = co_await co_usb::transfer_awaitable(tfer, devh, boost::capy::mutable_buffer{data, 1024});
-        std::println("{}", std::span{data, 1024});
+        auto [ec, n] = co_await co_usb::transfer_awaitable(tfer, devh);
+        std::println("{}", std::span{data, n});
     }
 }
 
