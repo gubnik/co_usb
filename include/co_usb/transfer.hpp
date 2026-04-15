@@ -6,7 +6,6 @@
 #include "boost/capy/ex/io_env.hpp"
 #include "boost/capy/io_result.hpp"
 #include <coroutine>
-#include <cstdint>
 #include <libusb-1.0/libusb.h>
 #include <print>
 
@@ -22,6 +21,7 @@ struct transfer_env
 struct transfer_awaitable
 {
     transfer_awaitable(libusb_transfer* tfer, libusb_device_handle *devh, boost::capy::mutable_buffer mb)
+    : transfer(tfer), devh(devh), buffer(mb)
     {
 
     }
@@ -54,7 +54,6 @@ struct transfer_awaitable
     
     libusb_transfer *transfer = nullptr;
     libusb_device_handle *devh;
-    uint8_t ep;
     boost::capy::mutable_buffer buffer;
     boost::capy::continuation cont;
 };

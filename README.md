@@ -22,7 +22,6 @@ static char data[1024];
 
 boost::capy::task<void> read_ctrl_in(libusb_context *ctx)
 {
-    auto env = co_await boost::capy::this_coro::environment;
     auto tfer = libusb_alloc_transfer(0);
     
     co_usb::device_handle devh{};
