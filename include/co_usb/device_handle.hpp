@@ -61,11 +61,6 @@ struct device_handle
         return (bool)m_devh;
     }
 
-    operator libusb_device_handle *() const noexcept
-    {
-        return m_devh;
-    }
-
   private:
     libusb_device_handle *m_devh = nullptr;
 };
