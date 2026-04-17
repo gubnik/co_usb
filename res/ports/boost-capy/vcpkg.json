@@ -1,0 +1,19 @@
+{
+    "name": "boost-capy",
+    "version": "1.0.0",
+    "description": "Capy abstracts away sockets, files, and asynchrony with type-erased streams and buffer sequences—code compiles fast because the implementation is hidden. It provides the framework for concurrent algorithms that transact in buffers of memory: networking, serial ports, console, timers, and any platform I/O. This is only possible because Capy is coroutine-only, enabling optimizations and ergonomics that hybrid approaches must sacrifice",
+    "homepage": "https://develop.capy.cpp.al/capy/index.html",
+    "license": "BSL-1.0",
+    "dependencies": [
+        {
+            "name": "vcpkg-cmake",
+            "host": true
+        },
+        {
+            "name": "vcpkg-cmake-config",
+            "host": true
+        }
+    ],
+    "default-features": [],
+    "features": {}
+}

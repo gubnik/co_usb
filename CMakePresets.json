@@ -1,0 +1,28 @@
+{
+    "version": 10,
+    "cmakeMinimumRequired": {"major": 3, "minor": 31},
+    "configurePresets": [
+        {
+            "hidden": true,
+            "name": "default",
+            "generator": "Ninja Multi-Config",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/build/${presetName}",
+            "toolchainFile": "${sourceDir}/res/toolchain.cmake",
+            "cacheVariables": {
+                "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
+                "CMAKE_CXX_SCAN_FOR_MODULES": false,
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "CMAKE_VERBOSE_MAKEFILE": false
+            }
+        },
+        {
+            "name": "x64-dyn",
+            "inherits": "default",
+            "architecture": {"strategy": "external", "value": "x64"},
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-linux"
+            }
+        }
+    ]
+}

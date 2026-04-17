@@ -1,0 +1,22 @@
+vcpkg_from_github(
+    OUT_SOURCE_PATH SOURCE_PATH
+    REPO cppalliance/capy
+    REF develop
+    SHA512 392215b5fb1fb4ffdcd89c1d5bfb12ddd032e925b437718146418ee4470d9251512cdd9eabbf5ad7c6b3d9299837deef212c1ca37a3a647fa500a90e8be09a5b
+)
+
+vcpkg_configure_cmake(
+    SOURCE_PATH ${SOURCE_PATH}
+    PREFER_NINJA
+    OPTIONS
+    -DBOOST_CAPY_BUILD_TESTS=OFF
+    -DBOOST_CAPY_BUILD_EXAMPLES=OFF
+    -DBOOST_CAPY_BUILD_BENCH=OFF
+    -DBOOST_CAPY_BUILD_P2300_EXAMPLES=OFF
+    -DBOOST_CAPY_MRDOCS_BUILD=OFF
+)
+
+vcpkg_install_cmake()
+
+vcpkg_copy_pdbs()
+
