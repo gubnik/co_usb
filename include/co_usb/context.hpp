@@ -65,6 +65,9 @@ struct context
 
     auto spawn_handler_thread (timeval tv = {.tv_sec = 0, .tv_usec = 10'000})
     {
+        if (m_opt_handler)
+            throw std::runtime_error{
+                "Cannot create a handler thread because it was already created"};
         m_opt_handler = std::thread{[st = m_ss.get_token(), tv, this] ()
                                     {
                                         timeval _tv = tv;
@@ -75,16 +78,7 @@ struct context
                                     }};
     }
 
-    boost::capy::task<void> spawn_handler (timeval tv = {.tv_sec = 0, .tv_usec = 10'000})
-    {
-        auto st = co_await boost::capy::this_coro::stop_token;
-        while (!st.stop_requested())
-        {
-            libusb_handle_events_timeout(m_ctx, &tv);
-        }
-    }
-
-    auto stop_handler ()
+    auto request_stop ()
     {
         m_ss.request_stop();
     }

@@ -1,4 +1,4 @@
-#include <co_usb/transfer_awaitable.hpp>
+#include <co_usb/tfer/transfer_awaitable.hpp>
 #include <libusb-1.0/libusb.h>
 
 struct transfer_env

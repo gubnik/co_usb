@@ -17,5 +17,7 @@ echo "\033[1;33mvcpkg located at $VCPKG_ROOT\033[0;0m"
 rm -rf build/$PRESET
 mkdir -p build/$PRESET
 cmake --preset=$PRESET && \
-    ln -s build/$PRESET/compile_commands.json compile_commands.json && \
     cmake --build build/$PRESET --config ${BUILD_TYPE}
+if [ ! -f compile_commands.json ]; then
+    ln -s build/$PRESET/compile_commands.json compile_commands.json
+fi
