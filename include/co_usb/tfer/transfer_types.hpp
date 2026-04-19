@@ -16,6 +16,8 @@ template <endpoint_type EpType, ep_direction Direction> struct basic_transfer
     explicit basic_transfer (int iso_packets = 0)
         : m_tfer{libusb_alloc_transfer(iso_packets), libusb_free_transfer}
     {
+        if (!m_tfer)
+            throw std::bad_alloc{};
     }
 
     constexpr endpoint_type ep_type () const noexcept
@@ -29,7 +31,7 @@ template <endpoint_type EpType, ep_direction Direction> struct basic_transfer
     }
 
     [[nodiscard]] boost::capy::io_task<size_t> read_some (boost::capy::mutable_buffer buf)
-        requires(Direction == ep_direction::in)
+        requires(Direction == ep_direction::in || Direction == ep_direction::both)
     {
         auto tfer    = m_tfer.get();
         tfer->buffer = (uint8_t *)buf.data();
@@ -38,7 +40,7 @@ template <endpoint_type EpType, ep_direction Direction> struct basic_transfer
     }
 
     boost::capy::io_task<size_t> write_some (boost::capy::const_buffer buf)
-        requires(Direction == ep_direction::out)
+        requires(Direction == ep_direction::out || Direction == ep_direction::both)
     {
         auto tfer    = m_tfer.get();
         tfer->buffer = (uint8_t *)buf.data();
@@ -49,8 +51,20 @@ template <endpoint_type EpType, ep_direction Direction> struct basic_transfer
   protected:
     unique_transfer m_tfer;
 };
+struct control_transfer : public basic_transfer<endpoint_type::control, ep_direction::both>
+{
+    explicit control_transfer (libusb_device_handle *devh,
+                               std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
+        : basic_transfer<endpoint_type::control, ep_direction::both>()
+    {
+        libusb_fill_control_transfer(this->m_tfer.get(), devh, nullptr, nullptr, nullptr,
+                                     timeout_ms.count());
+    }
+};
 
-template <ep_direction Dir> struct bulk_transfer : public basic_transfer<endpoint_type::bulk, Dir>
+template <ep_direction Dir>
+    requires(Dir != ep_direction::both)
+struct bulk_transfer : public basic_transfer<endpoint_type::bulk, Dir>
 {
     explicit bulk_transfer (endpoint<Dir> ep,
                             std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
@@ -62,6 +76,7 @@ template <ep_direction Dir> struct bulk_transfer : public basic_transfer<endpoin
 };
 
 template <ep_direction Dir>
+    requires(Dir != ep_direction::both)
 struct interrupt_transfer : public basic_transfer<endpoint_type::interrupt, Dir>
 {
     explicit interrupt_transfer (
@@ -74,6 +89,7 @@ struct interrupt_transfer : public basic_transfer<endpoint_type::interrupt, Dir>
 };
 
 template <ep_direction Dir>
+    requires(Dir != ep_direction::both)
 struct isochronous_transfer : public basic_transfer<endpoint_type::isochronous, Dir>
 {
     explicit isochronous_transfer (

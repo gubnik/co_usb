@@ -16,8 +16,9 @@ enum class endpoint_type : uint8_t
 
 enum class ep_direction
 {
-    out = 0x00,
-    in  = 0x80,
+    out  = 0x00,
+    in   = 0x80,
+    both = 0xFF,
 };
 
 template <ep_direction Direction> struct endpoint
