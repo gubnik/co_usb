@@ -16,9 +16,9 @@ co_usb::unique_dev_handle co_usb::open (libusb_device *dev)
 }
 
 co_usb::interface_holder::interface_holder (libusb_device_handle *devh, int interface_num)
-    : m_interface_num(interface_num)
+    : m_devh(devh), m_interface_num(interface_num)
 {
-    auto r = libusb_claim_interface(devh, m_interface_num);
+    auto r = libusb_claim_interface(m_devh, m_interface_num);
     if (r != LIBUSB_SUCCESS)
     {
         throw std::runtime_error{std::format("Could not claim the interface {}", m_interface_num)};

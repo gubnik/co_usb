@@ -1,21 +1,42 @@
 #pragma once
 
+#include "co_usb/service.hpp"
+#include <boost/capy/concept/executor.hpp>
 #include <boost/capy/ex/this_coro.hpp>
 #include <boost/capy/task.hpp>
 #include <concepts>
 #include <libusb-1.0/libusb.h>
-#include <optional>
 #include <ranges>
 #include <stdexcept>
 #include <stop_token>
-#include <thread>
 
 namespace co_usb
 {
 
-struct context
+enum class use_service
 {
+    no = 0,
+    yes
+};
+
+template <use_service Service = use_service::yes> struct context
+{
+    explicit context (boost::capy::Executor auto &&exec,
+                      timeval tv = {.tv_sec = 0, .tv_usec = 10'000})
+        requires(Service == use_service::yes)
+    {
+        auto r = libusb_init(&m_ctx);
+        if (r != LIBUSB_SUCCESS)
+        {
+            throw std::runtime_error{"Cannot initialize libusb"};
+        }
+        detail::handler_service &service =
+            exec.context().template use_service<detail::handler_service>();
+        service.start_thread(m_ctx, m_ss.get_token(), tv);
+    }
+
     explicit context ()
+        requires(Service == use_service::no)
     {
         auto r = libusb_init(&m_ctx);
         if (r != LIBUSB_SUCCESS)
@@ -41,8 +62,6 @@ struct context
 
     ~context ()
     {
-        if (m_opt_handler)
-            m_opt_handler->join();
         if (m_ctx)
             libusb_exit(m_ctx);
     }
@@ -63,21 +82,6 @@ struct context
         return m_ctx;
     }
 
-    auto spawn_handler_thread (timeval tv = {.tv_sec = 0, .tv_usec = 10'000})
-    {
-        if (m_opt_handler)
-            throw std::runtime_error{
-                "Cannot create a handler thread because it was already created"};
-        m_opt_handler = std::thread{[st = m_ss.get_token(), tv, this] ()
-                                    {
-                                        timeval _tv = tv;
-                                        while (!st.stop_requested())
-                                        {
-                                            libusb_handle_events_timeout(m_ctx, &_tv);
-                                        }
-                                    }};
-    }
-
     auto request_stop ()
     {
         m_ss.request_stop();
@@ -91,7 +95,6 @@ struct context
   private:
     libusb_context *m_ctx;
     std::stop_source m_ss;
-    std::optional<std::thread> m_opt_handler;
 };
 
 } // namespace co_usb

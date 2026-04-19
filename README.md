@@ -14,14 +14,14 @@ The library is designed to *not get in your way* of writing regular `libusb` or 
 Its interface consists of primitive awaitables satisfying [IoAwaitable](https://develop.capy.cpp.al/capy/4.coroutines/4d.io-awaitable.html)
 protocol and minimal RAII wrappers around `libusb` primitives (context, device handle etc.).
 
-# Elements
-- `co_usb::transfer_awaitable`, an `IoAwaitable` which submits the tranfer on suspension and resumes on arrival;
-- `co_usb::context` wrapper around `libusb_context` with RAII and a built-in default handler thread *(totally optional to use!)*;
-- `co_usb::unique_transfer`, `unique_dev_handle` and `interface_holder` RAII wrappers;
-- `ReadStream`/`WriteStream` abstractions over endpoint reads (100% syntactic sugar);
+The library builds on multiple levels of abstractions that allow wide range of possible usages:
+1. Raw `transfer_awaitable` that accepts any `libusb_transfer*`, it should be used for maximum control over transfers
+2. Wrapped `xxx_transfer` types which act as `ReadStream` or `WriteStream` - 100% syntactic sugar for compatibility with `Capy`-based libraries
 
 # Wiki
+
 Pending
 
 # Example
+
 See `/examples`

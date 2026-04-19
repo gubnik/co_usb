@@ -5,7 +5,11 @@
     "license": "MIT",
     "dependencies": [
         "boost-capy",
-        "libusb",
+        {
+            "name": "libusb",
+            "default-features": false,
+            "features": []
+        },
         {
             "name": "vcpkg-cmake",
             "host": true
