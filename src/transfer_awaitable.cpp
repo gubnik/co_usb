@@ -1,3 +1,4 @@
+#include "co_usb/tfer/error.hpp"
 #include <co_usb/tfer/transfer_awaitable.hpp>
 #include <libusb-1.0/libusb.h>
 
@@ -26,28 +27,17 @@ std::coroutine_handle<> co_usb::transfer_awaitable::await_suspend (std::coroutin
         transfer_env *tv = (transfer_env *)tfer->user_data;
         tv->io_env->executor.post(tv->cont);
     };
-    libusb_submit_transfer(transfer);
+    auto r = libusb_submit_transfer(transfer);
+    if (r != LIBUSB_SUCCESS)
+    {
+        transfer->status        = LIBUSB_TRANSFER_ERROR;
+        transfer->actual_length = 0;
+        return h;
+    }
     return std::noop_coroutine();
 }
 
 boost::capy::io_result<size_t> co_usb::transfer_awaitable::await_resume ()
 {
-    switch (transfer->status)
-    {
-    case LIBUSB_TRANSFER_COMPLETED: return {std::error_code{}, (size_t)transfer->actual_length};
-    case LIBUSB_TRANSFER_TIMED_OUT:
-        return {std::make_error_code(std::errc::timed_out), (size_t)transfer->actual_length};
-    case LIBUSB_TRANSFER_CANCELLED:
-        return {std::make_error_code(std::errc::operation_canceled),
-                (size_t)transfer->actual_length};
-    case LIBUSB_TRANSFER_NO_DEVICE:
-        return {std::make_error_code(std::errc::no_such_device), (size_t)transfer->actual_length};
-    case LIBUSB_TRANSFER_STALL:
-        return {std::make_error_code(std::errc::device_or_resource_busy),
-                (size_t)transfer->actual_length};
-    case LIBUSB_TRANSFER_OVERFLOW:
-        return {std::make_error_code(std::errc::no_buffer_space), (size_t)transfer->actual_length};
-    case LIBUSB_TRANSFER_ERROR:
-    default: return {std::make_error_code(std::errc::io_error), (size_t)transfer->actual_length};
-    }
+    return {make_transfer_status(transfer->status), static_cast<size_t>(transfer->actual_length)};
 }
