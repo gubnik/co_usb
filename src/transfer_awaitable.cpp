@@ -1,12 +1,6 @@
 #include <co_usb/tfer/transfer_awaitable.hpp>
 #include <libusb-1.0/libusb.h>
 
-struct transfer_env
-{
-    boost::capy::io_env const *io_env;
-    boost::capy::continuation cont;
-};
-
 co_usb::transfer_awaitable::transfer_awaitable (libusb_transfer *tfer) noexcept : transfer(tfer)
 {
 }
@@ -24,12 +18,9 @@ std::coroutine_handle<> co_usb::transfer_awaitable::await_suspend (std::coroutin
         libusb_cancel_transfer(transfer);
         return h;
     }
-    io_env = env;
-    cont   = {h};
-    transfer_env *d =
-        (transfer_env *)env->frame_allocator->allocate(sizeof(transfer_env), alignof(transfer_env));
-    new (d) transfer_env(env, cont);
-    transfer->user_data = d;
+    tfer_env.io_env     = env;
+    tfer_env.cont       = {h};
+    transfer->user_data = &tfer_env;
     transfer->callback  = [] (libusb_transfer *tfer)
     {
         transfer_env *tv = (transfer_env *)tfer->user_data;
@@ -41,8 +32,6 @@ std::coroutine_handle<> co_usb::transfer_awaitable::await_suspend (std::coroutin
 
 boost::capy::io_result<size_t> co_usb::transfer_awaitable::await_resume ()
 {
-    io_env->frame_allocator->deallocate(transfer->user_data, sizeof(transfer_env),
-                                        alignof(transfer_env));
     switch (transfer->status)
     {
     case LIBUSB_TRANSFER_COMPLETED: return {std::error_code{}, (size_t)transfer->actual_length};

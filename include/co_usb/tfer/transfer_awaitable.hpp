@@ -35,9 +35,12 @@ struct transfer_awaitable
 
     boost::capy::io_result<size_t> await_resume();
 
-    libusb_transfer *transfer         = nullptr;
-    boost::capy::io_env const *io_env = nullptr;
-    boost::capy::continuation cont;
+    libusb_transfer *transfer = nullptr;
+    struct transfer_env
+    {
+        boost::capy::io_env const *io_env = nullptr;
+        boost::capy::continuation cont;
+    } tfer_env;
 };
 
 static_assert(boost::capy::IoAwaitable<transfer_awaitable>);

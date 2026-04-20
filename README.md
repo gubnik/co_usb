@@ -18,6 +18,22 @@ The library builds on multiple levels of abstractions that allow wide range of p
 1. Raw `transfer_awaitable` that accepts any `libusb_transfer*`, it should be used for maximum control over transfers
 2. Wrapped `xxx_transfer` types which act as `ReadStream` or `WriteStream` - 100% syntactic sugar for compatibility with `Capy`-based libraries
 
+# Error handling policy
+
+`co_usb` uses a *combined approach* to error handling: error codes for I/O and recoverable error, and exceptions for when
+there is not way to recover.
+
+## Example
+### Error code
+```cpp
+auto [ec, n] = co_await tfer.read_some(buffer);
+```
+
+### Exception
+```cpp
+auto ctx = co_usb::context{}; // could not initialize - we're stuck, throw!!
+```
+
 # Wiki
 
 Pending
