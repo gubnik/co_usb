@@ -45,11 +45,12 @@ struct transfer_status_category_t : public std::error_category
         {
             using enum transfer_status;
         case completed: return "completed";
-        case error: return "unknown error";
+        case error: return "error";
         case cancelled: return "cancelled";
         case stall: return "device stalled";
         case no_device: return "no such device";
         case overflow: return "data overflow";
+        default: return "unknown";
         }
     }
 };

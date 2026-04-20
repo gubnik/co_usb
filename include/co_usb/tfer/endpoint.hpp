@@ -21,9 +21,43 @@ enum class ep_direction
     both = 0xFF,
 };
 
+/**
+ * @tparam Direction direction of an endpoint
+ */
 template <ep_direction Direction> struct endpoint
 {
-    endpoint (uint8_t ep, libusb_device_handle *devh) : m_ep(ep), m_devh(devh)
+    /**
+     * @brief makes an endpoint and completes address to proper value
+     *
+     * @details Example:
+     * @li ep_direction::out ep = 0x83 -> 0x03
+     * @li ep_direction::in ep = 0x83 -> 0x83
+     * @li ep_direction::in ep = 0x03 -> 0x83
+     */
+    static endpoint<Direction> make_safe (uint8_t ep, libusb_device_handle *devh) noexcept
+    {
+        if constexpr (Direction == ep_direction::out)
+        {
+            return {ep ^ LIBUSB_ENDPOINT_IN, devh};
+        }
+        else if constexpr (Direction == ep_direction::in)
+        {
+            return {ep | LIBUSB_ENDPOINT_IN, devh};
+        }
+        return {ep, devh};
+    }
+
+    static endpoint<Direction> make_unsafe (uint8_t ep, libusb_device_handle *devh) noexcept
+    {
+        return {ep, devh};
+    }
+
+    /**
+     * @brief creates an endpoint or throws if the address doesn't match expected direction
+     *
+     * @thrown @ref std::invalid_argument when endpoint address does not match @tp Direction
+     */
+    static endpoint<Direction> make_throwing (uint8_t ep, libusb_device_handle *devh)
     {
         if constexpr (Direction == ep_direction::out)
         {
@@ -39,6 +73,7 @@ template <ep_direction Direction> struct endpoint
                 throw std::invalid_argument{"Cannot use OUT endpoint for IN"};
             }
         }
+        return {ep, devh};
     }
 
     uint8_t addr () const noexcept
@@ -46,14 +81,14 @@ template <ep_direction Direction> struct endpoint
         return m_ep;
     }
 
-    auto dev () noexcept
+    auto *dev () const noexcept
     {
         return m_devh;
     }
 
-    auto *dev () const noexcept
+  private:
+    endpoint (uint8_t ep, libusb_device_handle *devh) : m_ep(ep), m_devh(devh)
     {
-        return m_devh;
     }
 
   private:

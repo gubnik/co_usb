@@ -24,8 +24,7 @@ boost::capy::task<void> process_transfer (libusb_device_handle *devh)
     auto st = co_await boost::capy::this_coro::stop_token;
     std::array<uint8_t, 16 * 16> data;
     // create a transfer (syntactic sugar over transfer_awaitable)
-    co_usb::bulk_transfer<co_usb::ep_direction::in> tfer{{0x81, devh},
-                                                         std::chrono::milliseconds{0'050}};
+    co_usb::bulk_transfer tfer{co_usb::ep_in(0x81, devh), std::chrono::milliseconds{0'050}};
     while (!st.stop_requested())
     {
         auto [ec, n] = co_await tfer.read_some({data.data(), data.size()});
@@ -55,7 +54,6 @@ int main (int argc, char **argv)
         std::println(stderr, "Cannot open device!");
         return 1;
     }
-
     // claim interface and release on scope end (RAII)
     co_usb::interface_holder interface{devh.get(), dev_iface};
     for (uint8_t i = 0; i < total; i++)
