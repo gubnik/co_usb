@@ -8,6 +8,7 @@
  * I test all my examples on a primitive virtual device in QEMU.
  */
 
+#include "co_usb/interface.hpp"
 #include <boost/capy.hpp>
 #include <co_usb.hpp>
 #include <csignal>
@@ -19,12 +20,12 @@ constexpr uint16_t dev_pid  = 0x9f9f;
 constexpr uint8_t dev_ep    = 0x81;
 constexpr uint8_t dev_iface = 0;
 
-boost::capy::task<void> process_transfer (libusb_device_handle *devh)
+boost::capy::task<void> process_transfer (const co_usb::interface &iface)
 {
     auto st = co_await boost::capy::this_coro::stop_token;
     std::array<uint8_t, 16 * 16> data;
     // create a transfer (syntactic sugar over transfer_awaitable)
-    co_usb::bulk_transfer tfer{co_usb::ep_in(0x81, devh), std::chrono::milliseconds{0'050}};
+    co_usb::bulk_transfer tfer{co_usb::ep_in(0x81, iface), std::chrono::milliseconds{0'050}};
     while (!st.stop_requested())
     {
         auto [ec, n] = co_await tfer.read_some({data.data(), data.size()});
@@ -55,10 +56,10 @@ int main (int argc, char **argv)
         return 1;
     }
     // claim interface and release on scope end (RAII)
-    co_usb::interface<> interface{devh.get(), dev_iface};
+    co_usb::interface iface{devh.get(), dev_iface};
     for (uint8_t i = 0; i < total; i++)
     {
-        boost::capy::run_async(tp.get_executor(), ctx.get_token())(process_transfer(devh.get()));
+        boost::capy::run_async(tp.get_executor(), ctx.get_token())(process_transfer(iface));
     }
     std::signal(SIGINT, [] (int) { ctx.request_stop(); });
     tp.join();

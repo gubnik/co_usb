@@ -1,7 +1,9 @@
 #pragma once
 
+#include "co_usb/interface.hpp"
 #include <libusb-1.0/libusb.h>
 #include <stdexcept>
+
 namespace co_usb
 {
 
@@ -34,17 +36,17 @@ template <ep_direction Direction> struct endpoint
      * @li ep_direction::in ep = 0x83 -> 0x83
      * @li ep_direction::in ep = 0x03 -> 0x83
      */
-    static endpoint<Direction> make_safe (uint8_t ep, libusb_device_handle *devh) noexcept
+    static endpoint<Direction> make_safe (uint8_t ep, const interface &iface) noexcept
     {
         if constexpr (Direction == ep_direction::out)
         {
-            return {ep ^ LIBUSB_ENDPOINT_IN, devh};
+            return {ep ^ LIBUSB_ENDPOINT_IN, iface.dev()};
         }
         else if constexpr (Direction == ep_direction::in)
         {
-            return {ep | LIBUSB_ENDPOINT_IN, devh};
+            return {ep | LIBUSB_ENDPOINT_IN, iface.dev()};
         }
-        return {ep, devh};
+        return {ep, iface.dev()};
     }
 
     static endpoint<Direction> make_unsafe (uint8_t ep, libusb_device_handle *devh) noexcept
@@ -99,11 +101,11 @@ template <ep_direction Direction> struct endpoint
 /**
  * @brief wrapper around endpoint<co_usb::ep_direction::in>::make_safe
  */
-endpoint<ep_direction::in> ep_in(uint8_t ep, libusb_device_handle *devh);
+endpoint<ep_direction::in> ep_in(uint8_t ep, const interface &iface);
 
 /**
  * @brief wrapper around endpoint<co_usb::ep_direction::out>::make_safe
  */
-endpoint<ep_direction::out> ep_out(uint8_t ep, libusb_device_handle *devh);
+endpoint<ep_direction::out> ep_out(uint8_t ep, const interface &iface);
 
 } // namespace co_usb

@@ -3,17 +3,13 @@
 #include <libusb-1.0/libusb.h>
 namespace co_usb
 {
-enum class detach_kernel_module
-{
-    no = 0,
-    yes
-};
 
-template <detach_kernel_module DetachModule = detach_kernel_module::yes> struct interface
+struct interface
 {
-    interface (libusb_device_handle *devh, int iface) : m_devh(devh), m_iface(iface)
+    interface (libusb_device_handle *devh, int iface, bool detach_kernel_module = true)
+        : m_devh(devh), m_iface(iface)
     {
-        if constexpr (DetachModule == detach_kernel_module::yes)
+        if (detach_kernel_module)
         {
             libusb_detach_kernel_driver(m_devh, m_iface);
         }
@@ -25,7 +21,7 @@ template <detach_kernel_module DetachModule = detach_kernel_module::yes> struct 
         libusb_release_interface(m_devh, m_iface);
     }
 
-    auto device_handle () const noexcept
+    auto dev () const noexcept
     {
         return m_devh;
     }

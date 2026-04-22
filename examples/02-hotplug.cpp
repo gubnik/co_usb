@@ -15,8 +15,8 @@ constexpr uint8_t dev_iface = 0;
 
 boost::capy::task<> dev_loop (co_usb::unique_dev_handle devh)
 {
-    co_usb::interface<> iface{devh.get(), dev_iface};
-    co_usb::bulk_transfer read_in{co_usb::ep_in(0x01, devh.get())};
+    co_usb::interface iface{devh.get(), dev_iface};
+    co_usb::bulk_transfer read_in{co_usb::ep_in(0x01, iface)};
     char buf[1024];
     for (;;)
     {
