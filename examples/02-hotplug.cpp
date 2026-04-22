@@ -1,3 +1,9 @@
+/**
+ *
+ * Minimal example demonstrating hotplug API usage for reconnecting devices
+ *
+ */
+
 #include <boost/capy.hpp>
 #include <co_usb.hpp>
 #include <libusb-1.0/libusb.h>
@@ -9,8 +15,8 @@ constexpr uint8_t dev_iface = 0;
 
 boost::capy::task<> dev_loop (co_usb::unique_dev_handle devh)
 {
-    co_usb::interface_holder iface{devh.get(), dev_iface};
-    co_usb::bulk_transfer read_in{co_usb::ep_in(0x81, devh.get())};
+    co_usb::interface<> iface{devh.get(), dev_iface};
+    co_usb::bulk_transfer read_in{co_usb::ep_in(0x01, devh.get())};
     char buf[1024];
     for (;;)
     {

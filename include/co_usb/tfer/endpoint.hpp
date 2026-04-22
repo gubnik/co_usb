@@ -96,7 +96,14 @@ template <ep_direction Direction> struct endpoint
     libusb_device_handle *m_devh;
 };
 
+/**
+ * @brief wrapper around endpoint<co_usb::ep_direction::in>::make_safe
+ */
 endpoint<ep_direction::in> ep_in(uint8_t ep, libusb_device_handle *devh);
+
+/**
+ * @brief wrapper around endpoint<co_usb::ep_direction::out>::make_safe
+ */
 endpoint<ep_direction::out> ep_out(uint8_t ep, libusb_device_handle *devh);
 
 } // namespace co_usb

@@ -21,20 +21,4 @@ unique_dev_handle open(libusb_device *dev);
 using transfer_deleter_t = std::decay_t<decltype(libusb_free_transfer)>;
 using unique_transfer    = std::unique_ptr<libusb_transfer, transfer_deleter_t>;
 
-// Interface
-struct interface_holder
-{
-    explicit interface_holder(libusb_device_handle *devh, int interface_num);
-    ~interface_holder() noexcept;
-
-    interface_holder(interface_holder const &)            = delete;
-    interface_holder(interface_holder &&)                 = delete;
-    interface_holder &operator=(interface_holder const &) = delete;
-    interface_holder &operator=(interface_holder &&)      = delete;
-
-  private:
-    libusb_device_handle *m_devh;
-    int m_interface_num;
-};
-
 } // namespace co_usb

@@ -55,7 +55,7 @@ int main (int argc, char **argv)
         return 1;
     }
     // claim interface and release on scope end (RAII)
-    co_usb::interface_holder interface{devh.get(), dev_iface};
+    co_usb::interface<> interface{devh.get(), dev_iface};
     for (uint8_t i = 0; i < total; i++)
     {
         boost::capy::run_async(tp.get_executor(), ctx.get_token())(process_transfer(devh.get()));

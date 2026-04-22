@@ -1,6 +1,7 @@
 #pragma once
 
 #include <co_usb/context.hpp>
+#include <co_usb/interface.hpp>
 #include <co_usb/raii.hpp>
 
 // Transfers

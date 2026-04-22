@@ -4,7 +4,6 @@
  * Demonstrates compile-time direction semantic and basics of reads and writes.
  */
 
-#include "co_usb/raii.hpp"
 #include <array>
 #include <boost/capy.hpp>
 #include <co_usb.hpp>
@@ -40,7 +39,7 @@ int main (int argc, char **argv)
     co_usb::unique_dev_handle devh = co_usb::open_vid_pid(ctx.get(), dev_vid, dev_pid);
     if (!devh)
         return 1;
-    co_usb::interface_holder iface{devh.get(), dev_iface};
+    co_usb::interface<> iface{devh.get(), dev_iface};
     boost::capy::run_async(tp.get_executor())(echo(devh.get()));
     tp.join();
 }
