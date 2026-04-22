@@ -19,10 +19,16 @@ enum class use_service
     yes
 };
 
+/**
+ * @brief libusb_context wrapper
+ *
+ * @tparam Service whether to create a handler service or not
+ */
 template <use_service Service = use_service::yes> struct context
 {
-    explicit context (boost::capy::Executor auto &&exec,
-                      timeval tv = {.tv_sec = 0, .tv_usec = 10'000})
+    explicit context (
+        boost::capy::Executor auto &&exec,
+        detail::handler_service::handler_fn_t handler_fn = detail::handler_service::default_handler)
         requires(Service == use_service::yes)
     {
         auto r = libusb_init(&m_ctx);
@@ -32,7 +38,7 @@ template <use_service Service = use_service::yes> struct context
         }
         detail::handler_service &service =
             exec.context().template use_service<detail::handler_service>();
-        service.start_thread(m_ctx, m_ss.get_token(), tv);
+        service.start_thread(m_ctx, m_ss.get_token(), handler_fn);
     }
 
     explicit context ()

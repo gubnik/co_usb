@@ -19,6 +19,7 @@ namespace co_usb::detail
  */
 struct handler_service : public boost::capy::execution_context::service
 {
+    using handler_fn_t = void (*)(libusb_context *, std::stop_token);
     handler_service(boost::capy::execution_context &ctx);
 
     /**
@@ -27,14 +28,18 @@ struct handler_service : public boost::capy::execution_context::service
      * Cannot be put into ctor because this must be optional
      * and services cannot take additional ctor params.
      */
-    void start_thread(libusb_context *ctx, std::stop_token st,
-                      timeval tv = {.tv_sec = 0, .tv_usec = 10'000});
+    void start_thread(libusb_context *ctx, std::stop_token st, handler_fn_t);
+
+    /**
+     * @brief default handler function for the service
+     */
+    static void default_handler(libusb_context *ctx, std::stop_token st);
 
     ~handler_service() override;
     void shutdown() override;
 
   private:
-    std::optional<std::jthread> m_handler_thread;
+    std::optional<std::thread> m_handler_thread;
 };
 
 } // namespace co_usb::detail
