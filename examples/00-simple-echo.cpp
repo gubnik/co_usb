@@ -31,5 +31,5 @@ int main (int argc, char **argv)
         return 1;
     co_usb::interface_holder iface{devh.get(), dev_iface};
     boost::capy::run_async(tp.get_executor())(echo(devh.get()));
-    tp.get_executor();
+    tp.join();
 }
