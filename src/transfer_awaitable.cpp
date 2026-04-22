@@ -19,13 +19,13 @@ std::coroutine_handle<> co_usb::transfer_awaitable::await_suspend (std::coroutin
         libusb_cancel_transfer(transfer);
         return h;
     }
-    tfer_env.io_env     = env;
-    tfer_env.cont       = {h};
-    transfer->user_data = &tfer_env;
+    m_data.io_env       = env;
+    m_data.cont         = {h};
+    transfer->user_data = &m_data;
     transfer->callback  = [] (libusb_transfer *tfer)
     {
-        transfer_env *tv = (transfer_env *)tfer->user_data;
-        tv->io_env->executor.post(tv->cont);
+        cb_data *data = (cb_data *)tfer->user_data;
+        data->io_env->executor.post(data->cont);
     };
     auto r = libusb_submit_transfer(transfer);
     if (r != LIBUSB_SUCCESS)
