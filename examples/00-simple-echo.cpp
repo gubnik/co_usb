@@ -18,8 +18,19 @@ boost::capy::task<> echo (libusb_device_handle *devh)
     std::array<uint8_t, 1024> buf;
     auto in_tfer  = co_usb::bulk_transfer{co_usb::ep_in(0x81, devh)};
     auto out_tfer = co_usb::bulk_transfer{co_usb::ep_out(0x02, devh)};
-    auto [ec, n]  = co_await in_tfer.read_some(boost::capy::mutable_buffer{buf.data(), buf.size()});
-    (void)co_await out_tfer.write_some(boost::capy::const_buffer{buf.data(), n});
+    for (;;)
+    {
+        auto [ec, n] =
+            co_await in_tfer.read_some(boost::capy::mutable_buffer{buf.data(), buf.size()});
+
+        if (ec)
+            break;
+
+        auto [wec, wn] = co_await out_tfer.write_some(boost::capy::const_buffer{buf.data(), n});
+
+        if (wec)
+            break;
+    }
 }
 
 int main (int argc, char **argv)
