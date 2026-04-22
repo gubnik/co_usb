@@ -51,6 +51,7 @@ template <endpoint_type EpType, ep_direction Direction> struct basic_transfer
   protected:
     unique_transfer m_tfer;
 };
+
 struct control_transfer : public basic_transfer<endpoint_type::control, ep_direction::both>
 {
     explicit control_transfer (libusb_device_handle *devh,

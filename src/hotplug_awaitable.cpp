@@ -2,19 +2,13 @@
 #include <co_usb/hotplug/hotplug_awaitable.hpp>
 #include <coroutine>
 #include <libusb-1.0/libusb.h>
-#include <print>
-/**
- * @note I hate how this is like this is but this is how libusb works
- */
+
 co_usb::hotplug_awaitable::hotplug_awaitable (libusb_context *ctx, int events, int flags, int vid,
                                               int pid, int dev_class)
     : m_ctx(ctx), m_events(events), m_flags(flags), m_vid(vid), m_pid(pid), m_dev_class(dev_class)
 {
 }
 
-/**
- * @return always false, a hotplug cannot complete instantly without a roundtrip
- */
 bool co_usb::hotplug_awaitable::await_ready () noexcept
 {
     return false;
@@ -41,7 +35,8 @@ std::coroutine_handle<> co_usb::hotplug_awaitable::await_suspend (std::coroutine
             data->res.event = (ev == LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED)
                                   ? co_usb::hotplug_event::arrived
                                   : co_usb::hotplug_event::left;
-            data->res.dev   = dev;
+            libusb_ref_device(dev);
+            data->res.dev = dev;
             data->io_env->executor.post(data->cont);
             return 0;
         },

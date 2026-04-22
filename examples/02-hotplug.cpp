@@ -15,9 +15,11 @@ boost::capy::task<> dev_loop (co_usb::unique_dev_handle devh)
     for (;;)
     {
         auto [ec, n] = co_await read_in.read_some(boost::capy::mutable_buffer{buf, sizeof(buf)});
-        std::println("Got {} bytes", n);
+
         if (ec)
             break;
+
+        std::println("Got {} bytes", n);
     }
 }
 
@@ -26,14 +28,20 @@ boost::capy::task<> accept_hotplug (libusb_context *ctx)
     auto exec = co_await boost::capy::this_coro::executor;
     for (;;)
     {
-        auto [ec, repl] = co_await co_usb::hotplug_awaitable(
+        auto [ec, res] = co_await co_usb::hotplug_awaitable(
             ctx, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED | LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT,
             LIBUSB_HOTPLUG_ENUMERATE, dev_vid, dev_pid, LIBUSB_HOTPLUG_MATCH_ANY);
-        auto &[ev, dev] = repl;
-        if (dev == nullptr)
+        auto &[ev, dev] = res;
+        if (ec)
         {
             break;
         }
+        if (ev == co_usb::hotplug_event::left)
+        {
+            std::println("Device disconnected, waiting...");
+            continue;
+        }
+        std::println("Device arrived!");
         auto devh = co_usb::open(dev);
         boost::capy::run_async(exec)(dev_loop(std::move(devh)));
     }
