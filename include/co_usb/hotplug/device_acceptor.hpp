@@ -22,11 +22,9 @@ struct device_acceptor
      * @brief Wrapper aroung hotplug_awaitable with events=LIBUSB_HOTPLUG_DEVICE_ARRIVED and
      * flags=LIBUSB_HOTPLUG_ENUMERATE
      *
-     * @returns @ref maybe_device_ref
-     *
-     * @throws @ref std::runtime_error on null device (should never happen!)
+     * @returns @ref std::error_code and device_ref
      */
-    boost::capy::task<maybe_device_ref> accept(int vid, int pid, int dev_class);
+    boost::capy::io_task<device_ref> accept(int vid, int pid, int dev_class);
 
   private:
     libusb_context *m_ctx;
@@ -35,6 +33,6 @@ struct device_acceptor
 /**
  * @brief Free function version of @ref device_acceptor::accept
  */
-boost::capy::task<maybe_device_ref> accept(libusb_context *ctx, int vid, int pid, int dev_class);
+boost::capy::io_task<device_ref> accept(libusb_context *ctx, int vid, int pid, int dev_class);
 
 } // namespace co_usb

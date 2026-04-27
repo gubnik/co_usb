@@ -1,7 +1,7 @@
+#include "co_usb/error.hpp"
 #include <co_usb/hotplug/hotplug_awaitable.hpp>
 #include <coroutine>
 #include <libusb-1.0/libusb.h>
-#include <optional>
 
 co_usb::hotplug_awaitable::hotplug_awaitable (libusb_context *ctx, int events, int flags, int vid,
                                               int pid, int dev_class)
@@ -20,7 +20,8 @@ std::coroutine_handle<> co_usb::hotplug_awaitable::await_suspend (std::coroutine
     if (env->stop_token.stop_requested())
     {
         m_data.res.event = co_usb::hotplug_event::left;
-        m_data.res.dev   = std::nullopt;
+        m_data.res.dev   = device_ref{nullptr};
+        m_error          = usb_error::unknown;
         return h;
     }
     m_data.cont   = {h};
@@ -41,13 +42,14 @@ std::coroutine_handle<> co_usb::hotplug_awaitable::await_suspend (std::coroutine
         &m_data, &m_handle);
     if (r != LIBUSB_SUCCESS)
     {
+        m_error = static_cast<usb_error>(r);
         return h;
     }
     return std::noop_coroutine();
 }
 
-co_usb::hotplug_awaitable::result co_usb::hotplug_awaitable::await_resume ()
+boost::capy::io_result<co_usb::hotplug_awaitable::result> co_usb::hotplug_awaitable::await_resume ()
 {
     libusb_hotplug_deregister_callback(m_ctx, m_handle);
-    return m_data.res;
+    return {make_usb_error_code(m_error), m_data.res};
 }

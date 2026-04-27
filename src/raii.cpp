@@ -18,6 +18,6 @@ co_usb::unique_dev_handle co_usb::open (libusb_device *dev)
 co_usb::unique_dev_handle co_usb::open (co_usb::device_ref dev)
 {
     libusb_device_handle *devh;
-    libusb_open(dev.raw(), &devh);
+    libusb_open(dev.get(), &devh);
     return {devh, libusb_close};
 }

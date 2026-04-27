@@ -41,16 +41,16 @@ boost::capy::task<> accept_hotplug (libusb_context *ctx)
     auto acceptor = co_usb::device_acceptor(ctx);
     for (;;)
     {
-        auto dev = co_await acceptor.accept(dev_vid, dev_pid, LIBUSB_HOTPLUG_MATCH_ANY);
+        auto [ec, dev] = co_await acceptor.accept(dev_vid, dev_pid, LIBUSB_HOTPLUG_MATCH_ANY);
         /* or:
          * auto dev = co_await co_usb::accept(ctx, dev_vid, dev_pid,LIBUSB_HOTPLUG_MATCH_ANY);
          */
 
-        if (!dev)
+        if (ec)
             break;
 
         std::println("Device arrived!");
-        auto devh = co_usb::open(*dev);
+        auto devh = co_usb::open(dev);
         boost::capy::run_async(exec)(dev_loop(std::move(devh)));
     }
 }
