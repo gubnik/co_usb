@@ -7,6 +7,7 @@
 #include "co_usb/hotplug/device_ref.hpp"
 #include <boost/capy/io_result.hpp>
 #include <co_usb/hotplug/hotplug.hpp>
+#include <optional>
 
 namespace co_usb
 {
@@ -47,12 +48,11 @@ struct hotplug_awaitable
 
     libusb_hotplug_callback_handle m_handle;
 
-    usb_error m_error;
     struct cb_data
     {
         boost::capy::io_env const *io_env = nullptr;
         boost::capy::continuation cont;
-        result res;
+        result res{.dev = std::nullopt};
     } m_data;
 };
 

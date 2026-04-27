@@ -22,7 +22,6 @@ std::coroutine_handle<> co_usb::hotplug_awaitable::await_suspend (std::coroutine
     {
         m_data.res.event = co_usb::hotplug_event::left;
         m_data.res.dev   = std::nullopt;
-        m_error          = usb_error::unknown;
         return h;
     }
     m_data.cont   = {h};
@@ -43,7 +42,6 @@ std::coroutine_handle<> co_usb::hotplug_awaitable::await_suspend (std::coroutine
         &m_data, &m_handle);
     if (r != LIBUSB_SUCCESS)
     {
-        m_error = static_cast<usb_error>(r);
         return h;
     }
     return std::noop_coroutine();
