@@ -57,7 +57,7 @@ template <ep_direction Direction> struct endpoint
     /**
      * @brief creates an endpoint or throws if the address doesn't match expected direction
      *
-     * @thrown @ref std::invalid_argument when endpoint address does not match @tp Direction
+     * @throws @ref std::invalid_argument when endpoint address does not match @tp Direction
      */
     static endpoint<Direction> make_throwing (uint8_t ep, libusb_device_handle *devh)
     {

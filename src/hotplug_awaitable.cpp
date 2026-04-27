@@ -49,8 +49,8 @@ std::coroutine_handle<> co_usb::hotplug_awaitable::await_suspend (std::coroutine
     return std::noop_coroutine();
 }
 
-boost::capy::io_result<co_usb::hotplug_awaitable::result> co_usb::hotplug_awaitable::await_resume ()
+co_usb::hotplug_awaitable::result co_usb::hotplug_awaitable::await_resume ()
 {
     libusb_hotplug_deregister_callback(m_ctx, m_handle);
-    return {make_usb_error_code(m_error), m_data.res};
+    return m_data.res;
 }
