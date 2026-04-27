@@ -1,7 +1,13 @@
 /**
+ * 02-hotplug.cpp
+ * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  *
  * Minimal example demonstrating hotplug API usage for reconnecting devices
  *
+ * Demonstrates high-level @ref co_usb::device_acceptor usage that matches
+ * a familiar Asio-like asio::ip::tcp::acceptor interface.
+ *
+ * For raw @ref co_usb::hotplug_awaitable, see example 03
  */
 
 #include <boost/capy.hpp>
@@ -9,13 +15,13 @@
 #include <libusb-1.0/libusb.h>
 #include <print>
 
-constexpr uint16_t dev_vid  = 0x9f9f;
-constexpr uint16_t dev_pid  = 0x9f9f;
-constexpr uint8_t dev_iface = 0;
+constexpr uint16_t dev_vid      = 0x9f9f;
+constexpr uint16_t dev_pid      = 0x9f9f;
+constexpr uint8_t dev_iface_num = 0;
 
 boost::capy::task<> dev_loop (co_usb::unique_dev_handle devh)
 {
-    co_usb::interface iface{devh.get(), dev_iface};
+    co_usb::interface iface{devh.get(), dev_iface_num};
     co_usb::bulk_transfer read_in{co_usb::ep_in(0x01, iface)};
     char buf[1024];
     for (;;)
@@ -31,24 +37,20 @@ boost::capy::task<> dev_loop (co_usb::unique_dev_handle devh)
 
 boost::capy::task<> accept_hotplug (libusb_context *ctx)
 {
-    auto exec = co_await boost::capy::this_coro::executor;
+    auto exec     = co_await boost::capy::this_coro::executor;
+    auto acceptor = co_usb::device_acceptor(ctx);
     for (;;)
     {
-        auto [ec, res] = co_await co_usb::hotplug_awaitable(
-            ctx, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED | LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT,
-            LIBUSB_HOTPLUG_ENUMERATE, dev_vid, dev_pid, LIBUSB_HOTPLUG_MATCH_ANY);
-        auto &[ev, dev] = res;
-        if (ec)
-        {
+        auto dev = co_await acceptor.accept(dev_vid, dev_pid, LIBUSB_HOTPLUG_MATCH_ANY);
+        /* or:
+         * auto dev = co_await co_usb::accept(ctx, dev_vid, dev_pid,LIBUSB_HOTPLUG_MATCH_ANY);
+         */
+
+        if (!dev)
             break;
-        }
-        if (ev == co_usb::hotplug_event::left)
-        {
-            std::println("Device disconnected, waiting...");
-            continue;
-        }
+
         std::println("Device arrived!");
-        auto devh = co_usb::open(dev);
+        auto devh = co_usb::open(*dev);
         boost::capy::run_async(exec)(dev_loop(std::move(devh)));
     }
 }

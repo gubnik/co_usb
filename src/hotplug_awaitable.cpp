@@ -2,6 +2,7 @@
 #include <co_usb/hotplug/hotplug_awaitable.hpp>
 #include <coroutine>
 #include <libusb-1.0/libusb.h>
+#include <optional>
 
 co_usb::hotplug_awaitable::hotplug_awaitable (libusb_context *ctx, int events, int flags, int vid,
                                               int pid, int dev_class)
@@ -20,7 +21,7 @@ std::coroutine_handle<> co_usb::hotplug_awaitable::await_suspend (std::coroutine
     if (env->stop_token.stop_requested())
     {
         m_data.res.event = co_usb::hotplug_event::left;
-        m_data.res.dev   = nullptr;
+        m_data.res.dev   = std::nullopt;
         m_error          = usb_error::unknown;
         return h;
     }
@@ -35,8 +36,7 @@ std::coroutine_handle<> co_usb::hotplug_awaitable::await_suspend (std::coroutine
             data->res.event = (ev == LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED)
                                   ? co_usb::hotplug_event::arrived
                                   : co_usb::hotplug_event::left;
-            libusb_ref_device(dev);
-            data->res.dev = dev;
+            data->res.dev   = device_ref{dev};
             data->io_env->executor.post(data->cont);
             return 0;
         },

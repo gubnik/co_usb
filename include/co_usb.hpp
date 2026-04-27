@@ -10,5 +10,7 @@
 #include <co_usb/tfer/transfer_types.hpp>
 
 // Hotplug
+#include <co_usb/hotplug/device_acceptor.hpp>
+#include <co_usb/hotplug/device_ref.hpp>
 #include <co_usb/hotplug/hotplug.hpp>
 #include <co_usb/hotplug/hotplug_awaitable.hpp>

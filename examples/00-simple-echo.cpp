@@ -1,4 +1,6 @@
 /**
+ * 00-simple-echo.cpp
+ * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  * Simple USB echo across 2 bulk endpoints (IN and OUT)
  *
  * Demonstrates compile-time direction semantic and basics of reads and writes.
@@ -9,9 +11,9 @@
 #include <boost/capy.hpp>
 #include <co_usb.hpp>
 
-constexpr uint16_t dev_vid  = 0x9f9f;
-constexpr uint16_t dev_pid  = 0x9f9f;
-constexpr uint8_t dev_iface = 0;
+constexpr uint16_t dev_vid      = 0x9f9f;
+constexpr uint16_t dev_pid      = 0x9f9f;
+constexpr uint8_t dev_iface_num = 0;
 
 boost::capy::task<> echo (const co_usb::interface &iface)
 {
@@ -40,7 +42,7 @@ int main (int argc, char **argv)
     co_usb::unique_dev_handle devh = co_usb::open_vid_pid(ctx.get(), dev_vid, dev_pid);
     if (!devh)
         return 1;
-    co_usb::interface iface{devh.get(), dev_iface};
+    co_usb::interface iface{devh.get(), dev_iface_num};
     boost::capy::run_async(tp.get_executor())(echo(iface));
     tp.join();
 }

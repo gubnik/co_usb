@@ -1,4 +1,7 @@
 /**
+ * 01-multiple-transfers.cpp
+ * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
+ *
  * Example of multiple asynchronous transfers running on a thread pool
  *
  * Demonstrates cancellation semantics and classic read loop.
@@ -14,11 +17,11 @@
 #include <csignal>
 #include <print>
 
-constexpr uint8_t total     = 8;
-constexpr uint16_t dev_vid  = 0x9f9f;
-constexpr uint16_t dev_pid  = 0x9f9f;
-constexpr uint8_t dev_ep    = 0x81;
-constexpr uint8_t dev_iface = 0;
+constexpr uint8_t total         = 8;
+constexpr uint16_t dev_vid      = 0x9f9f;
+constexpr uint16_t dev_pid      = 0x9f9f;
+constexpr uint8_t dev_ep        = 0x81;
+constexpr uint8_t dev_iface_num = 0;
 
 boost::capy::task<void> process_transfer (const co_usb::interface &iface)
 {
@@ -55,8 +58,9 @@ int main (int argc, char **argv)
         std::println(stderr, "Cannot open device!");
         return 1;
     }
-    // claim interface and release on scope end (RAII)
-    co_usb::interface iface{devh.get(), dev_iface};
+
+    // claim interface, detach driver and release on scope end (RAII)
+    co_usb::interface iface{devh.get(), dev_iface_num};
     for (uint8_t i = 0; i < total; i++)
     {
         boost::capy::run_async(tp.get_executor(), ctx.get_token())(process_transfer(iface));
