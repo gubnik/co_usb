@@ -14,14 +14,15 @@ constexpr uint16_t dev_vid      = 0x9f9f;
 constexpr uint16_t dev_pid      = 0x9f9f;
 constexpr uint8_t dev_iface_num = 0;
 
-boost::capy::task<> dev_loop (co_usb::unique_dev_handle devh, co_usb::device_left_signal devls)
+boost::capy::task<> dev_loop (co_usb::unique_dev_handle devh,
+                              co_usb::device_left_signal left_signal)
 {
     co_usb::interface iface{devh.get(), dev_iface_num};
     co_usb::bulk_transfer read_in{co_usb::ep_in(0x01, iface)};
     char buf[1024];
     for (;;)
     {
-        if (devls.device_left())
+        if (left_signal.device_left())
         {
             std::println("Device was detached, stopping loop");
             break;
@@ -46,7 +47,7 @@ boost::capy::task<> accept_hotplug (libusb_context *ctx)
          *
          * It is a signaling mechanism for handling matching LEFT callbacks
          */
-        auto [ec, dev, devls] =
+        auto [ec, dev, left_signal] =
             co_await acceptor.accept_with_left(dev_vid, dev_pid, LIBUSB_HOTPLUG_MATCH_ANY);
 
         if (ec)
@@ -54,8 +55,7 @@ boost::capy::task<> accept_hotplug (libusb_context *ctx)
 
         std::println("Device arrived!");
         auto devh = co_usb::open(dev);
-        boost::capy::run_async(exec)(dev_loop(std::move(devh), std::move(devls)));
-        acceptor.set_enumeration(false);
+        boost::capy::run_async(exec)(dev_loop(std::move(devh), std::move(left_signal)));
     }
 }
 

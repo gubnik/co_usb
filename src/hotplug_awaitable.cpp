@@ -1,4 +1,5 @@
 #include "co_usb/error.hpp"
+#include "co_usb/hotplug/device_ref.hpp"
 #include <co_usb/hotplug/hotplug_awaitable.hpp>
 #include <coroutine>
 #include <libusb-1.0/libusb.h>
@@ -48,8 +49,9 @@ std::coroutine_handle<> co_usb::hotplug_awaitable::await_suspend (std::coroutine
     return std::noop_coroutine();
 }
 
-boost::capy::io_result<co_usb::hotplug_awaitable::result> co_usb::hotplug_awaitable::await_resume ()
+boost::capy::io_result<co_usb::hotplug_event, co_usb::device_ref>
+co_usb::hotplug_awaitable::await_resume ()
 {
     libusb_hotplug_deregister_callback(m_ctx, m_handle);
-    return {make_usb_error_code(m_error), m_data.res};
+    return {make_usb_error_code(m_error), m_data.res.event, m_data.res.dev};
 }

@@ -35,7 +35,7 @@ struct hotplug_awaitable
     std::coroutine_handle<> await_suspend(std::coroutine_handle<> h,
                                           boost::capy::io_env const *env);
 
-    boost::capy::io_result<result> await_resume();
+    boost::capy::io_result<hotplug_event, device_ref> await_resume();
 
   private:
     libusb_context *m_ctx;

@@ -35,15 +35,13 @@ boost::capy::task<> accept_hotplug (libusb_context *ctx)
     auto exec = co_await boost::capy::this_coro::executor;
     for (;;)
     {
-        auto [ec, res] = co_await co_usb::hotplug_awaitable(
+        auto [ec, ev, dev] = co_await co_usb::hotplug_awaitable(
             ctx, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED | LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT,
             LIBUSB_HOTPLUG_ENUMERATE, dev_vid, dev_pid, LIBUSB_HOTPLUG_MATCH_ANY);
         if (ec)
         {
             break;
         }
-        // structural binding to event and device_ref
-        auto &[ev, dev] = res;
         if (ev == co_usb::hotplug_event::left)
         {
             std::println("Device disconnected, waiting...");

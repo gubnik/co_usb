@@ -49,7 +49,6 @@ boost::capy::task<> accept_hotplug (libusb_context *ctx)
         std::println("Device arrived!");
         auto devh = co_usb::open(dev);
         boost::capy::run_async(exec)(dev_loop(std::move(devh)));
-        acceptor.set_enumeration(false);
     }
 }
 
