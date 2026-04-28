@@ -1,13 +1,8 @@
 /**
- * 02-hotplug.cpp
+ * 04-left-hotplug.cpp
  * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  *
- * Minimal example demonstrating hotplug API usage for reconnecting devices
- *
- * Demonstrates high-level @ref co_usb::device_acceptor usage that matches
- * a familiar Asio-like asio::ip::tcp::acceptor interface.
- *
- * For raw @ref co_usb::hotplug_awaitable, see example 03
+ * Example demonstrating usage of hotplug API @ref co_usb::device_left_token
  */
 
 #include <boost/capy.hpp>
@@ -19,13 +14,18 @@ constexpr uint16_t dev_vid      = 0x9f9f;
 constexpr uint16_t dev_pid      = 0x9f9f;
 constexpr uint8_t dev_iface_num = 0;
 
-boost::capy::task<> dev_loop (co_usb::unique_dev_handle devh)
+boost::capy::task<> dev_loop (co_usb::unique_dev_handle devh, co_usb::device_left_signal devls)
 {
     co_usb::interface iface{devh.get(), dev_iface_num};
     co_usb::bulk_transfer read_in{co_usb::ep_in(0x01, iface)};
     char buf[1024];
     for (;;)
     {
+        if (devls.device_left())
+        {
+            std::println("Device was detached, stopping loop");
+            break;
+        }
         auto [ec, n] = co_await read_in.read_some(boost::capy::mutable_buffer{buf, sizeof(buf)});
 
         if (ec)
@@ -41,17 +41,20 @@ boost::capy::task<> accept_hotplug (libusb_context *ctx)
     auto acceptor = co_usb::device_acceptor(ctx);
     for (;;)
     {
-        auto [ec, dev] = co_await acceptor.accept(dev_vid, dev_pid, LIBUSB_HOTPLUG_MATCH_ANY);
-        /* or:
-         * auto dev = co_await co_usb::accept(ctx, dev_vid, dev_pid,LIBUSB_HOTPLUG_MATCH_ANY);
+        /*
+         * devls stands for @ref device_left_signal
+         *
+         * It is a signaling mechanism for handling matching LEFT callbacks
          */
+        auto [ec, dev, devls] =
+            co_await acceptor.accept_with_left(dev_vid, dev_pid, LIBUSB_HOTPLUG_MATCH_ANY);
 
         if (ec)
             break;
 
         std::println("Device arrived!");
         auto devh = co_usb::open(dev);
-        boost::capy::run_async(exec)(dev_loop(std::move(devh)));
+        boost::capy::run_async(exec)(dev_loop(std::move(devh), std::move(devls)));
         acceptor.set_enumeration(false);
     }
 }

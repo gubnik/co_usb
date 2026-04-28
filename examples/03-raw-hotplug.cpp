@@ -1,5 +1,5 @@
 /**
- * 02-hotplug.cpp
+ * 03-raw-hotplug.cpp
  * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  * Example demonstrating raw hotplug_awaitable usage
  *
