@@ -42,11 +42,7 @@ boost::capy::task<> accept_hotplug (libusb_context *ctx)
     auto acceptor = co_usb::device_acceptor(ctx);
     for (;;)
     {
-        /*
-         * devls stands for @ref device_left_signal
-         *
-         * It is a signaling mechanism for handling matching LEFT callbacks
-         */
+        // left_signal is a single-fire signal for a matching LEFT event on a device
         auto [ec, dev, left_signal] =
             co_await acceptor.accept_with_left(dev_vid, dev_pid, LIBUSB_HOTPLUG_MATCH_ANY);
 

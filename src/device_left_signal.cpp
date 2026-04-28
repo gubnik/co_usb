@@ -1,6 +1,6 @@
 #include "co_usb/error.hpp"
 #include <atomic>
-#include <co_usb/hotplug/device_left_token.hpp>
+#include <co_usb/hotplug/device_left_signal.hpp>
 #include <libusb-1.0/libusb.h>
 #include <memory>
 #include <system_error>

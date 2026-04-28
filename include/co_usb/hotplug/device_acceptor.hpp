@@ -1,6 +1,6 @@
 #pragma once
 
-#include "co_usb/hotplug/device_left_token.hpp"
+#include "co_usb/hotplug/device_left_signal.hpp"
 #include "co_usb/hotplug/device_ref.hpp"
 #include <boost/capy/io_task.hpp>
 #include <libusb-1.0/libusb.h>

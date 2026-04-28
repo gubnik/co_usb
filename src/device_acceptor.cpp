@@ -1,4 +1,3 @@
-#include "co_usb/hotplug/device_left_token.hpp"
 #include "co_usb/hotplug/device_ref.hpp"
 #include "co_usb/hotplug/hotplug_awaitable.hpp"
 #include <boost/capy/io_task.hpp>
