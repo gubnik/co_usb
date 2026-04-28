@@ -7,9 +7,9 @@ namespace co_usb
 struct interface
 {
     interface (libusb_device_handle *devh, int iface, bool detach_kernel_module = true)
-        : m_devh(devh), m_iface(iface)
+        : m_devh(devh), m_iface(iface), m_module_detached(detach_kernel_module)
     {
-        if (detach_kernel_module)
+        if (m_module_detached)
         {
             libusb_detach_kernel_driver(m_devh, m_iface);
         }
@@ -18,6 +18,10 @@ struct interface
 
     ~interface ()
     {
+        if (m_module_detached)
+        {
+            libusb_attach_kernel_driver(m_devh, m_iface);
+        }
         libusb_release_interface(m_devh, m_iface);
     }
 
@@ -34,6 +38,7 @@ struct interface
   private:
     libusb_device_handle *m_devh;
     int m_iface;
+    bool m_module_detached = true;
 };
 
 } // namespace co_usb
