@@ -42,9 +42,6 @@ boost::capy::task<> accept_hotplug (libusb_context *ctx)
     for (;;)
     {
         auto [ec, dev] = co_await acceptor.accept(dev_vid, dev_pid, LIBUSB_HOTPLUG_MATCH_ANY);
-        /* or:
-         * auto dev = co_await co_usb::accept(ctx, dev_vid, dev_pid,LIBUSB_HOTPLUG_MATCH_ANY);
-         */
 
         if (ec)
             break;
