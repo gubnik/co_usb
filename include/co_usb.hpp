@@ -5,9 +5,9 @@
 #include <co_usb/raii.hpp>
 
 // Transfers
-#include <co_usb/tfer/endpoint.hpp>
-#include <co_usb/tfer/transfer_awaitable.hpp>
-#include <co_usb/tfer/transfer_types.hpp>
+#include <co_usb/transfer/endpoint.hpp>
+#include <co_usb/transfer/transfer_awaitable.hpp>
+#include <co_usb/transfer/transfer_types.hpp>
 
 // Hotplug
 #include <co_usb/hotplug/device_acceptor.hpp>

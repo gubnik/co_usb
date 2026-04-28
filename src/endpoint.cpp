@@ -1,4 +1,4 @@
-#include <co_usb/tfer/endpoint.hpp>
+#include <co_usb/transfer/endpoint.hpp>
 
 co_usb::endpoint<co_usb::ep_direction::in> co_usb::ep_in (uint8_t ep, const interface &iface)
 {

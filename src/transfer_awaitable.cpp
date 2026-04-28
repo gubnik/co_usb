@@ -1,5 +1,5 @@
-#include "co_usb/tfer/error.hpp"
-#include <co_usb/tfer/transfer_awaitable.hpp>
+#include "co_usb/transfer/error.hpp"
+#include <co_usb/transfer/transfer_awaitable.hpp>
 #include <libusb-1.0/libusb.h>
 
 co_usb::transfer_awaitable::transfer_awaitable (libusb_transfer *tfer) noexcept : transfer(tfer)

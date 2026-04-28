@@ -2,7 +2,7 @@
  * 04-left-hotplug.cpp
  * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  *
- * Example demonstrating usage of hotplug API @ref co_usb::device_left_token
+ * Example demonstrating usage of hotplug API @ref co_usb::device_left_signal
  */
 
 #include <boost/capy.hpp>

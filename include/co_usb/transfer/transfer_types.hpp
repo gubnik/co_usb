@@ -1,8 +1,8 @@
 #pragma once
 
 #include "co_usb/raii.hpp"
-#include "co_usb/tfer/endpoint.hpp"
-#include "co_usb/tfer/transfer_awaitable.hpp"
+#include "co_usb/transfer/endpoint.hpp"
+#include "co_usb/transfer/transfer_awaitable.hpp"
 #include <boost/capy/buffers.hpp>
 #include <boost/capy/io_task.hpp>
 #include <chrono>
