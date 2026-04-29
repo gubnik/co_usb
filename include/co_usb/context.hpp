@@ -39,8 +39,8 @@ template <> struct context<use_service::yes>
         }
         detail::handler_service &service =
             exec.context().template use_service<detail::handler_service>();
-        m_ss = service.stop_source();
         service.start_thread(m_ctx, detail::handler_service::default_handler);
+        m_ss = service.stop_source();
     }
 
     template <std::invocable<libusb_context *, std::stop_token> HandlerFn>
@@ -53,8 +53,8 @@ template <> struct context<use_service::yes>
         }
         detail::handler_service &service =
             exec.context().template use_service<detail::handler_service>();
-        m_ss = service.stop_source();
         service.start_thread(m_ctx, std::forward<HandlerFn>(handler_fn));
+        m_ss = service.stop_source();
     }
 
     template <typename R, std::invocable<libusb_context *, std::stop_token> HandlerFn>
@@ -68,8 +68,8 @@ template <> struct context<use_service::yes>
         }
         detail::handler_service &service =
             exec.context().template use_service<detail::handler_service>();
-        m_ss = service.stop_source();
         service.start_thread(m_ctx, std::forward<HandlerFn>(handler_fn));
+        m_ss = service.stop_source();
         for (auto opt : options)
         {
             libusb_set_option(m_ctx, opt);
