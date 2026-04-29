@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,56,117,81"/>
+<area shape="rect" id="Node000001" href="$structstd_1_1is__error__code__enum_3_01co__usb_1_1transfer__status_01_4.html" title=" " alt="" coords="178,5,363,60"/>
+<area shape="poly" id="edge8_Node000000_Node000001" title=" " alt="" coords="130,54,177,46,178,51,131,59"/>
+<area shape="rect" id="Node000002" href="$structstd_1_1is__error__code__enum_3_01co__usb_1_1usb__error_01_4.html" title=" " alt="" coords="165,85,376,125"/>
+<area shape="poly" id="edge9_Node000000_Node000002" title=" " alt="" coords="131,78,166,84,165,89,130,83"/>
+</map>

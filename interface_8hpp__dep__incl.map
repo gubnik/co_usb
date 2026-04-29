@@ -1,0 +1,23 @@
+<map id="include/co_usb/interface.hpp" name="include/co_usb/interface.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="373,5,581,31"/>
+<area shape="rect" id="Node000002" href="$co__usb_8hpp.html" title=" " alt="" coords="393,255,540,280"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="474,45,469,79,466,181,469,254,463,255,461,181,464,78,469,44"/>
+<area shape="rect" id="Node000008" href="$endpoint_8hpp.html" title=" " alt="" coords="479,79,652,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="502,38,546,77,542,81,499,42"/>
+<area shape="rect" id="Node000003" href="$00-simple-echo_8cpp.html" title=" " alt="" coords="5,328,160,368"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="397,285,173,331,161,333,160,328,171,325,396,280"/>
+<area shape="rect" id="Node000004" href="$01-multiple-transfers_8cpp.html" title=" " alt="" coords="184,328,349,368"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="426,287,316,330,314,325,424,282"/>
+<area shape="rect" id="Node000005" href="$02-hotplug_8cpp.html" title=" " alt="" coords="373,335,560,361"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="469,294,469,335,464,335,464,294"/>
+<area shape="rect" id="Node000006" href="$03-raw-hotplug_8cpp.html" title=" " alt="" coords="584,335,800,361"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="513,282,660,333,658,338,511,287"/>
+<area shape="rect" id="Node000007" href="$04-left-hotplug_8cpp.html" title=" " alt="" coords="824,335,1037,361"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="548,280,864,333,863,338,547,285"/>
+<area shape="poly" id="edge8_Node000008_Node000002" title=" " alt="" coords="529,129,510,147,494,168,484,191,477,214,470,255,465,254,471,213,479,189,490,165,506,144,525,125"/>
+<area shape="rect" id="Node000009" href="$transfer__types_8hpp.html" title=" " alt="" coords="504,167,677,207"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="577,131,588,166,583,167,572,133"/>
+<area shape="rect" id="Node000010" href="$endpoint_8cpp.html" title=" " alt="" coords="702,174,831,199"/>
+<area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="623,122,741,172,739,176,621,127"/>
+<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="550,216,486,257,483,252,548,212"/>
+</map>

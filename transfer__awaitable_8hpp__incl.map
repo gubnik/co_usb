@@ -1,0 +1,13 @@
+<map id="include/co_usb/transfer/transfer_awaitable.hpp" name="include/co_usb/transfer/transfer_awaitable.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="414,5,590,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,153,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="414,46,168,95,167,90,413,41"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="177,101,384,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="454,48,324,98,322,93,452,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="409,101,595,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="505,46,505,87,499,87,499,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="619,101,801,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="549,43,671,93,669,98,547,48"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="825,101,966,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="591,43,813,91,833,95,832,100,812,96,590,48"/>
+</map>

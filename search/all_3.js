@@ -1,0 +1,18 @@
+var searchData=
+[
+  ['cancellation_0',['Cancellation',['../md_README.html#autotoc_md7',1,'']]],
+  ['cancelled_1',['cancelled',['../namespaceco__usb.html#a25f0b769747592400f5f0708a6363707a38881e0a24039dc2621e1d6f86cb71f7',1,'co_usb']]],
+  ['cb_5fdata_2',['cb_data',['../structco__usb_1_1transfer__awaitable_1_1cb__data.html',1,'co_usb::transfer_awaitable::cb_data'],['../structco__usb_1_1cb__data.html',1,'co_usb::cb_data']]],
+  ['co_5fusb_3',['co_usb',['../md_README.html#autotoc_md0',1,'co_usb'],['../namespaceco__usb.html',1,'co_usb']]],
+  ['co_5fusb_2ehpp_4',['co_usb.hpp',['../co__usb_8hpp.html',1,'']]],
+  ['co_5fusb_3a_3adetail_5',['detail',['../namespaceco__usb_1_1detail.html',1,'co_usb']]],
+  ['completed_6',['completed',['../namespaceco__usb.html#a25f0b769747592400f5f0708a6363707aaa8fb77e57d1ca18d593e909729871fe',1,'co_usb']]],
+  ['cont_7',['cont',['../structco__usb_1_1transfer__awaitable_1_1cb__data.html#ad0c5c72df3d3c7deae9a88cff52b85d5',1,'co_usb::transfer_awaitable::cb_data']]],
+  ['context_8',['context',['../structco__usb_1_1context_3_01use__service_1_1yes_01_4.html#a455c678b3dc0899541d7d6ac0cd2e5b3',1,'co_usb::context&lt; use_service::yes &gt;::context()'],['../structco__usb_1_1context.html',1,'co_usb::context&lt; Service &gt;'],['../structco__usb_1_1context_3_01use__service_1_1no_01_4.html#aeb0834c94ed9de506d866027d71d27c8',1,'co_usb::context&lt; use_service::no &gt;::context(context &amp;&amp;)=delete'],['../structco__usb_1_1context_3_01use__service_1_1no_01_4.html#a581cc7e0d12de2a03c6aa66b78084715',1,'co_usb::context&lt; use_service::no &gt;::context(context const &amp;)=delete'],['../structco__usb_1_1context_3_01use__service_1_1no_01_4.html#a9942a8144d70b4cbf0528d68611468ea',1,'co_usb::context&lt; use_service::no &gt;::context(R &amp;&amp;options)'],['../structco__usb_1_1context_3_01use__service_1_1no_01_4.html#a817ed083080b45b2e6d552768cb561ad',1,'co_usb::context&lt; use_service::no &gt;::context()'],['../structco__usb_1_1context_3_01use__service_1_1yes_01_4.html#abeae3f45c069a4e8ac13462f1e6278f4',1,'co_usb::context&lt; use_service::yes &gt;::context(context const &amp;)=delete'],['../structco__usb_1_1context_3_01use__service_1_1yes_01_4.html#ad89f22ca9d80b99eea2279ea3625426b',1,'co_usb::context&lt; use_service::yes &gt;::context(R &amp;&amp;options, boost::capy::Executor auto &amp;&amp;exec, HandlerFn &amp;&amp;handler_fn)'],['../structco__usb_1_1context_3_01use__service_1_1yes_01_4.html#a979d22f7bcf0fbdc1b8e05205b0fe800',1,'co_usb::context&lt; use_service::yes &gt;::context(boost::capy::Executor auto &amp;&amp;exec, HandlerFn &amp;&amp;handler_fn)'],['../structco__usb_1_1context_3_01use__service_1_1yes_01_4.html#ad2e67be5757750ad495b263d79ee0ab5',1,'co_usb::context&lt; use_service::yes &gt;::context(boost::capy::Executor auto &amp;&amp;exec)']]],
+  ['context_2ehpp_9',['context.hpp',['../context_8hpp.html',1,'']]],
+  ['context_3c_20use_5fservice_3a_3ano_20_3e_10',['context&lt; use_service::no &gt;',['../structco__usb_1_1context_3_01use__service_1_1no_01_4.html',1,'co_usb']]],
+  ['context_3c_20use_5fservice_3a_3ayes_20_3e_11',['context&lt; use_service::yes &gt;',['../structco__usb_1_1context_3_01use__service_1_1yes_01_4.html',1,'co_usb']]],
+  ['control_12',['control',['../namespaceco__usb.html#afd7c665b131570d066071086e956a0caafc5364bf9dbfa34954526becad136d4b',1,'co_usb']]],
+  ['control_5ftransfer_13',['control_transfer',['../structco__usb_1_1control__transfer.html#a9250a14af73a2237cff10c252df5f0ca',1,'co_usb::control_transfer::control_transfer()'],['../structco__usb_1_1control__transfer.html',1,'co_usb::control_transfer']]],
+  ['ctx_14',['ctx',['../structco__usb_1_1cb__data.html#afa2e8d6dc864c67a19aebc79c5435334',1,'co_usb::cb_data']]]
+];

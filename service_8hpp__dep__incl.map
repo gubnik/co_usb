@@ -1,0 +1,20 @@
+<map id="include/co_usb/service.hpp" name="include/co_usb/service.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="436,5,633,31"/>
+<area shape="rect" id="Node000002" href="$co__usb_8hpp.html" title=" " alt="" coords="393,152,540,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="479,38,449,55,426,80,422,98,429,117,441,135,455,150,451,153,437,138,424,119,417,98,422,77,446,51,477,34"/>
+<area shape="rect" id="Node000008" href="$context_8hpp.html" title=" " alt="" coords="435,79,634,104"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="537,44,537,79,532,79,532,44"/>
+<area shape="rect" id="Node000009" href="$service_8cpp.html" title=" " alt="" coords="658,79,777,104"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="578,33,688,76,686,81,576,38"/>
+<area shape="rect" id="Node000003" href="$00-simple-echo_8cpp.html" title=" " alt="" coords="5,225,160,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="397,183,173,228,161,230,160,225,171,223,396,177"/>
+<area shape="rect" id="Node000004" href="$01-multiple-transfers_8cpp.html" title=" " alt="" coords="184,225,349,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="426,185,316,228,314,223,424,180"/>
+<area shape="rect" id="Node000005" href="$02-hotplug_8cpp.html" title=" " alt="" coords="373,233,560,258"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="469,191,469,232,464,232,464,191"/>
+<area shape="rect" id="Node000006" href="$03-raw-hotplug_8cpp.html" title=" " alt="" coords="584,233,800,258"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="513,179,660,230,658,235,511,184"/>
+<area shape="rect" id="Node000007" href="$04-left-hotplug_8cpp.html" title=" " alt="" coords="824,233,1037,258"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="548,177,864,230,863,235,547,182"/>
+<area shape="poly" id="edge8_Node000008_Node000002" title=" " alt="" coords="516,116,480,154,476,150,512,112"/>
+</map>
