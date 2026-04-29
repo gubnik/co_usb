@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> This is an experimental project until this notice is removed
+> Experimental - may be unstable, expect all kind of changes
 
 # co_usb
 
@@ -106,7 +106,7 @@ if (ec)
 ```
 - `accept_with_left` method "accepts" the device in the same way as `accept` but also returns a `device_left_signal`, which is a
 way to know when the device was detached, similar to `std::stop_token` for cancellation (see [example 04](./examples/04-left-hotplug.cpp)).
-Please note that `device_left_signal` maintains a signal state similar to stop state of `std::stop_source` *and it is allocated on the heap*,
+Please note that `device_left_signal` maintains a signal state similar to stop state of `std::stop_source`, *and it is allocated on the heap*,
 so each signal allocates once per lifetime on initial construction.
 ```cpp
 libusb_context *ctx = /* initialize */;
