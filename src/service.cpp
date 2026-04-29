@@ -6,16 +6,14 @@ co_usb::detail::handler_service::handler_service (boost::capy::execution_context
 {
 }
 
-/**
- * @brief Creates a default handler thread
- *
- * Cannot be put into ctor because this must be optional
- * and services cannot take additional ctor params.
- */
-void co_usb::detail::handler_service::start_thread (libusb_context *ctx, std::stop_token st,
-                                                    handler_fn_t handler_fn)
+void co_usb::detail::handler_service::start_thread (libusb_context *ctx, handler_fn_t handler_fn)
 {
-    m_handler_thread = std::thread{[=] () { handler_fn(ctx, st); }};
+    m_handler_thread = std::jthread{[=] (std::stop_token st) { handler_fn(ctx, st); }};
+}
+
+std::stop_source co_usb::detail::handler_service::stop_source ()
+{
+    return m_handler_thread->get_stop_source();
 }
 
 void co_usb::detail::handler_service::default_handler (libusb_context *ctx, std::stop_token st)

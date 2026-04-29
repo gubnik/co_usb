@@ -125,3 +125,23 @@ for(;;)
 }
 ```
 
+# Handler service
+
+By default, `co_usb` provides a *service* on a separate thread based on Boost.Capy's execution context
+and bound to `co_usb::context<>` which performs the simplest possible cancellable libusb event handling:
+```cpp
+void co_usb::detail::handler_service::default_handler (libusb_context *ctx, std::stop_token st)
+{
+    timeval tv = {.tv_sec = 0, .tv_usec = 10'000};
+    while (!st.stop_requested())
+    {
+        libusb_handle_events_timeout(ctx, &tv);
+    }
+}
+```
+This behavior can be configured by providing additional argument to context constructor, which is a function pointer of
+signature `void(libusb_context*, std::stop_token)`, or disabled entirely by providing `co_usb::use_service::no` as a template
+parameter to `co_usb::context`. Note that if the service was disabled the context *will not* provide any kind of handler *nor*
+a cancellation mechanism - you will have to implement them on your own.
+> [!WARNING]
+> Do not consider default loop safe to run on multiple threads in ANY way! It WILL break!

@@ -28,18 +28,20 @@ struct handler_service : public boost::capy::execution_context::service
      * Cannot be put into ctor because this must be optional
      * and services cannot take additional ctor params.
      */
-    void start_thread(libusb_context *ctx, std::stop_token st, handler_fn_t);
+    void start_thread(libusb_context *ctx, handler_fn_t);
 
     /**
      * @brief default handler function for the service
      */
     static void default_handler(libusb_context *ctx, std::stop_token st);
 
+    std::stop_source stop_source();
+
     ~handler_service() override;
     void shutdown() override;
 
   private:
-    std::optional<std::thread> m_handler_thread;
+    std::optional<std::jthread> m_handler_thread;
 };
 
 } // namespace co_usb::detail
