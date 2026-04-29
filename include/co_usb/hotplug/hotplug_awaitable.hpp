@@ -32,6 +32,15 @@ struct hotplug_awaitable
      */
     bool await_ready() noexcept;
 
+    /**
+     * @brief suspends and registers the callback
+     *
+     * @param h @ref std::coroutine_handle to the awaiting coroutine
+     * @param env @ref boost::capy::io_env* as per @ref boost::capy::IoAwaitable concept
+     *
+     * @return @ref std::noop_coroutine on success
+     * @return @p h on submission error or on cancellation
+     */
     std::coroutine_handle<> await_suspend(std::coroutine_handle<> h,
                                           boost::capy::io_env const *env);
 

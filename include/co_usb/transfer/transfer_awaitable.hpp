@@ -16,12 +16,12 @@ namespace co_usb
  *
  * @details This is the lowest possible representation level of an asynchronous unit of
  * libusb. It does not care for any of a transfer's properties and does not have
- * direction- or transfer type-related bevahioural differences.
+ * direction- or transfer type-related bevahioral differences.
  *
- * @note You should use this awaitable for porting an existing codebase to co_usb or
+ * You should use this awaitable for porting an existing codebase to co_usb or
  * when you need ultimate control.
  *
- * @note IMPORTANT user_data and callback fields of a transfer object ARE
+ * @note user_data and callback fields of a transfer object ARE
  * OVERRIDDEN on await_suspend with internal coroutine machinery, to access
  * data from a completed transfer consider inspecting the transfer object after
  * the completion of the awaitable.
