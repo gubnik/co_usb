@@ -5,6 +5,7 @@
 #include <optional>
 #include <stop_token>
 #include <thread>
+#include <utility>
 
 namespace co_usb::detail
 {
@@ -28,7 +29,13 @@ struct handler_service : public boost::capy::execution_context::service
      * Cannot be put into ctor because this must be optional
      * and services cannot take additional ctor params.
      */
-    void start_thread(libusb_context *ctx, handler_fn_t);
+    template <std::invocable<libusb_context *, std::stop_token> HandlerFn>
+    void start_thread (libusb_context *ctx, HandlerFn &&handler_fn)
+    {
+        m_handler_thread = std::jthread{
+            [ctx = ctx, handler_fn = std::forward<HandlerFn>(handler_fn)] (std::stop_token st)
+            { handler_fn(ctx, st); }};
+    }
 
     /**
      * @brief default handler function for the service

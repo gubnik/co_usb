@@ -6,11 +6,6 @@ co_usb::detail::handler_service::handler_service (boost::capy::execution_context
 {
 }
 
-void co_usb::detail::handler_service::start_thread (libusb_context *ctx, handler_fn_t handler_fn)
-{
-    m_handler_thread = std::jthread{[=] (std::stop_token st) { handler_fn(ctx, st); }};
-}
-
 std::stop_source co_usb::detail::handler_service::stop_source ()
 {
     return m_handler_thread->get_stop_source();

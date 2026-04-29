@@ -128,20 +128,28 @@ for(;;)
 # Handler service
 
 By default, `co_usb` provides a *service* on a separate thread based on Boost.Capy's execution context
-and bound to `co_usb::context<>` which performs the simplest possible cancellable libusb event handling:
-```cpp
-void co_usb::detail::handler_service::default_handler (libusb_context *ctx, std::stop_token st)
-{
-    timeval tv = {.tv_sec = 0, .tv_usec = 10'000};
-    while (!st.stop_requested())
-    {
-        libusb_handle_events_timeout(ctx, &tv);
-    }
-}
-```
-This behavior can be configured by providing additional argument to context constructor, which is a function pointer of
+and bound to `co_usb::context<>` which performs the simplest possible cancellable libusb event handling.
+The context constructor requires a valid Boost.Capy executor to be provided. It accepts any proper Boost.Capy executor,
+ranging from `boost::capy::thread_pool` to `boost::corosio::io_context` to even custom executors.
+
+> [!WARNING]
+> Default handler is NOT thread-safe; it will break if attempted to be used on multiple threads
+
+Handler function can be configured by providing additional argument to context constructor, which is a function pointer of
 signature `void(libusb_context*, std::stop_token)`, or disabled entirely by providing `co_usb::use_service::no` as a template
 parameter to `co_usb::context`. Note that if the service was disabled the context *will not* provide any kind of handler *nor*
 a cancellation mechanism - you will have to implement them on your own.
-> [!WARNING]
-> Do not consider default loop safe to run on multiple threads in ANY way! It WILL break!
+
+```cpp
+boost::capy::thread_pool pool{8};
+co_usb::context<> ctx(pool.get_executor());              // default template is with service
+co_usb::context<> ctx(pool.get_executor(), &my_handler); // with custom handler
+co_usb::context<co_usb::use_service::no> ctx();          // disables the service and internal cancellation
+```
+
+## Cancellation
+
+Context with enabled service provides cancellation semantics via exposed `std::stop_token`. It is recommended to be passed to
+`boost::capy::run_async` if proper cancellation is needed. However, due to the nature of libusb event handling the cancellation
+*will likely not* be instantaneous and instead happen *after* the current event is processed.
+
