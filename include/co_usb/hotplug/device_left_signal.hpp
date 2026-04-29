@@ -28,6 +28,9 @@ namespace co_usb
  * @note The callback is deregistered when:
  * @li A. The callback was successfully fired
  * @li B. The callback did not fire but the dtor was called
+ *
+ * @note Signal state is stored on the heap to keep stable address for callback across moves.
+ * Use raw @ref hotplug_awaitable if this is unnacceptable.
  */
 struct device_left_signal
 {
@@ -38,8 +41,9 @@ struct device_left_signal
     device_left_signal(libusb_context *ctx, int vid, int pid, int dev_class);
     ~device_left_signal() noexcept;
 
-    device_left_signal(const device_left_signal &)            = delete;
-    device_left_signal &operator=(const device_left_signal &) = delete;
+    device_left_signal(const device_left_signal &)            = delete; /* does not make sense */
+    device_left_signal &operator=(const device_left_signal &) = delete; /* does not make sense */
+
     device_left_signal(device_left_signal &&);
     device_left_signal &operator=(device_left_signal &&);
 

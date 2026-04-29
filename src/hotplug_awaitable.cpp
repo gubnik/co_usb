@@ -20,9 +20,9 @@ std::coroutine_handle<> co_usb::hotplug_awaitable::await_suspend (std::coroutine
 {
     if (env->stop_token.stop_requested())
     {
-        m_data.res.event = co_usb::hotplug_event::left;
-        m_data.res.dev   = device_ref{nullptr};
-        m_error          = usb_error::unknown;
+        m_data.event = co_usb::hotplug_event::left;
+        m_data.dev   = device_ref{nullptr};
+        m_error      = usb_error::unknown;
         return h;
     }
     m_data.cont   = {h};
@@ -32,11 +32,11 @@ std::coroutine_handle<> co_usb::hotplug_awaitable::await_suspend (std::coroutine
         [] (libusb_context *ctx, libusb_device *dev, libusb_hotplug_event ev,
             void *user_data) -> int
         {
-            auto *data      = (cb_data *)user_data;
-            data->res.event = (ev == LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED)
-                                  ? co_usb::hotplug_event::arrived
-                                  : co_usb::hotplug_event::left;
-            data->res.dev   = device_ref{dev};
+            auto *data  = (cb_data *)user_data;
+            data->event = (ev == LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED)
+                              ? co_usb::hotplug_event::arrived
+                              : co_usb::hotplug_event::left;
+            data->dev   = device_ref{dev};
             data->io_env->executor.post(data->cont);
             return 0;
         },
@@ -53,5 +53,5 @@ boost::capy::io_result<co_usb::hotplug_event, co_usb::device_ref>
 co_usb::hotplug_awaitable::await_resume ()
 {
     libusb_hotplug_deregister_callback(m_ctx, m_handle);
-    return {make_usb_error_code(m_error), m_data.res.event, m_data.res.dev};
+    return {make_usb_error_code(m_error), m_data.event, m_data.dev};
 }

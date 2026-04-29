@@ -13,9 +13,11 @@ if [ -z $VCPKG_ROOT ]; then
     echo No vcpkg found. Cease!!
     exit 127
 fi
-echo "\033[1;33mvcpkg located at $VCPKG_ROOT\033[0;0m"
-rm -rf build/$PRESET
-mkdir -p build/$PRESET
+echo -e "\033[1;33mvcpkg located at $VCPKG_ROOT\033[0;0m"
+if [[ $3 = "reset" ]]; then
+    rm -rf build/$PRESET
+    mkdir -p build/$PRESET
+fi
 cmake --preset=$PRESET && \
     cmake --build build/$PRESET --config ${BUILD_TYPE}
 if [ ! -f compile_commands.json ]; then

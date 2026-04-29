@@ -11,20 +11,20 @@
 namespace co_usb
 {
 
+/**
+ * @brief Low-level awaitable primitive for strapping hotplug callbacks to a coroutine ecosystem.
+ *
+ * @details This is the lowest possible layer of abstraction over libusb's hotplug API. It should be
+ * used for maximum flexibility or when the behaviour of @ref device_acceptor is unacceptable, e.g.
+ * when no heap allocation is acceptable.
+ *
+ * Objects of this type are copyable since an awaitable object itself does not own any resource and
+ * operates on handles, pointers and integers instead. It it safe to copy and to move in any state.
+ *
+ * @note Does not allocate.
+ */
 struct hotplug_awaitable
 {
-    /**
-     * @brief result of a hotplug operation
-     */
-    struct result
-    {
-        hotplug_event event;
-        device_ref dev;
-    };
-
-    /**
-     * @note I hate how this is like this is but this is how libusb works
-     */
     hotplug_awaitable(libusb_context *ctx, int events, int flags, int vid, int pid, int dev_class);
 
     /**
@@ -52,7 +52,8 @@ struct hotplug_awaitable
     {
         boost::capy::io_env const *io_env = nullptr;
         boost::capy::continuation cont;
-        result res;
+        hotplug_event event;
+        device_ref dev;
     } m_data;
 };
 
