@@ -19,11 +19,11 @@ jobs:
         run: doxygen Doxyfile
 
       - name: Prepare nojekyll
-        run: touch .nojekyll
+        run: touch docs/html/.nojekyll
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./html
+          publish_dir: ./docs/html
           publish_branch: gh-pages
