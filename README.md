@@ -11,18 +11,28 @@ so it can be used seamlessly with libraries that consume those interfaces, e.g. 
 # Getting started
 
 This project uses `vcpkg` as a package manager.
-To use it in your `vcpkg`-based, projects:
+To use it in your `vcpkg`-based projects, do the following:
 1. Add [portfile](`./portfile.cmake`) and [vcpkg.json](./vcpkg.json) to your ports directory
 2. Copy `./res/ports/boost-capy/` and `./res/ports/libusb/` to your ports dir
 3. Provide them as overlay to the `vcpkg`
 4. Add the following to your `CMakeLists.txt`:
 ```cmake
 find_package(co_usb CONFIG REQUIRED)
-target_link_libraries(your_project PRIVATE co_usb::co_usb)
+target_link_libraries(my_app PRIVATE co_usb::co_usb)
 ```
 
-For non-`vcpkg` projects, you'll have to use CMake's `FetchContent` module and provide Boost.Capy and libusb
-on your own.
+For non-`vcpkg` projects, you will have to use CMake's `FetchContent` module and provide
+Boost.Capy and libusb on your own. This is method of consuming `co_usb` is not endorsed and may not work.
+```cmake
+include(FetchContent)
+FetchContent_Declare(co_usb
+    GIT_REPOSITORY https://github.com/gubnik/co_usb.git
+    GIT_TAG dev
+    GIT_SHALLOW TRUE)
+FetchContent_MakeAvailable(co_usb)
+
+target_link_libraries(my_app co_usb::co_usb)
+```
 
 # Documentation
 
@@ -30,15 +40,14 @@ Pending. Refer to in-code comments until then.
 
 # Design principles
 
-`co_usb` is first and foremost designed to not get in the way of regular libusb code - every abstraction
-lets the user of the library peel off the layers and get into raw libusb handles and functions if need be - it is no
-goal of the library to be an all-encompassing wrapper over libusb.
+`co_usb` is designed to be a helping layer on top of libusb and not an all-encompassing wrapper. It follows
+original libusb abstractions closely and exposes original handles on every of its abstractions.
 
-However, `co_usb` does provide some high-level abstractions to provide a better interface - namely,
-transfer types and hotplug API. They introduce a tiny overhead compared to raw awaitables and libusb but
-it is negligible in the context of any I/O delay.
+Still, the library does provide higher level mechanisms of interacting with libusb which are modeled after
+established I/O libraries, namely - Asio and Corosio. These higher level abstraction do introduce a tiny overhead
+compared to raw awaitables but in real code this overhead is negligible compared to I/O delays.
 
-# Transfer awaitables (ReadStream/WriteStream)
+# Transfer awaitables and transfer types
 
 Transfers are the primary asynchronous unit of libusb, and by extension `co_usb` as well. This library provides a
 `transfer_awaitable` primitive for wrapping submission logic: submit a transfer upon suspension and resume when the transfer
@@ -67,17 +76,17 @@ if (ec)
 process_data(buf, n);
 ```
 
-# Hotplug API (Device acceptor)
+# Hotplug awaitables and device acceptor
 
 Hotplug API is a major component of both libusb and `co_usb` - it is a way to get information about devices being attached and detached
-in real time, and it is a rather complicated component of libusb in regards to managing device lifetimes.
+in real time, and it is a rather complicated component of libusb in regards to managing devices' lifetimes.
 
-`co_usb` aims to provide an awaitable interface to libusb's hotplug callbacks by introducing `hotplug_awaitable` type, which is exactly
-what is reads like: an awaitable which, upon suspension, registers a callback and upon callback's completion resumes the awaiting coroutine
-and deregisters the callback. It is a *very* low level wrapper over hotplug callbacks, and as such it does not allocate and should be used
-for the cases which cannot be handled by higher level abstraction (see [example 03](./examples/03-raw-hotplug.cpp)). One overhead of
-such awaitable is that it returns *not* the raw `libusb_device*` but a `co_usb::device_ref` which *guarantees* a non-null device
-underneath, increments device ref count on construction and decrements on destruction.
+`co_usb` aims to provide an awaitable interface to libusb's hotplug callbacks by introducing `hotplug_awaitable` type.
+This is an awaitable which, upon suspension, registers a callback, resumes the awaiting coroutine once the callback completes
+and deregisters the callback. It is a low level wrapper over hotplug callbacks, and as such it does not allocate and should be used
+for the cases which cannot be handled by a higher level abstraction (see [example 03](./examples/03-raw-hotplug.cpp)).
+The overhead of this awaitable is that it returns *not* the raw `libusb_device*` but a `co_usb::device_ref` instead
+which *guarantees* a non-null device and maintains a positivie ref count for the device during its lifetime.
 ```cpp
 libusb_context *ctx = /* initialize */;
 auto [ec, event, device] = co_await co_usb::hotplug_awaitable{
@@ -105,9 +114,7 @@ if (ec)
 /* open the device, submit transfers, etc. */
 ```
 - `accept_with_left` method "accepts" the device in the same way as `accept` but also returns a `device_left_signal`, which is a
-way to know when the device was detached, similar to `std::stop_token` for cancellation (see [example 04](./examples/04-left-hotplug.cpp)).
-Please note that `device_left_signal` maintains a signal state similar to stop state of `std::stop_source`, *and it is allocated on the heap*,
-so each signal allocates once per lifetime on initial construction.
+way to know when the device was detached (see [example 04](./examples/04-left-hotplug.cpp)).
 ```cpp
 libusb_context *ctx = /* initialize */;
 co_usb::device_acceptor acceptor(ctx);
@@ -124,6 +131,10 @@ for(;;)
     /* open the device, submit transfers, etc. */
 }
 ```
+- - Similar to `std::stop_source`, `device_left_signal` maintains a signal state.
+Each signal object allocates a tiny state on the heap on construction.
+This is required because the state address must remain stable across moves and must outlive
+both the acceptor and the coroutine inside which it was initially created.
 
 # Handler service
 
@@ -150,6 +161,6 @@ co_usb::context<co_usb::use_service::no> ctx();          // disables the service
 ## Cancellation
 
 Context with enabled service provides cancellation semantics via exposed `std::stop_token`. It is recommended to be passed to
-`boost::capy::run_async` if proper cancellation is needed. However, due to the nature of libusb event handling the cancellation
-*will likely not* be instantaneous and instead happen *after* the current event is processed.
+`boost::capy::run_async` if proper cancellation is needed. Due to the nature of libusb event handling the cancellation
+will not be instantaneous and will happen *after* the current event is processed.
 
