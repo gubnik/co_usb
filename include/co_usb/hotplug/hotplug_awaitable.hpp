@@ -3,8 +3,8 @@
 #include "boost/capy/concept/io_awaitable.hpp"
 #include "boost/capy/continuation.hpp"
 #include "boost/capy/ex/io_env.hpp"
+#include "co_usb/device_ref.hpp"
 #include "co_usb/error.hpp"
-#include "co_usb/hotplug/device_ref.hpp"
 #include <boost/capy/io_result.hpp>
 #include <co_usb/hotplug/hotplug.hpp>
 

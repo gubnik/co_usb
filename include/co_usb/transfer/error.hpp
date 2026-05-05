@@ -19,6 +19,9 @@ enum class transfer_status
     error = LIBUSB_TRANSFER_ERROR,
 
     /** Transfer timed out */
+    timed_out = LIBUSB_TRANSFER_TIMED_OUT,
+
+    /** Transfer was cancelled */
     cancelled = LIBUSB_TRANSFER_CANCELLED,
 
     /** For bulk/interrupt endpoints: halt condition detected (endpoint

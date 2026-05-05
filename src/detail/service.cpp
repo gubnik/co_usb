@@ -1,4 +1,4 @@
-#include <co_usb/service.hpp>
+#include <co_usb/detail/service.hpp>
 
 co_usb::detail::handler_service::handler_service (boost::capy::execution_context &ctx)
     : boost::capy::execution_context::service()

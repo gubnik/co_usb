@@ -1,6 +1,6 @@
 #pragma once
 
-#include "co_usb/service.hpp"
+#include "co_usb/detail/service.hpp"
 #include <boost/capy/concept/executor.hpp>
 #include <boost/capy/ex/this_coro.hpp>
 #include <boost/capy/task.hpp>
@@ -9,7 +9,6 @@
 #include <ranges>
 #include <stdexcept>
 #include <stop_token>
-#include <type_traits>
 #include <utility>
 
 namespace co_usb

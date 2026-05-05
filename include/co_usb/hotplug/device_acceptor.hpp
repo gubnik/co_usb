@@ -1,63 +1,73 @@
 #pragma once
 
-#include "co_usb/hotplug/device_left_signal.hpp"
-#include "co_usb/hotplug/device_ref.hpp"
+#include "co_usb/device_ref.hpp"
+#include "co_usb/hotplug/left_signal.hpp"
+#include <boost/capy/continuation.hpp>
+#include <boost/capy/ex/io_env.hpp>
 #include <boost/capy/io_task.hpp>
 #include <libusb-1.0/libusb.h>
+#include <map>
+#include <memory_resource>
+#include <mutex>
 
 namespace co_usb
 {
 
+constexpr struct use_left_t
+{
+} use_left;
 /**
- * @brief Wrapper around raw @ref hotplug_awaitable
+ * @brief Accepts devices via hotplug
  *
- * @details This is a convenience wrapper and sarcifices control, namely ability to change
- * events and flags parameters for a better interface matching that of Corosio and Asio.
+ * @note Totally unrelated to @ref hotplug_awaitable in any way
  *
- * @note maybe not needed to be a class, kept as a class for compatibility reasons
+ * @details This class maintains a pool of currently connected devices and performs the book keeping
+ * to ensure that the same device is not accepted while already connected.
+ *
+ * Internal map is allocated using @ref std::pmr::polymorphic_allocator to allow allocator
+ * propagation from coroutine frame allocator.
  */
 struct device_acceptor
 {
-    explicit device_acceptor(libusb_context *ctx) noexcept;
+    explicit device_acceptor(libusb_context *ctx, std::pmr::memory_resource *memory_resource =
+                                                      std::pmr::get_default_resource());
 
-    /**
-     * @brief Switches enumeration mode. Default is ON
-     *
-     * Passing true is equivalent to setting LIBUSB_HOTPLUG_ENUMERATE for flags.
-     */
-    void set_enumeration(bool do_enumerate) noexcept;
+    ~device_acceptor();
 
-    /**
-     * @returns current enumeration mode
-     *
-     * true is equivalent to LIBUSB_HOTPLUG_ENUMERATE.
-     */
-    bool do_enumerate() const noexcept;
+    device_acceptor(const device_acceptor &)            = delete;
+    device_acceptor &operator=(const device_acceptor &) = delete;
+    device_acceptor(device_acceptor &&)                 = delete;
+    device_acceptor &operator=(device_acceptor &&)      = delete;
 
-    /**
-     * @brief Wrapper aroung hotplug_awaitable with events=LIBUSB_HOTPLUG_DEVICE_ARRIVED and
-     * flags=LIBUSB_HOTPLUG_ENUMERATE
-     *
-     * @returns @ref std::error_code and device_ref
-     */
-    boost::capy::io_task<device_ref> accept(int vid, int pid, int dev_class);
+    boost::capy::io_task<device_ref> accept(device_triplet triplet);
 
-    /**
-     * @brief Wrapper aroung hotplug_awaitable with events=LIBUSB_HOTPLUG_DEVICE_ARRIVED and
-     * flags=LIBUSB_HOTPLUG_ENUMERATE that also registers a LIBUSB_HOTPLUG_DEVICE_LEFT callback
-     * on successful arrival and exposes a signal that triggers on successful callback
-     *
-     * @note device_left_token is a single-use, do not attempt to store it for prolonged periods of
-     * time
-     *
-     * @returns @ref std::error_code, @ref device_ref and @ref device_left_token
-     */
-    boost::capy::io_task<device_ref, device_left_signal> accept_with_left(int vid, int pid,
-                                                                          int dev_class);
+    boost::capy::io_task<device_ref, left_signal> accept(use_left_t, device_triplet triplet);
+
+    struct acceptor_awaitable;
+    friend struct acceptor_awaitable;
 
   private:
+    struct device_state_t
+    {
+        boost::capy::io_env const *env;
+        boost::capy::continuation cont;
+        device_ref dev;
+    };
+
+    struct triplet_comparator
+    {
+        bool operator()(const device_triplet &lhs, const device_triplet &rhs) const;
+    };
+
+    using allocator_t =
+        std::pmr::polymorphic_allocator<std::pair<const device_triplet, device_state_t>>;
+    using map_t = std::map<device_triplet, device_state_t, triplet_comparator, allocator_t>;
+
     libusb_context *m_ctx;
-    bool m_do_enumerate = true;
+    libusb_hotplug_callback_handle m_handle;
+    allocator_t m_allocator;
+    std::mutex m_mutex;
+    map_t m_dev_states;
 };
 
 } // namespace co_usb

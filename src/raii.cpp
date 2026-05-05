@@ -1,4 +1,3 @@
-#include "co_usb/hotplug/device_ref.hpp"
 #include <co_usb/raii.hpp>
 #include <libusb-1.0/libusb.h>
 

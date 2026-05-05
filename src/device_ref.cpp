@@ -1,4 +1,4 @@
-#include <co_usb/hotplug/device_ref.hpp>
+#include <co_usb/device_ref.hpp>
 #include <libusb-1.0/libusb.h>
 #include <stdexcept>
 
