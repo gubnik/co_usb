@@ -1,7 +1,7 @@
 #pragma once
 
 #include "co_usb/device_ref.hpp"
-#include "co_usb/hotplug/left_signal.hpp"
+#include "co_usb/device_triplet.hpp"
 #include <boost/capy/continuation.hpp>
 #include <boost/capy/ex/io_env.hpp>
 #include <boost/capy/io_task.hpp>
@@ -40,8 +40,6 @@ struct device_acceptor
     device_acceptor &operator=(device_acceptor &&)      = delete;
 
     boost::capy::io_task<device_ref> accept(device_triplet triplet);
-
-    boost::capy::io_task<device_ref, left_signal> accept(use_left_t, device_triplet triplet);
 
     struct acceptor_awaitable;
     friend struct acceptor_awaitable;

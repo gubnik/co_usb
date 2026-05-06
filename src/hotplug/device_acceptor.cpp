@@ -1,6 +1,5 @@
 #include "co_usb/device_ref.hpp"
 #include "co_usb/error.hpp"
-#include "co_usb/hotplug/left_signal.hpp"
 #include <boost/capy/io_result.hpp>
 #include <boost/capy/io_task.hpp>
 #include <co_usb/hotplug/device_acceptor.hpp>
@@ -121,14 +120,6 @@ boost::capy::io_task<co_usb::device_ref>
 co_usb::device_acceptor::accept (co_usb::device_triplet triplet)
 {
     co_return co_await acceptor_awaitable{this, triplet};
-}
-
-boost::capy::io_task<co_usb::device_ref, co_usb::left_signal>
-co_usb::device_acceptor::accept (co_usb::use_left_t, co_usb::device_triplet triplet)
-{
-    auto [ec, dev] = co_await acceptor_awaitable{this, triplet};
-    auto ls        = left_signal{m_ctx, triplet, m_allocator.resource()};
-    co_return {ec, dev, ls};
 }
 
 co_usb::device_acceptor::~device_acceptor ()
