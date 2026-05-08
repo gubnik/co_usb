@@ -22,8 +22,16 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev)
     // propagate the stop token
     auto stop_token = co_await boost::capy::this_coro::stop_token;
 
-    auto devh  = co_usb::open(dev);
+    auto devh = co_usb::open(dev);
+
+    // RAII guard to detach and reattach kernel driver
+    auto guard = co_usb::kernel_driver_guard{devh.get(), dev_iface_num};
+
+    // claim the interface
     auto iface = co_usb::interface{devh.get(), dev_iface_num};
+
+    // allocate and pre-fill the transfer
+    // libusb doesn't have allocator API so we can't propagate frame allocator
     co_usb::bulk_transfer hello_tfer{co_usb::ep_out(0x02, iface)};
 
     // set up an stop observer to cancel outgoing transfers when the stop is requested
@@ -42,6 +50,7 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev)
         {
             continue;
         }
+
         switch (static_cast<co_usb::transfer_status>(ec.value()))
         {
 

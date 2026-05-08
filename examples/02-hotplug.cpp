@@ -10,6 +10,7 @@
  * For raw @ref co_usb::hotplug_awaitable, see example 03
  */
 
+#include "co_usb/kernel_driver_guard.hpp"
 #include <boost/capy.hpp>
 #include <co_usb.hpp>
 #include <libusb-1.0/libusb.h>
@@ -21,6 +22,7 @@ constexpr uint8_t dev_iface_num = 0;
 
 boost::capy::task<> dev_loop (co_usb::unique_dev_handle devh)
 {
+    co_usb::kernel_driver_guard guard{devh.get(), dev_iface_num};
     co_usb::interface iface{devh.get(), dev_iface_num};
     co_usb::bulk_transfer read_in{co_usb::ep_in(0x01, iface)};
     char buf[1024];

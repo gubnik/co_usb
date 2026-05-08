@@ -6,6 +6,7 @@
 #include <co_usb/device_ref.hpp>
 #include <co_usb/error.hpp>
 #include <co_usb/interface.hpp>
+#include <co_usb/kernel_driver_guard.hpp>
 #include <co_usb/raii.hpp>
 
 // Transfers

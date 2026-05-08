@@ -2,13 +2,16 @@
 
 #include "co_usb/device_ref.hpp"
 #include "co_usb/device_triplet.hpp"
+#include "co_usb/error.hpp"
 #include <boost/capy/continuation.hpp>
 #include <boost/capy/ex/io_env.hpp>
 #include <boost/capy/io_task.hpp>
+#include <functional>
 #include <libusb-1.0/libusb.h>
 #include <map>
 #include <memory_resource>
 #include <mutex>
+#include <stop_token>
 
 namespace co_usb
 {
@@ -41,15 +44,18 @@ struct device_acceptor
 
     boost::capy::io_task<device_ref> accept(device_triplet triplet);
 
+  private:
     struct acceptor_awaitable;
     friend struct acceptor_awaitable;
-
-  private:
     struct device_state_t
     {
-        boost::capy::io_env const *env;
-        boost::capy::continuation cont;
-        device_ref dev;
+        boost::capy::io_env const *env{nullptr};
+        boost::capy::continuation cont{};
+        device_ref dev{};
+        usb_error err;
+
+        // fires on cancellation to interrupt awaitables
+        std::optional<std::stop_callback<std::function<void()>>> opt_cb;
     };
 
     struct triplet_comparator
