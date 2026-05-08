@@ -54,7 +54,7 @@ struct co_usb::device_acceptor::acceptor_awaitable
         auto &state = acceptor->m_dev_states[triplet];
 
         // resume if the device arrived while we were locking
-        if (state.env || state.dev.get_opt())
+        if (state.env || state.dev.get())
         {
             lock.unlock();
             return h;
@@ -80,6 +80,7 @@ struct co_usb::device_acceptor::acceptor_awaitable
                                  state.err = usb_error::interrupted;
                                  auto env  = state.env;
                                  auto cont = state.cont;
+                                 state.env = nullptr;
                                  lock.unlock();
                                  env->executor.post(cont);
                              });
@@ -162,7 +163,6 @@ co_usb::device_acceptor::device_acceptor (libusb_context *ctx,
                 auto env    = state.env;
                 auto cont   = state.cont;
                 state.env   = nullptr;
-                state.cont  = {};
                 lock.unlock();
                 env->executor.post(cont);
             }

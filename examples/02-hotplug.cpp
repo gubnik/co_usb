@@ -10,7 +10,6 @@
  * For raw @ref co_usb::hotplug_awaitable, see example 03
  */
 
-#include "co_usb/kernel_driver_guard.hpp"
 #include <boost/capy.hpp>
 #include <co_usb.hpp>
 #include <libusb-1.0/libusb.h>
@@ -20,10 +19,26 @@ constexpr uint16_t dev_vid      = 0x9f9f;
 constexpr uint16_t dev_pid      = 0x9f9f;
 constexpr uint8_t dev_iface_num = 0;
 
-boost::capy::task<> dev_loop (co_usb::unique_dev_handle devh)
+boost::capy::task<> dev_loop (co_usb::device_ref dev)
 {
-    co_usb::kernel_driver_guard guard{devh.get(), dev_iface_num};
-    co_usb::interface iface{devh.get(), dev_iface_num};
+    auto [dec, devh] = co_usb::open(dev);
+    if (dec)
+    {
+        std::println(stderr, "Error during device opening: {}", dec.message());
+        co_return;
+    }
+    auto [gec, guard] = co_usb::kernel_driver_guard::detach(devh, dev_iface_num);
+    if (gec && gec != co_usb::make_usb_error_code(co_usb::usb_error::not_found))
+    {
+        std::println(stderr, "Error during driver detachment: {}", gec.message());
+        co_return;
+    }
+    auto [iec, iface] = co_usb::interface::claim(devh, dev_iface_num);
+    if (iec)
+    {
+        std::println(stderr, "Error during interface claiming: {}", iec.message());
+        co_return;
+    }
     co_usb::bulk_transfer read_in{co_usb::ep_in(0x01, iface)};
     char buf[1024];
     for (;;)
@@ -49,8 +64,7 @@ boost::capy::task<> accept_hotplug (libusb_context *ctx)
             break;
 
         std::println("Device arrived!");
-        auto devh = co_usb::open(dev);
-        boost::capy::run_async(exec)(dev_loop(std::move(devh)));
+        boost::capy::run_async(exec)(dev_loop(dev));
     }
 }
 

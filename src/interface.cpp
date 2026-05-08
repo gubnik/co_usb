@@ -3,25 +3,27 @@
 #include <libusb-1.0/libusb.h>
 #include <system_error>
 
-co_usb::interface::interface (libusb_device_handle *devh, int iface)
+co_usb::interface::interface (libusb_device_handle *devh, int iface) noexcept
     : m_devh(devh), m_iface_num(iface)
 {
-    auto r = libusb_claim_interface(m_devh, iface);
-    if (r != LIBUSB_SUCCESS)
-    {
-        throw std::system_error{make_usb_error_code(static_cast<usb_error>(r))};
-    }
 }
 
-co_usb::interface::interface (std::error_code &errc, libusb_device_handle *devh, int iface) noexcept
-    : m_devh(devh), m_iface_num(iface)
+boost::capy::io_result<co_usb::interface> co_usb::interface::claim (libusb_device_handle *devh,
+                                                                    int iface_num) noexcept
 {
-    auto r = libusb_claim_interface(m_devh, iface);
+    auto r               = libusb_claim_interface(devh, iface_num);
+    std::error_code errc = make_usb_error_code(usb_error::success);
     if (r != LIBUSB_SUCCESS)
     {
         errc = make_usb_error_code(static_cast<usb_error>(r));
-        return;
     }
+    return {errc, {devh, iface_num}};
+}
+
+boost::capy::io_result<co_usb::interface> co_usb::interface::claim (co_usb::unique_dev_handle &devh,
+                                                                    int iface_num) noexcept
+{
+    return claim(devh.get(), iface_num);
 }
 
 void co_usb::interface::release () const noexcept

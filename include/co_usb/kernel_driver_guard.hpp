@@ -1,8 +1,9 @@
 #pragma once
 
+#include "co_usb/raii.hpp"
+#include <boost/capy/io_result.hpp>
 #include <libusb-1.0/libusb.h>
 #include <memory>
-#include <system_error>
 
 namespace co_usb
 {
@@ -13,8 +14,11 @@ namespace co_usb
  */
 struct kernel_driver_guard
 {
-    kernel_driver_guard(libusb_device_handle *devh, int iface_num);
-    kernel_driver_guard(std::error_code &errc, libusb_device_handle *devh, int iface_num) noexcept;
+    static boost::capy::io_result<kernel_driver_guard> detach(libusb_device_handle *devh,
+                                                              int iface_num) noexcept;
+
+    static boost::capy::io_result<kernel_driver_guard> detach(unique_dev_handle &devh,
+                                                              int iface_num) noexcept;
 
     libusb_device_handle *dev() const noexcept;
     int number() const noexcept;
@@ -22,6 +26,8 @@ struct kernel_driver_guard
     void release() noexcept;
 
   private:
+    kernel_driver_guard(libusb_device_handle *devh, int iface_num);
+
     std::shared_ptr<libusb_device_handle> m_devh;
     int m_iface_num;
 };

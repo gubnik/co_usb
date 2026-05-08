@@ -1,7 +1,6 @@
 #pragma once
 
 #include <libusb-1.0/libusb.h>
-#include <optional>
 
 namespace co_usb
 {
@@ -33,17 +32,8 @@ struct device_ref
 
     /**
      * @returns underlying pointer to @ref libusb_device
-     *
-     * @throws @ref std::runtime_error if internal device is null
      */
-    libusb_device *get() const;
-
-    /**
-     * @returns optional of an underlying pointer to @ref libusb_device
-     *
-     * @note does not throw under normal circumstances
-     */
-    std::optional<libusb_device *> get_opt() const noexcept;
+    libusb_device *get() const noexcept;
 
   private:
     libusb_device *m_dev;

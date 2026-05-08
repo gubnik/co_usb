@@ -6,9 +6,11 @@
  * Demonstrates compile-time direction semantic and basics of reads and writes.
  */
 
+#include "co_usb/error.hpp"
 #include <array>
 #include <boost/capy.hpp>
 #include <co_usb.hpp>
+#include <print>
 
 constexpr uint16_t dev_vid      = 0x9f9f;
 constexpr uint16_t dev_pid      = 0x9f9f;
@@ -21,13 +23,13 @@ boost::capy::task<> echo (const co_usb::interface &iface)
     auto out_tfer = co_usb::bulk_transfer{co_usb::ep_out(0x02, iface)};
     for (;;)
     {
-        auto [ec, n] =
+        auto [rec, rn] =
             co_await in_tfer.read_some(boost::capy::mutable_buffer{buf.data(), buf.size()});
 
-        if (ec)
+        if (rec)
             break;
 
-        auto [wec, wn] = co_await out_tfer.write_some(boost::capy::const_buffer{buf.data(), n});
+        auto [wec, wn] = co_await out_tfer.write_some(boost::capy::const_buffer{buf.data(), rn});
 
         if (wec)
             break;
@@ -38,11 +40,24 @@ int main (int argc, char **argv)
 {
     boost::capy::thread_pool tp;
     co_usb::context<> ctx(tp.get_executor());
-    co_usb::unique_dev_handle devh = co_usb::open_vid_pid(ctx.get(), dev_vid, dev_pid);
-    if (!devh)
-        return 1;
-    co_usb::kernel_driver_guard guard{devh.get(), dev_iface_num};
-    co_usb::interface iface{devh.get(), dev_iface_num};
+    auto [dec, devh] = co_usb::open(ctx.get(), {dev_vid, dev_pid});
+    if (dec)
+    {
+        std::println(stderr, "Error during device opening: {}", dec.message());
+        return dec.value();
+    }
+    auto [gec, guard] = co_usb::kernel_driver_guard::detach(devh, dev_iface_num);
+    if (gec && gec != co_usb::make_usb_error_code(co_usb::usb_error::not_found))
+    {
+        std::println(stderr, "Error during driver detachment: {}", gec.message());
+        return gec.value();
+    }
+    auto [iec, iface] = co_usb::interface::claim(devh, dev_iface_num);
+    if (iec)
+    {
+        std::println(stderr, "Error during interface claiming: {}", iec.message());
+        return iec.value();
+    }
     boost::capy::run_async(tp.get_executor())(echo(iface));
     tp.join();
 }

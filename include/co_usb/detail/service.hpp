@@ -2,6 +2,7 @@
 
 #include <boost/capy/ex/execution_context.hpp>
 #include <libusb-1.0/libusb.h>
+#include <memory>
 #include <optional>
 #include <stop_token>
 #include <thread>
@@ -30,17 +31,13 @@ struct handler_service : public boost::capy::execution_context::service
      * and services cannot take additional ctor params.
      */
     template <std::invocable<libusb_context *, std::stop_token> HandlerFn>
-    void start_thread (libusb_context *ctx, HandlerFn &&handler_fn)
+    void start_thread (std::shared_ptr<libusb_context> ctx, HandlerFn &&handler_fn)
     {
+        m_ctx            = ctx;
         m_handler_thread = std::jthread{
-            [ctx = ctx, handler_fn = std::forward<HandlerFn>(handler_fn)] (std::stop_token st)
+            [ctx = ctx.get(), handler_fn = std::forward<HandlerFn>(handler_fn)] (std::stop_token st)
             { handler_fn(ctx, st); }};
     }
-
-    /**
-     * @brief default handler function for the service
-     */
-    static void default_handler(libusb_context *ctx, std::stop_token st);
 
     std::stop_source stop_source();
 
@@ -48,6 +45,7 @@ struct handler_service : public boost::capy::execution_context::service
     void shutdown() override;
 
   private:
+    std::shared_ptr<libusb_context> m_ctx;
     std::optional<std::jthread> m_handler_thread;
 };
 

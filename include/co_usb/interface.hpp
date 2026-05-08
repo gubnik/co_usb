@@ -1,15 +1,18 @@
 #pragma once
 
+#include "co_usb/raii.hpp"
 #include <boost/capy/io_result.hpp>
 #include <libusb-1.0/libusb.h>
 
 namespace co_usb
 {
 
+struct interface;
+
 struct interface
 {
-    interface(libusb_device_handle *devh, int iface);
-    interface(std::error_code &errc, libusb_device_handle *devh, int iface) noexcept;
+    static boost::capy::io_result<interface> claim(libusb_device_handle *, int) noexcept;
+    static boost::capy::io_result<interface> claim(unique_dev_handle &, int) noexcept;
 
     ~interface();
 
@@ -28,6 +31,8 @@ struct interface
     void release() const noexcept;
 
   private:
+    interface(libusb_device_handle *devh, int iface) noexcept;
+
     libusb_device_handle *m_devh;
     int m_iface_num;
 };

@@ -1,7 +1,5 @@
 #include <co_usb/device_ref.hpp>
 #include <libusb-1.0/libusb.h>
-#include <optional>
-#include <stdexcept>
 
 co_usb::device_ref::device_ref () noexcept : m_dev(nullptr)
 {
@@ -18,18 +16,9 @@ co_usb::device_ref::~device_ref () noexcept
         libusb_unref_device(m_dev);
 }
 
-libusb_device *co_usb::device_ref::get () const
+libusb_device *co_usb::device_ref::get () const noexcept
 {
-    if (m_dev)
-        return m_dev;
-    throw std::runtime_error{"Cannot retrieve device from null device ref"};
-}
-
-std::optional<libusb_device *> co_usb::device_ref::get_opt () const noexcept
-{
-    if (m_dev)
-        return m_dev;
-    return std::nullopt;
+    return m_dev;
 }
 
 co_usb::device_ref::device_ref (const device_ref &other) noexcept
