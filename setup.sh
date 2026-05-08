@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/bash
 PRESET=$1
 if [ -z $PRESET ]; then
     echo Preset missing
