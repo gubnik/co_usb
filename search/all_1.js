@@ -8,8 +8,9 @@ var searchData=
   ['basic_5ftransfer_3c_20endpoint_5ftype_3a_3aisochronous_2c_20dir_20_3e_5',['basic_transfer&lt; endpoint_type::isochronous, Dir &gt;',['../structco__usb_1_1basic__transfer.html',1,'co_usb']]],
   ['both_6',['both',['../namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676af6cb3e816496528d4187db53bc66567f',1,'co_usb']]],
   ['broken_5fpipe_7',['broken_pipe',['../namespaceco__usb.html#a3b9521daa5a8097db3c2162bce25a1bca2f0338eed54503152be1d31c93c9c2f1',1,'co_usb']]],
-  ['bulk_8',['bulk',['../namespaceco__usb.html#afd7c665b131570d066071086e956a0caa14f098921bc8c68a8dc0c5529b7013b4',1,'co_usb']]],
-  ['bulk_5fstream_9',['bulk_stream',['../namespaceco__usb.html#afd7c665b131570d066071086e956a0caa9800a20c23b31d5da368912afef958ed',1,'co_usb']]],
-  ['bulk_5fstream_5ftransfer_10',['bulk_stream_transfer',['../structco__usb_1_1bulk__stream__transfer.html',1,'co_usb::bulk_stream_transfer&lt; Dir &gt;'],['../structco__usb_1_1bulk__stream__transfer.html#a632bfabc870817d61346c997a9db5d72',1,'co_usb::bulk_stream_transfer::bulk_stream_transfer()']]],
-  ['bulk_5ftransfer_11',['bulk_transfer',['../structco__usb_1_1bulk__transfer.html',1,'co_usb::bulk_transfer&lt; Dir &gt;'],['../structco__usb_1_1bulk__transfer.html#afea362384367ccad753c50e8b1adf888',1,'co_usb::bulk_transfer::bulk_transfer()']]]
+  ['build_20from_20source_8',['Build from source',['../index.html#autotoc_md2',1,'']]],
+  ['bulk_9',['bulk',['../namespaceco__usb.html#afd7c665b131570d066071086e956a0caa14f098921bc8c68a8dc0c5529b7013b4',1,'co_usb']]],
+  ['bulk_5fstream_10',['bulk_stream',['../namespaceco__usb.html#afd7c665b131570d066071086e956a0caa9800a20c23b31d5da368912afef958ed',1,'co_usb']]],
+  ['bulk_5fstream_5ftransfer_11',['bulk_stream_transfer',['../structco__usb_1_1bulk__stream__transfer.html',1,'co_usb::bulk_stream_transfer&lt; Dir &gt;'],['../structco__usb_1_1bulk__stream__transfer.html#a632bfabc870817d61346c997a9db5d72',1,'co_usb::bulk_stream_transfer::bulk_stream_transfer()']]],
+  ['bulk_5ftransfer_12',['bulk_transfer',['../structco__usb_1_1bulk__transfer.html',1,'co_usb::bulk_transfer&lt; Dir &gt;'],['../structco__usb_1_1bulk__transfer.html#afea362384367ccad753c50e8b1adf888',1,'co_usb::bulk_transfer::bulk_transfer()']]]
 ];
