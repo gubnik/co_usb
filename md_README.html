@@ -77,9 +77,9 @@ $(function() {
 </blockquote>
 <h1><a class="anchor" id="autotoc_md0"></a>
 co_usb</h1>
-<p>Modern C++ library using C++20 coroutines and <a href="https://github.com/cppalliance/capy">Boost.Capy</a> to create a lightweight interface for <a href="https://libusb.info/">libusb-1.0</a>. It provides minimal abstractions over base libusb to enable efficient and clean concurrent I/O using Boost.Capy's common interfaces so it can be used seamlessly with libraries that consume those interfaces, e.g. Boost.Http.</p>
-<h1><a class="anchor" id="autotoc_md1"></a>
-Getting started</h1>
+<p>Asynchronous USB library using C++20 coroutines and <a href="https://github.com/cppalliance/capy">Boost.Capy</a> to create a lightweight interface for <a href="https://libusb.info/">libusb-1.0</a>. It provides minimal necessary abstractions over base libusb to enable efficient and clean concurrent I/O using Boost.Capy's common interfaces for seamless interoperability with wider coroutine ecosystem.</p>
+<h2><a class="anchor" id="autotoc_md1"></a>
+Getting started</h2>
 <p>This project uses <code>vcpkg</code> as a package manager. To use it in your <code>vcpkg</code>-based projects, do the following:</p><ol type="1">
 <li>Add <a href="`./portfile.cmake`">portfile</a> and <a href="./vcpkg.json">vcpkg.json</a> to your ports directory</li>
 <li>Copy <code>./res/ports/boost-capy/</code> and <code>./res/ports/libusb/</code> to your ports dir</li>
@@ -96,9 +96,18 @@ Getting started</h1>
 <div class="line">FetchContent_MakeAvailable(co_usb)</div>
 <div class="line"> </div>
 <div class="line">target_link_libraries(my_app co_usb::co_usb)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md2"></a>
-Documentation</h1>
-<p>See <a href="https://gubnik.github.io/co_usb">docs</a> for WIP generated docs </p>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md2"></a>
+Build from source</h2>
+<p>To build from source: </p><div class="fragment"><div class="line">git clone https://github.com/gubnik/co_usb.git</div>
+<div class="line">cd co_usb</div>
+<div class="line">./setup.sh x64-static Debug # or x64-dyn instead of x64-static, or Release instead of Debug</div>
+</div><!-- fragment --><p>To fully rebuild: </p><div class="fragment"><div class="line">./setup.sh ${PRESET} ${BUILD_TYPE} reset</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md3"></a>
+Documentation</h2>
+<p>See <a href="https://gubnik.github.io/co_usb">docs</a> for generated docs</p>
+<h2><a class="anchor" id="autotoc_md4"></a>
+License</h2>
+<p>Distributed under the Boost Software License, Version 1.0. (See accompanying file <a href="LICENSE_1_0.txt">LICENSE_1_0.txt</a> or copy at <a href="https://www.boost.org/LICENSE_1_0.txt">https://www.boost.org/LICENSE_1_0.txt</a>) </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

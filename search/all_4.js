@@ -20,5 +20,5 @@ var searchData=
   ['device_5ftriplet_17',['device_triplet',['../structco__usb_1_1device__triplet.html',1,'co_usb']]],
   ['device_5ftriplet_2ehpp_18',['device_triplet.hpp',['../device__triplet_8hpp.html',1,'']]],
   ['direction_19',['direction',['../structco__usb_1_1basic__transfer.html#a29eda0cb05e566f46cd46463853b7b74',1,'co_usb::basic_transfer']]],
-  ['documentation_20',['Documentation',['../md_README.html#autotoc_md2',1,'']]]
+  ['documentation_20',['Documentation',['../md_README.html#autotoc_md3',1,'']]]
 ];

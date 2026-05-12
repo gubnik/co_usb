@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['service_2ecpp_0',['service.cpp',['../service_8cpp.html',1,'']]],
-  ['service_2ehpp_1',['service.hpp',['../service_8hpp.html',1,'']]],
-  ['shutdown_2',['shutdown',['../structco__usb_1_1detail_1_1handler__service.html#a3d9e9bbba3f0507eb810723721194512',1,'co_usb::detail::handler_service']]],
-  ['stall_3',['stall',['../namespaceco__usb.html#a25f0b769747592400f5f0708a6363707af0069dfea9ff1a6d6df3e0a40e375d2b',1,'co_usb']]],
-  ['start_5fthread_4',['start_thread',['../structco__usb_1_1detail_1_1handler__service.html#a5c504da840e47dc59c1134477a236d0f',1,'co_usb::detail::handler_service']]],
-  ['started_5',['Getting started',['../md_README.html#autotoc_md1',1,'']]],
-  ['std_6',['std',['../namespacestd.html',1,'']]],
-  ['stop_5fsource_7',['stop_source',['../structco__usb_1_1detail_1_1handler__service.html#a04223eea5f3629655d4868eceba40880',1,'co_usb::detail::handler_service']]],
-  ['success_8',['success',['../namespaceco__usb.html#a3b9521daa5a8097db3c2162bce25a1bca260ca9dd8a4577fc00b7bd5810298076',1,'co_usb']]]
+  ['raii_2ecpp_0',['raii.cpp',['../raii_8cpp.html',1,'']]],
+  ['raii_2ehpp_1',['raii.hpp',['../raii_8hpp.html',1,'']]],
+  ['raw_2',['raw',['../structco__usb_1_1basic__transfer.html#a1724b31c03123613f4de472c8e4004ff',1,'co_usb::basic_transfer']]],
+  ['read_5fsome_3',['read_some',['../structco__usb_1_1basic__transfer.html#a9f5a0e5ec1d2c4466d889e9c76351ddb',1,'co_usb::basic_transfer']]],
+  ['readme_4',['README',['../md_README.html',1,'']]],
+  ['readme_2emd_5',['README.md',['../README_8md.html',1,'']]],
+  ['release_6',['release',['../structco__usb_1_1interface.html#a1c1e4a2f03d8551dff32b95312a7c5a1',1,'co_usb::interface::release()'],['../structco__usb_1_1kernel__driver__guard.html#af670d96b0209c114030e29a7f2a01f05',1,'co_usb::kernel_driver_guard::release()']]],
+  ['request_5fstop_7',['request_stop',['../structco__usb_1_1context_3_01use__service_1_1yes_01_4.html#a4f13fddf28c4aedcab1533e9e913731b',1,'co_usb::context&lt; use_service::yes &gt;']]],
+  ['resource_5fbusy_8',['resource_busy',['../namespaceco__usb.html#a3b9521daa5a8097db3c2162bce25a1bcab8452f93535a5ae7466e9df8fc13435c',1,'co_usb']]]
 ];

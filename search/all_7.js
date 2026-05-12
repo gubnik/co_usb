@@ -1,11 +1,6 @@
 var searchData=
 [
-  ['handler_5ffn_5ft_0',['handler_fn_t',['../structco__usb_1_1detail_1_1handler__service.html#aa89ba643a31d178bff7a715c033d5776',1,'co_usb::detail::handler_service']]],
-  ['handler_5fservice_1',['handler_service',['../structco__usb_1_1detail_1_1handler__service.html',1,'co_usb::detail::handler_service'],['../structco__usb_1_1detail_1_1handler__service.html#a576173a3d255b0dd3efb34fe8794d7c6',1,'co_usb::detail::handler_service::handler_service()']]],
-  ['hotplug_2ehpp_2',['hotplug.hpp',['../hotplug_8hpp.html',1,'']]],
-  ['hotplug_5fawaitable_3',['hotplug_awaitable',['../structco__usb_1_1hotplug__awaitable.html',1,'co_usb::hotplug_awaitable'],['../structco__usb_1_1hotplug__awaitable.html#a0f3cec4df847d40f2913eae08dd860d2',1,'co_usb::hotplug_awaitable::hotplug_awaitable()']]],
-  ['hotplug_5fawaitable_2ecpp_4',['hotplug_awaitable.cpp',['../hotplug__awaitable_8cpp.html',1,'']]],
-  ['hotplug_5fawaitable_2ehpp_5',['hotplug_awaitable.hpp',['../hotplug__awaitable_8hpp.html',1,'']]],
-  ['hotplug_5fevent_6',['hotplug_event',['../namespaceco__usb.html#ab4f4c1da5879716d34fbb9f68f7fe1df',1,'co_usb']]],
-  ['hotplug_5fflag_7',['hotplug_flag',['../namespaceco__usb.html#a01c5017cf4fde237b17feb8ab0f642c6',1,'co_usb']]]
+  ['get_0',['get',['../structco__usb_1_1context_3_01use__service_1_1yes_01_4.html#a0e5c123164bbee0bdbf50ef2f6df9d21',1,'co_usb::context&lt; use_service::yes &gt;::get()'],['../structco__usb_1_1context_3_01use__service_1_1no_01_4.html#ac77ae4d4314cfb4b0124500b773f2e63',1,'co_usb::context&lt; use_service::no &gt;::get()'],['../structco__usb_1_1device__ref.html#a1a0b8234bfafc5517f143937a8cb4047',1,'co_usb::device_ref::get()']]],
+  ['get_5ftoken_1',['get_token',['../structco__usb_1_1context_3_01use__service_1_1yes_01_4.html#a242a8dad5bca094da34f6825dd7f7291',1,'co_usb::context&lt; use_service::yes &gt;']]],
+  ['getting_20started_2',['Getting started',['../md_README.html#autotoc_md1',1,'']]]
 ];

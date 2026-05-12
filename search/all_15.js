@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['yes_0',['yes',['../namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0caa6105c0a611b41b08f1209506350279e',1,'co_usb']]]
+  ['write_5fsome_0',['write_some',['../structco__usb_1_1basic__transfer.html#a10e1bac016722fba8f070485be3ffa1b',1,'co_usb::basic_transfer']]]
 ];

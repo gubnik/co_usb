@@ -1,15 +1,13 @@
 var searchData=
 [
-  ['timed_5fout_0',['timed_out',['../namespaceco__usb.html#a3b9521daa5a8097db3c2162bce25a1bca56c27b1ab1a5a5a0eae853cabb4dc0c1',1,'co_usb::timed_out'],['../namespaceco__usb.html#a25f0b769747592400f5f0708a6363707a56c27b1ab1a5a5a0eae853cabb4dc0c1',1,'co_usb::timed_out']]],
-  ['total_1',['total',['../01-multiple-transfers_8cpp.html#a556d0eb7652f3fc19be41b7e0b4be0cd',1,'01-multiple-transfers.cpp']]],
-  ['transfer_2',['transfer',['../structco__usb_1_1transfer__awaitable.html#a370b839b14f4a34d25363c299ba462b6',1,'co_usb::transfer_awaitable']]],
-  ['transfer_5fawaitable_3',['transfer_awaitable',['../structco__usb_1_1transfer__awaitable.html',1,'co_usb::transfer_awaitable'],['../structco__usb_1_1transfer__awaitable.html#ae482f99518cb3d3b2e9ae48a9cc3846b',1,'co_usb::transfer_awaitable::transfer_awaitable()']]],
-  ['transfer_5fawaitable_2ecpp_4',['transfer_awaitable.cpp',['../transfer__awaitable_8cpp.html',1,'']]],
-  ['transfer_5fawaitable_2ehpp_5',['transfer_awaitable.hpp',['../transfer__awaitable_8hpp.html',1,'']]],
-  ['transfer_5fdeleter_5ft_6',['transfer_deleter_t',['../namespaceco__usb.html#a5015b07a8e8490c8a41de51d52152a8b',1,'co_usb']]],
-  ['transfer_5fstatus_7',['transfer_status',['../namespaceco__usb.html#a25f0b769747592400f5f0708a6363707',1,'co_usb']]],
-  ['transfer_5fstatus_5fcategory_8',['transfer_status_category',['../namespaceco__usb.html#a396db13d5a4e51c7cf7f3e3469cc529f',1,'co_usb']]],
-  ['transfer_5fstatus_5fcategory_5ft_9',['transfer_status_category_t',['../structco__usb_1_1transfer__status__category__t.html',1,'co_usb']]],
-  ['transfer_5ftypes_2ehpp_10',['transfer_types.hpp',['../transfer__types_8hpp.html',1,'']]],
-  ['triplet_11',['triplet',['../structco__usb_1_1device__acceptor_1_1acceptor__awaitable.html#ae3e0e433179cb7f29c603ce3a903796c',1,'co_usb::device_acceptor::acceptor_awaitable']]]
+  ['service_2ecpp_0',['service.cpp',['../service_8cpp.html',1,'']]],
+  ['service_2ehpp_1',['service.hpp',['../service_8hpp.html',1,'']]],
+  ['shutdown_2',['shutdown',['../structco__usb_1_1detail_1_1handler__service.html#a3d9e9bbba3f0507eb810723721194512',1,'co_usb::detail::handler_service']]],
+  ['source_3',['Build from source',['../md_README.html#autotoc_md2',1,'']]],
+  ['stall_4',['stall',['../namespaceco__usb.html#a25f0b769747592400f5f0708a6363707af0069dfea9ff1a6d6df3e0a40e375d2b',1,'co_usb']]],
+  ['start_5fthread_5',['start_thread',['../structco__usb_1_1detail_1_1handler__service.html#a5c504da840e47dc59c1134477a236d0f',1,'co_usb::detail::handler_service']]],
+  ['started_6',['Getting started',['../md_README.html#autotoc_md1',1,'']]],
+  ['std_7',['std',['../namespacestd.html',1,'']]],
+  ['stop_5fsource_8',['stop_source',['../structco__usb_1_1detail_1_1handler__service.html#a04223eea5f3629655d4868eceba40880',1,'co_usb::detail::handler_service']]],
+  ['success_9',['success',['../namespaceco__usb.html#a3b9521daa5a8097db3c2162bce25a1bca260ca9dd8a4577fc00b7bd5810298076',1,'co_usb']]]
 ];

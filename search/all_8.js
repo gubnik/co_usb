@@ -1,17 +1,11 @@
 var searchData=
 [
-  ['in_0',['in',['../namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676a13b5bfe96f3e2fe411c9f66f4a582adf',1,'co_usb']]],
-  ['interface_1',['interface',['../structco__usb_1_1interface.html',1,'co_usb']]],
-  ['interface_2ecpp_2',['interface.cpp',['../interface_8cpp.html',1,'']]],
-  ['interface_2ehpp_3',['interface.hpp',['../interface_8hpp.html',1,'']]],
-  ['interrupt_4',['interrupt',['../namespaceco__usb.html#afd7c665b131570d066071086e956a0caa2414c252176310b2c04547257948c7b7',1,'co_usb']]],
-  ['interrupt_5ftransfer_5',['interrupt_transfer',['../structco__usb_1_1interrupt__transfer.html',1,'co_usb::interrupt_transfer&lt; Dir &gt;'],['../structco__usb_1_1interrupt__transfer.html#a76655567877c8c0e30deece3bee892cc',1,'co_usb::interrupt_transfer::interrupt_transfer()']]],
-  ['interrupted_6',['interrupted',['../namespaceco__usb.html#a3b9521daa5a8097db3c2162bce25a1bcafadb76763385627e57ec386c9b6038f0',1,'co_usb']]],
-  ['invalid_5fparam_7',['invalid_param',['../namespaceco__usb.html#a3b9521daa5a8097db3c2162bce25a1bca791da2474b835cdf0aaecef48df5bbd0',1,'co_usb']]],
-  ['io_5fenv_8',['io_env',['../structco__usb_1_1transfer__awaitable_1_1cb__data.html#aa6a68fc8225223e692f36d85722673b0',1,'co_usb::transfer_awaitable::cb_data']]],
-  ['io_5ferror_9',['io_error',['../namespaceco__usb.html#a3b9521daa5a8097db3c2162bce25a1bcacccc32f2a5f7dc7b87d2f85daea66789',1,'co_usb']]],
-  ['is_5ferror_5fcode_5fenum_3c_20co_5fusb_3a_3atransfer_5fstatus_20_3e_10',['is_error_code_enum&lt; co_usb::transfer_status &gt;',['../structstd_1_1is__error__code__enum_3_01co__usb_1_1transfer__status_01_4.html',1,'std']]],
-  ['is_5ferror_5fcode_5fenum_3c_20co_5fusb_3a_3ausb_5ferror_20_3e_11',['is_error_code_enum&lt; co_usb::usb_error &gt;',['../structstd_1_1is__error__code__enum_3_01co__usb_1_1usb__error_01_4.html',1,'std']]],
-  ['isochronous_12',['isochronous',['../namespaceco__usb.html#afd7c665b131570d066071086e956a0caa1ccb1e43be64fd715fae60b8f048ecf4',1,'co_usb']]],
-  ['isochronous_5ftransfer_13',['isochronous_transfer',['../structco__usb_1_1isochronous__transfer.html',1,'co_usb::isochronous_transfer&lt; Dir &gt;'],['../structco__usb_1_1isochronous__transfer.html#a5243399dc7b6d048072e76a2e47dd741',1,'co_usb::isochronous_transfer::isochronous_transfer()']]]
+  ['handler_5ffn_5ft_0',['handler_fn_t',['../structco__usb_1_1detail_1_1handler__service.html#aa89ba643a31d178bff7a715c033d5776',1,'co_usb::detail::handler_service']]],
+  ['handler_5fservice_1',['handler_service',['../structco__usb_1_1detail_1_1handler__service.html',1,'co_usb::detail::handler_service'],['../structco__usb_1_1detail_1_1handler__service.html#a576173a3d255b0dd3efb34fe8794d7c6',1,'co_usb::detail::handler_service::handler_service()']]],
+  ['hotplug_2ehpp_2',['hotplug.hpp',['../hotplug_8hpp.html',1,'']]],
+  ['hotplug_5fawaitable_3',['hotplug_awaitable',['../structco__usb_1_1hotplug__awaitable.html',1,'co_usb::hotplug_awaitable'],['../structco__usb_1_1hotplug__awaitable.html#a0f3cec4df847d40f2913eae08dd860d2',1,'co_usb::hotplug_awaitable::hotplug_awaitable()']]],
+  ['hotplug_5fawaitable_2ecpp_4',['hotplug_awaitable.cpp',['../hotplug__awaitable_8cpp.html',1,'']]],
+  ['hotplug_5fawaitable_2ehpp_5',['hotplug_awaitable.hpp',['../hotplug__awaitable_8hpp.html',1,'']]],
+  ['hotplug_5fevent_6',['hotplug_event',['../namespaceco__usb.html#ab4f4c1da5879716d34fbb9f68f7fe1df',1,'co_usb']]],
+  ['hotplug_5fflag_7',['hotplug_flag',['../namespaceco__usb.html#a01c5017cf4fde237b17feb8ab0f642c6',1,'co_usb']]]
 ];

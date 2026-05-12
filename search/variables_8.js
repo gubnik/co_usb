@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['use_5fleft_0',['use_left',['../namespaceco__usb.html#a4644ac1bb53d5de04b8c19278b028fcb',1,'co_usb']]]
+  ['vid_0',['vid',['../structco__usb_1_1device__triplet.html#af31ad46041c9696e929d60211fd6f427',1,'co_usb::device_triplet']]]
 ];
