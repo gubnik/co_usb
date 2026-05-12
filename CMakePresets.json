@@ -31,6 +31,19 @@
             "cacheVariables": {
                 "VCPKG_TARGET_TRIPLET": "x64-linux-static"
             }
+        },
+        {
+            "name": "no-vcpkg",
+            "architecture": {"strategy": "external", "value": "x64"},
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
+                "CMAKE_CXX_SCAN_FOR_MODULES": false,
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "CMAKE_VERBOSE_MAKEFILE": false
+            }
         }
     ]
 }
