@@ -1,6 +1,6 @@
 PROJECT_NAME           = @PROJECT_NAME@
 OUTPUT_DIRECTORY       = @CMAKE_CURRENT_BINARY_DIR@/docs
-INPUT                  = @CMAKE_SOURCE_DIR@/include @CMAKE_SOURCE_DIR@/src
+INPUT                  = README.md @CMAKE_SOURCE_DIR@/include @CMAKE_SOURCE_DIR@/src
 RECURSIVE              = YES
 GENERATE_HTML          = YES
 GENERATE_LATEX         = NO
