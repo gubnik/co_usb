@@ -42,11 +42,25 @@ struct device_acceptor
     device_acceptor(device_acceptor &&)                 = delete;
     device_acceptor &operator=(device_acceptor &&)      = delete;
 
+    /**
+     * @brief accepts a device by its triplet
+     *
+     * @details waits until a device with a provided triplet is attached.
+     * Can avoid suspension if the device was attached before the accept call.
+     *
+     * @returns reference to an accepted device
+     * @returns error code co_usb::usb_error::interrupted on cancellation or when acceptor dtor was
+     * called
+     * @returns error code co_usb::usb_error::no_device if device was detached while suspending &
+     * acquiring the internal lock
+     */
     boost::capy::io_task<device_ref> accept(device_triplet triplet);
 
   private:
     struct acceptor_awaitable;
     friend struct acceptor_awaitable;
+
+    // internal device entry
     struct device_state_t
     {
         boost::capy::io_env const *env{nullptr};

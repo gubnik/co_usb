@@ -85,19 +85,21 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev, std::atomic<size_t> &activ
             continue;
         }
 
+        auto err = static_cast<co_usb::transfer_status>(wec.value());
+
         // timeouts are normal, continue
-        if (wec == co_usb::make_transfer_status(co_usb::transfer_status::timed_out))
+        if (err == co_usb::transfer_status::timed_out)
         {
             continue;
         }
 
-        if (wec == co_usb::make_transfer_status(co_usb::transfer_status::cancelled))
+        if (err == co_usb::transfer_status::cancelled)
         {
             std::println("Transfer was cancelled; exiting the process loop...");
             co_return;
         }
 
-        if (wec == co_usb::make_transfer_status(co_usb::transfer_status::no_device))
+        if (err == co_usb::transfer_status::no_device)
         {
             std::println(stderr, "Device was detached; exiting the process loop...");
             co_return;
@@ -146,7 +148,7 @@ auto make_tracking_event_handler (std::atomic<size_t> &active_work)
             {
                 throw std::system_error{make_usb_error_code(static_cast<co_usb::usb_error>(r))};
             }
-            // no work and cancellation was requird - oblige and leave
+            // no work and cancellation was required - oblige and leave
             if (st.stop_requested() && active_work.load(std::memory_order_acquire) == 0)
             {
                 break;

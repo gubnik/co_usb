@@ -11,6 +11,8 @@ namespace co_usb
 /**
  * @brief Refcounted RAII guard for managing detachment of a kernel driver for an interface of a
  * device
+ *
+ * @note Acts as a shared_ptr
  */
 struct kernel_driver_guard
 {
@@ -23,6 +25,9 @@ struct kernel_driver_guard
     libusb_device_handle *dev() const noexcept;
     int number() const noexcept;
 
+    /**
+     * @brief Releases kernel guard and reattaches the driver
+     */
     void release() noexcept;
 
   private:

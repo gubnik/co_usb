@@ -16,8 +16,6 @@ namespace co_usb::detail
  *
  * @details creates a primitive libusb event handler thread. Said handler is guaranteed to NOT
  * support multithreaded handling and must be assumed to be as primitive as humanly possible;
- *
- * @note 100% OPTIONAL
  */
 struct handler_service : public boost::capy::execution_context::service
 {

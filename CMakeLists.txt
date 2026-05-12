@@ -7,6 +7,9 @@ project(
 
 option(COUSB_BUILD_EXAMPLES "co_usb examples" ON)
 
+# not supported yet
+option(COUSB_BUILD_TESTS "co_usb tests" OFF)
+
 # libusb-1.0
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBUSB REQUIRED IMPORTED_TARGET libusb-1.0)
@@ -27,6 +30,10 @@ target_compile_definitions(${PROJECT_NAME} INTERFACE)
 
 if(COUSB_BUILD_EXAMPLES)
   add_subdirectory(examples)
+endif()
+
+if(COUSB_BUILD_TESTS)
+  add_subdirectory(tests)
 endif()
 
 # installation section

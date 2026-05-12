@@ -12,19 +12,21 @@ co_usb::kernel_driver_guard::kernel_driver_guard (libusb_device_handle *devh, in
 boost::capy::io_result<co_usb::kernel_driver_guard>
 co_usb::kernel_driver_guard::detach (libusb_device_handle *devh, int iface_num) noexcept
 {
-    auto guard           = kernel_driver_guard{devh, iface_num};
-    auto r               = libusb_detach_kernel_driver(guard.m_devh.get(), guard.m_iface_num);
-    std::error_code errc = make_usb_error_code(static_cast<usb_error>(r));
-    return {errc, std::move(guard)};
+    auto guard     = kernel_driver_guard{devh, iface_num};
+    auto r         = libusb_detach_kernel_driver(guard.m_devh.get(), guard.m_iface_num);
+    usb_error errc = usb_error::success;
+    if (r != LIBUSB_SUCCESS)
+    {
+        errc = static_cast<usb_error>(r);
+        devh = nullptr;
+    }
+    return {make_usb_error_code(errc), std::move(guard)};
 }
 
 boost::capy::io_result<co_usb::kernel_driver_guard>
 co_usb::kernel_driver_guard::detach (unique_dev_handle &devh, int iface_num) noexcept
 {
-    auto guard           = kernel_driver_guard{devh.get(), iface_num};
-    auto r               = libusb_detach_kernel_driver(guard.m_devh.get(), guard.m_iface_num);
-    std::error_code errc = make_usb_error_code(static_cast<usb_error>(r));
-    return {errc, std::move(guard)};
+    return detach(devh.get(), iface_num);
 }
 
 libusb_device_handle *co_usb::kernel_driver_guard::dev () const noexcept

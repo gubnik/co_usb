@@ -7,9 +7,9 @@ namespace co_usb
 {
 
 /**
- * @brief status codes for transfers
+ * @brief Status codes for transfers
  *
- * @note can be casted from @ref libusb_transfer_status
+ * @note Can be casted from @ref libusb_transfer_status
  */
 enum class transfer_status
 {
