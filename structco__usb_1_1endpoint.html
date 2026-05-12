@@ -77,6 +77,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="structco__usb_1_1endpoint-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">co_usb::endpoint&lt; Direction &gt; Struct Template Reference</div></div>
 </div><!--header-->
@@ -109,6 +110,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:adc680bfbb8fc48b728e1917a19b139ad" id="r_adc680bfbb8fc48b728e1917a19b139ad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">static</a> <a class="el" href="structco__usb_1_1endpoint.html">endpoint</a>&lt; <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">Direction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1endpoint.html#adc680bfbb8fc48b728e1917a19b139ad">make_throwing</a> (<a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">uint8_t</a> <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">ep</a>, <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">libusb_device_handle</a> *<a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">devh</a>)</td></tr>
 <tr class="memdesc:adc680bfbb8fc48b728e1917a19b139ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an endpoint or throws if the address doesn't match expected direction.  <br /></td></tr>
 <tr class="separator:adc680bfbb8fc48b728e1917a19b139ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a61cf4a26b4dba1a78fda14542d45bf55" id="r_a61cf4a26b4dba1a78fda14542d45bf55"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676">ep_direction</a> ToDirection&gt; </td></tr>
+<tr class="memitem:a61cf4a26b4dba1a78fda14542d45bf55"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structco__usb_1_1endpoint.html">endpoint</a>&lt; <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">ToDirection</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structco__usb_1_1endpoint.html#a61cf4a26b4dba1a78fda14542d45bf55">endpoint_cast</a> (<a class="el" href="structco__usb_1_1endpoint.html">endpoint</a>&lt; <a class="el" href="namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676af6cb3e816496528d4187db53bc66567f">ep_direction::both</a> &gt; <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">ep</a>) <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">noexcept</a></td></tr>
+<tr class="separator:a61cf4a26b4dba1a78fda14542d45bf55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676">ep_direction</a> Direction&gt;<br />
@@ -334,6 +341,37 @@ template&lt;<a class="el" href="namespaceco__usb.html#a35417684dfe6d97668e0851c4
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Symbol Documentation</h2>
+<a id="a61cf4a26b4dba1a78fda14542d45bf55" name="a61cf4a26b4dba1a78fda14542d45bf55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61cf4a26b4dba1a78fda14542d45bf55">&#9670;&#160;</a></span>endpoint_cast</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676">ep_direction</a> Direction&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676">ep_direction</a> ToDirection&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structco__usb_1_1endpoint.html">endpoint</a>&lt; <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">ToDirection</a> &gt; endpoint_cast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structco__usb_1_1endpoint.html">endpoint</a>&lt; <a class="el" href="namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676af6cb3e816496528d4187db53bc66567f">ep_direction::both</a> &gt;&#160;</td>
+          <td class="paramname"><em>ep</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
