@@ -2,7 +2,7 @@ name: Build and deploy Doxygen
 
 on:
   push:
-    branches: [ master ]
+    branches: [ dev, master ]
 
 jobs:
   doxygen:
@@ -11,6 +11,11 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Setup vcpkg
+        uses: vcpkg/setup-vcpkg@v2024-12-12
+        with:
+          vcpkg-root: ./.vcpkg
 
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y doxygen graphviz
