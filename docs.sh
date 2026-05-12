@@ -2,6 +2,7 @@
 
 ROOT=$(pwd)
 PRESET=no-vcpkg
+rm -rf build/$PRESET
 cmake --preset $PRESET -DCOUSB_ONLY_BUILD_DOCS=ON && \
 cmake --build build/$PRESET --target docs && \
 mkdir -p docs/html && \
