@@ -40,7 +40,7 @@ template <ep_direction Direction> struct endpoint
     {
         if constexpr (Direction == ep_direction::out)
         {
-            return {static_cast<uint8_t>(ep ^ LIBUSB_ENDPOINT_IN), iface.dev()};
+            return {static_cast<uint8_t>(ep & ~LIBUSB_ENDPOINT_IN), iface.dev()};
         }
         else if constexpr (Direction == ep_direction::in)
         {
