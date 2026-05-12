@@ -16,7 +16,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y doxygen graphviz
 
       - name: Run Doxygen
-        run: doxygen Doxyfile
+        run: sh docs.sh
 
       - name: Prepare nojekyll
         run: touch docs/html/.nojekyll

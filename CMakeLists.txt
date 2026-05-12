@@ -6,6 +6,7 @@ project(
   LANGUAGES CXX)
 
 option(COUSB_BUILD_EXAMPLES "co_usb examples" ON)
+option(COUSB_BUILD_DOCS "co_usb docs" ON)
 
 # not supported yet
 option(COUSB_BUILD_TESTS "co_usb tests" OFF)
@@ -30,6 +31,10 @@ target_compile_definitions(${PROJECT_NAME} INTERFACE)
 
 if(COUSB_BUILD_EXAMPLES)
   add_subdirectory(examples)
+endif()
+
+if(COUSB_BUILD_DOCS)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Doxygen.cmake)
 endif()
 
 if(COUSB_BUILD_TESTS)
