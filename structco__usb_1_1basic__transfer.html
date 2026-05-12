@@ -81,19 +81,26 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Base transfer type which provides Capy's ReadStream/WriteStream operations depending on the direction of the endpoint provided.  
+ <a href="structco__usb_1_1basic__transfer.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="transfer__types_8hpp_source.html">transfer_types.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aaa673721c203039d2dbc421670f9466a" id="r_aaa673721c203039d2dbc421670f9466a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1basic__transfer.html#aaa673721c203039d2dbc421670f9466a">basic_transfer</a> (<a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">int</a> <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">iso_packets</a>=0)</td></tr>
 <tr class="separator:aaa673721c203039d2dbc421670f9466a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29eda0cb05e566f46cd46463853b7b74" id="r_a29eda0cb05e566f46cd46463853b7b74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">consteval</a> <a class="el" href="namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676">ep_direction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1basic__transfer.html#a29eda0cb05e566f46cd46463853b7b74">direction</a> () <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">const</a> <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">noexcept</a></td></tr>
+<tr class="separator:a29eda0cb05e566f46cd46463853b7b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66015537c6a588ed636972d4cf3fc02c" id="r_a66015537c6a588ed636972d4cf3fc02c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">constexpr</a> <a class="el" href="namespaceco__usb.html#afd7c665b131570d066071086e956a0ca">endpoint_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1basic__transfer.html#a66015537c6a588ed636972d4cf3fc02c">ep_type</a> () <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">const</a> <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">noexcept</a></td></tr>
 <tr class="separator:a66015537c6a588ed636972d4cf3fc02c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1724b31c03123613f4de472c8e4004ff" id="r_a1724b31c03123613f4de472c8e4004ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1basic__transfer.html#a1724b31c03123613f4de472c8e4004ff">raw</a> () <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">const</a> <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">noexcept</a></td></tr>
 <tr class="separator:a1724b31c03123613f4de472c8e4004ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f5a0e5ec1d2c4466d889e9c76351ddb" id="r_a9f5a0e5ec1d2c4466d889e9c76351ddb"><td class="memItemLeft" align="right" valign="top">boost::capy::io_task&lt; <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">size_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1basic__transfer.html#a9f5a0e5ec1d2c4466d889e9c76351ddb">read_some</a> (boost::capy::mutable_buffer <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">buf</a>)</td></tr>
+<tr class="memdesc:a9f5a0e5ec1d2c4466d889e9c76351ddb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Partial read from an endpoint.  <br /></td></tr>
 <tr class="separator:a9f5a0e5ec1d2c4466d889e9c76351ddb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10e1bac016722fba8f070485be3ffa1b" id="r_a10e1bac016722fba8f070485be3ffa1b"><td class="memItemLeft" align="right" valign="top">boost::capy::io_task&lt; <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">size_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1basic__transfer.html#a10e1bac016722fba8f070485be3ffa1b">write_some</a> (boost::capy::const_buffer <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">buf</a>)</td></tr>
+<tr class="memdesc:a10e1bac016722fba8f070485be3ffa1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Partial write to an endpoint.  <br /></td></tr>
 <tr class="separator:a10e1bac016722fba8f070485be3ffa1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
@@ -101,7 +108,11 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a808fdbd1ac5c0efe04b8d01752074444" id="r_a808fdbd1ac5c0efe04b8d01752074444"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceco__usb.html#a5e913865997bc339935525c9455945ac">unique_transfer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1basic__transfer.html#a808fdbd1ac5c0efe04b8d01752074444">m_tfer</a></td></tr>
 <tr class="separator:a808fdbd1ac5c0efe04b8d01752074444"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="namespaceco__usb.html#afd7c665b131570d066071086e956a0ca">endpoint_type</a> EpType, <a class="el" href="namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676">ep_direction</a> Direction&gt;<br />
+struct co_usb::basic_transfer&lt; EpType, Direction &gt;</div><p>Base transfer type which provides Capy's ReadStream/WriteStream operations depending on the direction of the endpoint provided. </p>
+<dl class="section note"><dt>Note</dt><dd>Prefer using concrete transfer types which are correctly prefilled on construction </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aaa673721c203039d2dbc421670f9466a" name="aaa673721c203039d2dbc421670f9466a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaa673721c203039d2dbc421670f9466a">&#9670;&#160;</a></span>basic_transfer()</h2>
 
@@ -131,6 +142,33 @@ template&lt;<a class="el" href="namespaceco__usb.html#afd7c665b131570d066071086e
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a29eda0cb05e566f46cd46463853b7b74" name="a29eda0cb05e566f46cd46463853b7b74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29eda0cb05e566f46cd46463853b7b74">&#9670;&#160;</a></span>direction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespaceco__usb.html#afd7c665b131570d066071086e956a0ca">endpoint_type</a> EpType, <a class="el" href="namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676">ep_direction</a> Direction&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">consteval</a> <a class="el" href="namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676">ep_direction</a> <a class="el" href="structco__usb_1_1basic__transfer.html">co_usb::basic_transfer</a>&lt; <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">EpType</a>, <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">Direction</a> &gt;::direction </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a66015537c6a588ed636972d4cf3fc02c" name="a66015537c6a588ed636972d4cf3fc02c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a66015537c6a588ed636972d4cf3fc02c">&#9670;&#160;</a></span>ep_type()</h2>
 
@@ -211,6 +249,10 @@ template&lt;<a class="el" href="namespaceco__usb.html#afd7c665b131570d066071086e
 </table>
 </div><div class="memdoc">
 
+<p>Partial read from an endpoint. </p>
+<p>Provides a buffer to the transfer and submits it via <a class="el" href="structco__usb_1_1transfer__awaitable.html">transfer_awaitable</a>.</p>
+<dl class="section note"><dt>Note</dt><dd>Overrides the existing buffer, length, user_data and callback_fn of the internal libusb_transfer. </dd></dl>
+
 </div>
 </div>
 <a id="a10e1bac016722fba8f070485be3ffa1b" name="a10e1bac016722fba8f070485be3ffa1b"></a>
@@ -238,6 +280,10 @@ template&lt;<a class="el" href="namespaceco__usb.html#afd7c665b131570d066071086e
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Partial write to an endpoint. </p>
+<p>Provides a buffer to the transfer and submits it via <a class="el" href="structco__usb_1_1transfer__awaitable.html">transfer_awaitable</a>.</p>
+<dl class="section note"><dt>Note</dt><dd>Overrides the existing buffer, length, user_data and callback_fn of the internal libusb_transfer. </dd></dl>
 
 </div>
 </div>

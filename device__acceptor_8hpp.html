@@ -75,34 +75,58 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">device_acceptor.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="device__left__signal_8hpp_source.html">co_usb/hotplug/device_left_signal.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="device__ref_8hpp_source.html">co_usb/hotplug/device_ref.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="device__ref_8hpp_source.html">co_usb/device_ref.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="device__triplet_8hpp_source.html">co_usb/device_triplet.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="error_8hpp_source.html">co_usb/error.hpp</a>&quot;</code><br />
+<code>#include &lt;boost/capy/continuation.hpp&gt;</code><br />
+<code>#include &lt;boost/capy/ex/io_env.hpp&gt;</code><br />
 <code>#include &lt;boost/capy/io_task.hpp&gt;</code><br />
+<code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;libusb-1.0/libusb.h&gt;</code><br />
+<code>#include &lt;map&gt;</code><br />
+<code>#include &lt;memory_resource&gt;</code><br />
+<code>#include &lt;mutex&gt;</code><br />
+<code>#include &lt;stop_token&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for device_acceptor.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="device__acceptor_8hpp__incl.png" border="0" usemap="#ainclude_2co__usb_2hotplug_2device__acceptor_8hpp" alt=""/></div>
 <map name="ainclude_2co__usb_2hotplug_2device__acceptor_8hpp" id="ainclude_2co__usb_2hotplug_2device__acceptor_8hpp">
-<area shape="rect" title=" " alt="" coords="185,5,355,45"/>
-<area shape="rect" href="device__left__signal_8hpp.html" title=" " alt="" coords="5,93,172,133"/>
-<area shape="poly" title=" " alt="" coords="231,48,142,90,139,85,229,43"/>
-<area shape="rect" title=" " alt="" coords="139,181,281,207"/>
-<area shape="poly" title=" " alt="" coords="262,47,239,94,218,169,213,167,234,92,257,44"/>
-<area shape="rect" href="device__ref_8hpp.html" title=" " alt="" coords="248,93,415,133"/>
-<area shape="poly" title=" " alt="" coords="286,44,312,81,308,84,281,47"/>
-<area shape="rect" title=" " alt="" coords="439,101,611,126"/>
-<area shape="poly" title=" " alt="" coords="327,43,478,94,477,99,325,48"/>
-<area shape="poly" title=" " alt="" coords="119,131,182,172,179,176,117,136"/>
-<area shape="rect" title=" " alt="" coords="38,181,115,207"/>
-<area shape="poly" title=" " alt="" coords="88,134,83,168,78,167,83,133"/>
-<area shape="poly" title=" " alt="" coords="303,136,241,176,238,172,301,131"/>
-<area shape="rect" title=" " alt="" coords="305,181,379,207"/>
-<area shape="poly" title=" " alt="" coords="337,133,341,167,336,168,331,134"/>
+<area shape="rect" title=" " alt="" coords="954,5,1125,45"/>
+<area shape="rect" href="device__ref_8hpp.html" title=" " alt="" coords="5,93,172,119"/>
+<area shape="poly" title=" " alt="" coords="954,35,620,60,192,96,186,97,185,91,191,91,619,54,954,30"/>
+<area shape="rect" title=" " alt="" coords="206,167,347,192"/>
+<area shape="poly" title=" " alt="" coords="954,30,765,34,539,44,432,53,341,64,273,78,250,86,237,95,231,109,234,124,243,140,256,155,251,158,239,143,229,126,226,108,233,92,248,82,271,73,340,59,431,48,538,39,765,29,954,25"/>
+<area shape="rect" href="device__triplet_8hpp.html" title=" " alt="" coords="248,93,436,119"/>
+<area shape="poly" title=" " alt="" coords="954,39,450,95,449,90,954,34"/>
+<area shape="rect" href="error_8hpp.html" title=" " alt="" coords="460,93,589,119"/>
+<area shape="poly" title=" " alt="" coords="954,42,603,95,603,90,953,37"/>
+<area shape="rect" title=" " alt="" coords="613,93,820,119"/>
+<area shape="poly" title=" " alt="" coords="963,48,778,93,776,88,961,43"/>
+<area shape="rect" title=" " alt="" coords="845,93,1031,119"/>
+<area shape="poly" title=" " alt="" coords="1016,48,966,87,963,82,1013,43"/>
+<area shape="rect" title=" " alt="" coords="1056,93,1228,119"/>
+<area shape="poly" title=" " alt="" coords="1066,43,1118,83,1114,87,1063,48"/>
+<area shape="rect" title=" " alt="" coords="1252,93,1339,119"/>
+<area shape="poly" title=" " alt="" coords="1101,43,1246,87,1244,92,1100,48"/>
+<area shape="rect" title=" " alt="" coords="1363,93,1414,119"/>
+<area shape="poly" title=" " alt="" coords="1125,40,1350,91,1349,96,1124,46"/>
+<area shape="rect" title=" " alt="" coords="1439,93,1579,119"/>
+<area shape="poly" title=" " alt="" coords="1125,38,1427,88,1426,94,1124,44"/>
+<area shape="rect" title=" " alt="" coords="1603,93,1667,119"/>
+<area shape="poly" title=" " alt="" coords="1125,31,1333,52,1460,69,1590,91,1589,96,1459,75,1332,58,1125,36"/>
+<area shape="rect" title=" " alt="" coords="1691,93,1785,119"/>
+<area shape="poly" title=" " alt="" coords="1125,31,1370,53,1678,91,1677,96,1369,58,1125,36"/>
+<area shape="poly" title=" " alt="" coords="120,116,234,159,232,164,118,121"/>
+<area shape="poly" title=" " alt="" coords="333,121,298,158,295,155,329,117"/>
+<area shape="poly" title=" " alt="" coords="486,121,331,165,329,160,484,116"/>
+<area shape="rect" title=" " alt="" coords="471,167,579,192"/>
+<area shape="poly" title=" " alt="" coords="527,119,527,153,522,153,522,119"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -110,21 +134,21 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="device__acceptor_8hpp__dep__incl.png" border="0" usemap="#ainclude_2co__usb_2hotplug_2device__acceptor_8hppdep" alt=""/></div>
 <map name="ainclude_2co__usb_2hotplug_2device__acceptor_8hppdep" id="ainclude_2co__usb_2hotplug_2device__acceptor_8hppdep">
-<area shape="rect" title=" " alt="" coords="475,5,645,45"/>
-<area shape="rect" href="co__usb_8hpp.html" title=" " alt="" coords="393,93,540,119"/>
-<area shape="poly" title=" " alt="" coords="529,56,482,95,479,91,525,52"/>
-<area shape="rect" href="device__acceptor_8cpp.html" title=" " alt="" coords="565,93,742,119"/>
-<area shape="poly" title=" " alt="" coords="595,52,641,91,638,95,591,56"/>
-<area shape="rect" href="00-simple-echo_8cpp.html" title=" " alt="" coords="5,167,160,207"/>
-<area shape="poly" title=" " alt="" coords="397,124,173,169,161,172,160,166,171,164,396,119"/>
-<area shape="rect" href="01-multiple-transfers_8cpp.html" title=" " alt="" coords="184,167,349,207"/>
-<area shape="poly" title=" " alt="" coords="426,126,316,169,314,164,424,121"/>
-<area shape="rect" href="02-hotplug_8cpp.html" title=" " alt="" coords="373,174,560,199"/>
-<area shape="poly" title=" " alt="" coords="469,132,469,174,464,174,464,132"/>
-<area shape="rect" href="03-raw-hotplug_8cpp.html" title=" " alt="" coords="584,174,800,199"/>
-<area shape="poly" title=" " alt="" coords="513,121,660,171,658,176,511,126"/>
-<area shape="rect" href="04-left-hotplug_8cpp.html" title=" " alt="" coords="824,174,1037,199"/>
-<area shape="poly" title=" " alt="" coords="548,118,864,171,863,177,547,124"/>
+<area shape="rect" title=" " alt="" coords="465,5,636,45"/>
+<area shape="rect" href="co__usb_8hpp.html" title=" " alt="" coords="393,101,540,126"/>
+<area shape="poly" title=" " alt="" coords="524,57,480,102,476,98,521,53"/>
+<area shape="rect" href="device__acceptor_8cpp.html" title=" " alt="" coords="564,93,705,133"/>
+<area shape="poly" title=" " alt="" coords="581,53,618,91,614,95,577,57"/>
+<area shape="rect" href="00-simple-echo_8cpp.html" title=" " alt="" coords="5,181,160,221"/>
+<area shape="poly" title=" " alt="" coords="403,132,161,185,160,180,401,126"/>
+<area shape="rect" href="01-multiple-transfers_8cpp.html" title=" " alt="" coords="184,181,349,221"/>
+<area shape="poly" title=" " alt="" coords="428,134,312,184,310,179,426,129"/>
+<area shape="rect" href="02-hotplug_8cpp.html" title=" " alt="" coords="373,189,560,214"/>
+<area shape="poly" title=" " alt="" coords="469,140,469,188,464,188,464,140"/>
+<area shape="rect" href="03-raw-hotplug_8cpp.html" title=" " alt="" coords="584,189,800,214"/>
+<area shape="poly" title=" " alt="" coords="511,129,663,186,661,191,509,134"/>
+<area shape="rect" href="04-cancellation_8cpp.html" title=" " alt="" coords="825,189,1042,214"/>
+<area shape="poly" title=" " alt="" coords="531,126,553,131,864,186,863,191,551,136,530,131"/>
 </map>
 </div>
 </div>
@@ -132,14 +156,21 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1use__left__t.html">co_usb::use_left_t</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1device__acceptor.html">co_usb::device_acceptor</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper around raw <a class="el" href="structco__usb_1_1hotplug__awaitable.html">hotplug_awaitable</a>.  <a href="structco__usb_1_1device__acceptor.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accepts devices via hotplug.  <a href="structco__usb_1_1device__acceptor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespaceco__usb" id="r_namespaceco__usb"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceco__usb.html">co_usb</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a4644ac1bb53d5de04b8c19278b028fcb" id="r_a4644ac1bb53d5de04b8c19278b028fcb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">constexpr</a> <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">struct</a> <a class="el" href="structco__usb_1_1use__left__t.html">co_usb::use_left_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceco__usb.html#a4644ac1bb53d5de04b8c19278b028fcb">co_usb::use_left</a></td></tr>
+<tr class="separator:a4644ac1bb53d5de04b8c19278b028fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

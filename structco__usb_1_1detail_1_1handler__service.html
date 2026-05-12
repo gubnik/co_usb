@@ -76,7 +76,6 @@ $(function() {
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="structco__usb_1_1detail_1_1handler__service-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">co_usb::detail::handler_service Struct Reference</div></div>
 </div><!--header-->
@@ -114,29 +113,22 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a576173a3d255b0dd3efb34fe8794d7c6" id="r_a576173a3d255b0dd3efb34fe8794d7c6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1detail_1_1handler__service.html#a576173a3d255b0dd3efb34fe8794d7c6">handler_service</a> (boost::capy::execution_context &amp;ctx)</td></tr>
+<tr class="memitem:a576173a3d255b0dd3efb34fe8794d7c6" id="r_a576173a3d255b0dd3efb34fe8794d7c6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1detail_1_1handler__service.html#a576173a3d255b0dd3efb34fe8794d7c6">handler_service</a> (boost::capy::execution_context &amp;<a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">ctx</a>)</td></tr>
 <tr class="separator:a576173a3d255b0dd3efb34fe8794d7c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80c6c24f81ca6ac19421fff002720f99" id="r_a80c6c24f81ca6ac19421fff002720f99"><td class="memTemplParams" colspan="2">template&lt;std::invocable&lt; <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">libusb_context</a> *, std::stop_token &gt; HandlerFn&gt; </td></tr>
-<tr class="memitem:a80c6c24f81ca6ac19421fff002720f99"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structco__usb_1_1detail_1_1handler__service.html#a80c6c24f81ca6ac19421fff002720f99">start_thread</a> (<a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">libusb_context</a> *ctx, <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">HandlerFn</a> &amp;&amp;<a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">handler_fn</a>)</td></tr>
-<tr class="memdesc:a80c6c24f81ca6ac19421fff002720f99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a default handler thread.  <br /></td></tr>
-<tr class="separator:a80c6c24f81ca6ac19421fff002720f99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c504da840e47dc59c1134477a236d0f" id="r_a5c504da840e47dc59c1134477a236d0f"><td class="memTemplParams" colspan="2">template&lt;std::invocable&lt; <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">libusb_context</a> *, std::stop_token &gt; HandlerFn&gt; </td></tr>
+<tr class="memitem:a5c504da840e47dc59c1134477a236d0f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structco__usb_1_1detail_1_1handler__service.html#a5c504da840e47dc59c1134477a236d0f">start_thread</a> (std::shared_ptr&lt; <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">libusb_context</a> &gt; <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">ctx</a>, <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">HandlerFn</a> &amp;&amp;<a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">handler_fn</a>)</td></tr>
+<tr class="memdesc:a5c504da840e47dc59c1134477a236d0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a default handler thread.  <br /></td></tr>
+<tr class="separator:a5c504da840e47dc59c1134477a236d0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04223eea5f3629655d4868eceba40880" id="r_a04223eea5f3629655d4868eceba40880"><td class="memItemLeft" align="right" valign="top">std::stop_source&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1detail_1_1handler__service.html#a04223eea5f3629655d4868eceba40880">stop_source</a> ()</td></tr>
 <tr class="separator:a04223eea5f3629655d4868eceba40880"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2768163b34b844976c9fd9c88b08172" id="r_ad2768163b34b844976c9fd9c88b08172"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1detail_1_1handler__service.html#ad2768163b34b844976c9fd9c88b08172">~handler_service</a> () <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">override</a></td></tr>
 <tr class="separator:ad2768163b34b844976c9fd9c88b08172"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d9e9bbba3f0507eb810723721194512" id="r_a3d9e9bbba3f0507eb810723721194512"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1detail_1_1handler__service.html#a3d9e9bbba3f0507eb810723721194512">shutdown</a> () <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">override</a></td></tr>
 <tr class="separator:a3d9e9bbba3f0507eb810723721194512"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a7ce16899e3e5233b4641473825e0c36f" id="r_a7ce16899e3e5233b4641473825e0c36f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">static</a> <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1detail_1_1handler__service.html#a7ce16899e3e5233b4641473825e0c36f">default_handler</a> (<a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">libusb_context</a> *ctx, std::stop_token <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">st</a>)</td></tr>
-<tr class="memdesc:a7ce16899e3e5233b4641473825e0c36f"><td class="mdescLeft">&#160;</td><td class="mdescRight">default handler function for the service  <br /></td></tr>
-<tr class="separator:a7ce16899e3e5233b4641473825e0c36f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Service for handling libusb events. </p>
-<p>creates a primitive libusb event handler thread. Said handler is guaranteed to NOT support multithreaded handling and must be assumed to be as primitive as humanly possible;</p>
-<dl class="section note"><dt>Note</dt><dd>100% OPTIONAL </dd></dl>
+<p>creates a primitive libusb event handler thread. Said handler is guaranteed to NOT support multithreaded handling and must be assumed to be as primitive as humanly possible; </p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="aa89ba643a31d178bff7a715c033d5776" name="aa89ba643a31d178bff7a715c033d5776"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa89ba643a31d178bff7a715c033d5776">&#9670;&#160;</a></span>handler_fn_t</h2>
@@ -197,44 +189,6 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7ce16899e3e5233b4641473825e0c36f" name="a7ce16899e3e5233b4641473825e0c36f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ce16899e3e5233b4641473825e0c36f">&#9670;&#160;</a></span>default_handler()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">void</a> co_usb::detail::handler_service::default_handler </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">libusb_context</a> *&#160;</td>
-          <td class="paramname"><em>ctx</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::stop_token&#160;</td>
-          <td class="paramname"><em>st</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>default handler function for the service </p>
-
-</div>
-</div>
 <a id="a3d9e9bbba3f0507eb810723721194512" name="a3d9e9bbba3f0507eb810723721194512"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3d9e9bbba3f0507eb810723721194512">&#9670;&#160;</a></span>shutdown()</h2>
 
@@ -260,8 +214,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a80c6c24f81ca6ac19421fff002720f99" name="a80c6c24f81ca6ac19421fff002720f99"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a80c6c24f81ca6ac19421fff002720f99">&#9670;&#160;</a></span>start_thread()</h2>
+<a id="a5c504da840e47dc59c1134477a236d0f" name="a5c504da840e47dc59c1134477a236d0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c504da840e47dc59c1134477a236d0f">&#9670;&#160;</a></span>start_thread()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -274,7 +228,7 @@ template&lt;std::invocable&lt; <a class="el" href="namespaceco__usb.html#a7afd52
         <tr>
           <td class="memname"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">void</a> co_usb::detail::handler_service::start_thread </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">libusb_context</a> *&#160;</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">libusb_context</a> &gt;&#160;</td>
           <td class="paramname"><em>ctx</em>, </td>
         </tr>
         <tr>
@@ -319,8 +273,8 @@ template&lt;std::invocable&lt; <a class="el" href="namespaceco__usb.html#a7afd52
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>include/co_usb/<a class="el" href="service_8hpp_source.html">service.hpp</a></li>
-<li>src/<a class="el" href="service_8cpp.html">service.cpp</a></li>
+<li>include/co_usb/detail/<a class="el" href="service_8hpp_source.html">service.hpp</a></li>
+<li>src/detail/<a class="el" href="service_8cpp.html">service.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

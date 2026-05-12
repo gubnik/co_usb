@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['handler_5fservice_0',['handler_service',['../structco__usb_1_1detail_1_1handler__service.html',1,'co_usb::detail']]],
-  ['hotplug_5fawaitable_1',['hotplug_awaitable',['../structco__usb_1_1hotplug__awaitable.html',1,'co_usb']]]
+  ['endpoint_0',['endpoint',['../structco__usb_1_1endpoint.html',1,'co_usb']]],
+  ['error_5fcategory_5ft_1',['error_category_t',['../structco__usb_1_1error__category__t.html',1,'co_usb']]]
 ];

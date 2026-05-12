@@ -1,0 +1,7 @@
+<map id="co_usb::device_acceptor::acceptor_awaitable" name="co_usb::device_acceptor::acceptor_awaitable">
+<area shape="rect" id="Node000001" title="Internal awaitable type for device_acceptor." alt="" coords="104,93,285,133"/>
+<area shape="rect" id="Node000002" href="$structco__usb_1_1device__acceptor.html" title="Accepts devices via hotplug." alt="" coords="5,5,187,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,38,176,91,173,95,116,42"/>
+<area shape="rect" id="Node000003" href="$structco__usb_1_1device__triplet.html" title="Aggregate struct to pass to functions requiring device information." alt="" coords="211,5,375,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="273,42,217,95,213,91,269,38"/>
+</map>

@@ -79,15 +79,33 @@ $(function() {
   <div class="headertitle"><div class="title">interface.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;libusb-1.0/libusb.h&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="raii_8hpp_source.html">co_usb/raii.hpp</a>&quot;</code><br />
+<code>#include &lt;boost/capy/io_result.hpp&gt;</code><br />
+<code>#include &lt;libusb-1.0/libusb.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for interface.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="interface_8hpp__incl.png" border="0" usemap="#ainclude_2co__usb_2interface_8hpp" alt=""/></div>
 <map name="ainclude_2co__usb_2interface_8hpp" id="ainclude_2co__usb_2interface_8hpp">
-<area shape="rect" title=" " alt="" coords="5,5,213,31"/>
-<area shape="rect" title=" " alt="" coords="39,79,180,104"/>
-<area shape="poly" title=" " alt="" coords="112,31,112,65,107,65,107,31"/>
+<area shape="rect" title=" " alt="" coords="666,5,874,31"/>
+<area shape="rect" href="raii_8hpp.html" title=" " alt="" coords="439,79,559,104"/>
+<area shape="poly" title=" " alt="" coords="727,33,557,78,556,73,726,28"/>
+<area shape="rect" title=" " alt="" coords="205,225,346,251"/>
+<area shape="poly" title=" " alt="" coords="789,29,826,56,864,94,878,115,886,137,886,159,875,179,848,193,801,204,663,221,502,231,360,237,360,232,501,226,662,215,800,199,846,188,871,175,881,157,881,138,873,118,860,98,822,60,786,33"/>
+<area shape="rect" title=" " alt="" coords="679,152,861,177"/>
+<area shape="poly" title=" " alt="" coords="773,31,773,138,767,138,767,31"/>
+<area shape="rect" href="device__ref_8hpp.html" title=" " alt="" coords="5,152,172,177"/>
+<area shape="poly" title=" " alt="" coords="440,106,169,152,168,147,439,100"/>
+<area shape="poly" title=" " alt="" coords="439,100,382,107,321,118,269,134,250,143,238,154,232,168,235,183,256,214,251,217,230,185,227,167,233,150,247,139,267,129,320,113,381,102,439,95"/>
+<area shape="rect" href="device__triplet_8hpp.html" title=" " alt="" coords="248,152,436,177"/>
+<area shape="poly" title=" " alt="" coords="475,106,381,149,379,144,473,102"/>
+<area shape="poly" title=" " alt="" coords="543,101,714,146,712,151,542,107"/>
+<area shape="rect" title=" " alt="" coords="461,152,538,177"/>
+<area shape="poly" title=" " alt="" coords="502,104,502,138,497,138,497,104"/>
+<area shape="rect" title=" " alt="" coords="563,152,655,177"/>
+<area shape="poly" title=" " alt="" coords="518,102,581,142,578,147,515,106"/>
+<area shape="poly" title=" " alt="" coords="120,175,233,218,231,223,118,180"/>
+<area shape="poly" title=" " alt="" coords="333,179,297,217,294,213,329,176"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -95,11 +113,13 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="interface_8hpp__dep__incl.png" border="0" usemap="#ainclude_2co__usb_2interface_8hppdep" alt=""/></div>
 <map name="ainclude_2co__usb_2interface_8hppdep" id="ainclude_2co__usb_2interface_8hppdep">
-<area shape="rect" title=" " alt="" coords="373,5,581,31"/>
+<area shape="rect" title=" " alt="" coords="461,5,669,31"/>
 <area shape="rect" href="co__usb_8hpp.html" title=" " alt="" coords="393,255,540,280"/>
-<area shape="poly" title=" " alt="" coords="474,45,469,79,466,181,469,254,463,255,461,181,464,78,469,44"/>
+<area shape="poly" title=" " alt="" coords="518,39,490,56,469,80,459,103,453,127,452,177,458,222,466,254,460,255,452,223,446,177,448,126,454,101,464,77,487,52,515,34"/>
 <area shape="rect" href="endpoint_8hpp.html" title=" " alt="" coords="479,79,652,119"/>
-<area shape="poly" title=" " alt="" coords="502,38,546,77,542,81,499,42"/>
+<area shape="poly" title=" " alt="" coords="568,44,568,79,563,79,563,44"/>
+<area shape="rect" href="interface_8cpp.html" title=" " alt="" coords="676,86,807,111"/>
+<area shape="poly" title=" " alt="" coords="604,34,717,84,715,88,602,39"/>
 <area shape="rect" href="00-simple-echo_8cpp.html" title=" " alt="" coords="5,328,160,368"/>
 <area shape="poly" title=" " alt="" coords="397,285,173,331,161,333,160,328,171,325,396,280"/>
 <area shape="rect" href="01-multiple-transfers_8cpp.html" title=" " alt="" coords="184,328,349,368"/>
@@ -108,13 +128,13 @@ This graph shows which files directly or indirectly include this file:</div>
 <area shape="poly" title=" " alt="" coords="469,294,469,335,464,335,464,294"/>
 <area shape="rect" href="03-raw-hotplug_8cpp.html" title=" " alt="" coords="584,335,800,361"/>
 <area shape="poly" title=" " alt="" coords="513,282,660,333,658,338,511,287"/>
-<area shape="rect" href="04-left-hotplug_8cpp.html" title=" " alt="" coords="824,335,1037,361"/>
-<area shape="poly" title=" " alt="" coords="548,280,864,333,863,338,547,285"/>
+<area shape="rect" href="04-cancellation_8cpp.html" title=" " alt="" coords="825,335,1042,361"/>
+<area shape="poly" title=" " alt="" coords="548,280,866,333,865,338,547,285"/>
 <area shape="poly" title=" " alt="" coords="529,129,510,147,494,168,484,191,477,214,470,255,465,254,471,213,479,189,490,165,506,144,525,125"/>
 <area shape="rect" href="transfer__types_8hpp.html" title=" " alt="" coords="504,167,677,207"/>
 <area shape="poly" title=" " alt="" coords="577,131,588,166,583,167,572,133"/>
-<area shape="rect" href="endpoint_8cpp.html" title=" " alt="" coords="702,174,831,199"/>
-<area shape="poly" title=" " alt="" coords="623,122,741,172,739,176,621,127"/>
+<area shape="rect" href="endpoint_8cpp.html" title=" " alt="" coords="701,174,885,199"/>
+<area shape="poly" title=" " alt="" coords="629,121,764,171,762,176,627,126"/>
 <area shape="poly" title=" " alt="" coords="550,216,486,257,483,252,548,212"/>
 </map>
 </div>
@@ -124,6 +144,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structco__usb_1_1interface.html">co_usb::interface</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">RAII wrapper than claims interface on ctor and releases on dtor.  <a href="structco__usb_1_1interface.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>

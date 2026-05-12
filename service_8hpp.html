@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>co_usb: include/co_usb/service.hpp File Reference</title>
+<title>co_usb: include/co_usb/detail/service.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -69,7 +69,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_aaec7577f4aca882f68626b05bc0227b.html">co_usb</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_aaec7577f4aca882f68626b05bc0227b.html">co_usb</a></li><li class="navelem"><a class="el" href="dir_e889112e6e047fe7ede078996aed4074.html">detail</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -81,6 +81,7 @@ $(function() {
 <div class="contents">
 <div class="textblock"><code>#include &lt;boost/capy/ex/execution_context.hpp&gt;</code><br />
 <code>#include &lt;libusb-1.0/libusb.h&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;optional&gt;</code><br />
 <code>#include &lt;stop_token&gt;</code><br />
 <code>#include &lt;thread&gt;</code><br />
@@ -88,46 +89,50 @@ $(function() {
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for service.hpp:</div>
 <div class="dyncontent">
-<div class="center"><img src="service_8hpp__incl.png" border="0" usemap="#ainclude_2co__usb_2service_8hpp" alt=""/></div>
-<map name="ainclude_2co__usb_2service_8hpp" id="ainclude_2co__usb_2service_8hpp">
-<area shape="rect" title=" " alt="" coords="367,5,565,31"/>
-<area shape="rect" title=" " alt="" coords="5,79,185,119"/>
-<area shape="poly" title=" " alt="" coords="413,33,198,78,197,73,412,28"/>
-<area shape="rect" title=" " alt="" coords="210,86,351,111"/>
-<area shape="poly" title=" " alt="" coords="440,33,321,83,319,78,438,28"/>
-<area shape="rect" title=" " alt="" coords="375,86,450,111"/>
-<area shape="poly" title=" " alt="" coords="460,32,431,76,426,73,456,29"/>
-<area shape="rect" title=" " alt="" coords="474,86,567,111"/>
-<area shape="poly" title=" " alt="" coords="476,29,507,73,503,76,472,32"/>
-<area shape="rect" title=" " alt="" coords="591,86,655,111"/>
-<area shape="poly" title=" " alt="" coords="490,28,589,78,587,82,488,33"/>
-<area shape="rect" title=" " alt="" coords="680,86,740,111"/>
-<area shape="poly" title=" " alt="" coords="511,28,585,49,668,76,674,78,672,83,666,81,584,54,510,33"/>
+<div class="center"><img src="service_8hpp__incl.png" border="0" usemap="#ainclude_2co__usb_2detail_2service_8hpp" alt=""/></div>
+<map name="ainclude_2co__usb_2detail_2service_8hpp" id="ainclude_2co__usb_2detail_2service_8hpp">
+<area shape="rect" title=" " alt="" coords="435,5,593,45"/>
+<area shape="rect" title=" " alt="" coords="5,93,185,133"/>
+<area shape="poly" title=" " alt="" coords="435,46,200,93,198,88,434,40"/>
+<area shape="rect" title=" " alt="" coords="210,101,351,126"/>
+<area shape="poly" title=" " alt="" coords="464,48,325,99,323,94,462,43"/>
+<area shape="rect" title=" " alt="" coords="375,101,453,126"/>
+<area shape="poly" title=" " alt="" coords="494,48,440,93,436,89,490,44"/>
+<area shape="rect" title=" " alt="" coords="477,101,551,126"/>
+<area shape="poly" title=" " alt="" coords="517,46,517,87,511,87,511,46"/>
+<area shape="rect" title=" " alt="" coords="575,101,669,126"/>
+<area shape="poly" title=" " alt="" coords="540,44,598,90,595,94,536,48"/>
+<area shape="rect" title=" " alt="" coords="693,101,757,126"/>
+<area shape="poly" title=" " alt="" coords="563,43,682,91,687,93,685,98,680,96,561,48"/>
+<area shape="rect" title=" " alt="" coords="781,101,841,126"/>
+<area shape="poly" title=" " alt="" coords="594,42,679,63,770,91,775,93,773,98,768,96,678,68,593,47"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><img src="service_8hpp__dep__incl.png" border="0" usemap="#ainclude_2co__usb_2service_8hppdep" alt=""/></div>
-<map name="ainclude_2co__usb_2service_8hppdep" id="ainclude_2co__usb_2service_8hppdep">
-<area shape="rect" title=" " alt="" coords="436,5,633,31"/>
-<area shape="rect" href="co__usb_8hpp.html" title=" " alt="" coords="393,152,540,177"/>
-<area shape="poly" title=" " alt="" coords="479,38,449,55,426,80,422,98,429,117,441,135,455,150,451,153,437,138,424,119,417,98,422,77,446,51,477,34"/>
-<area shape="rect" href="context_8hpp.html" title=" " alt="" coords="435,79,634,104"/>
-<area shape="poly" title=" " alt="" coords="537,44,537,79,532,79,532,44"/>
-<area shape="rect" href="service_8cpp.html" title=" " alt="" coords="658,79,777,104"/>
-<area shape="poly" title=" " alt="" coords="578,33,688,76,686,81,576,38"/>
-<area shape="rect" href="00-simple-echo_8cpp.html" title=" " alt="" coords="5,225,160,265"/>
-<area shape="poly" title=" " alt="" coords="397,183,173,228,161,230,160,225,171,223,396,177"/>
-<area shape="rect" href="01-multiple-transfers_8cpp.html" title=" " alt="" coords="184,225,349,265"/>
-<area shape="poly" title=" " alt="" coords="426,185,316,228,314,223,424,180"/>
-<area shape="rect" href="02-hotplug_8cpp.html" title=" " alt="" coords="373,233,560,258"/>
-<area shape="poly" title=" " alt="" coords="469,191,469,232,464,232,464,191"/>
-<area shape="rect" href="03-raw-hotplug_8cpp.html" title=" " alt="" coords="584,233,800,258"/>
-<area shape="poly" title=" " alt="" coords="513,179,660,230,658,235,511,184"/>
-<area shape="rect" href="04-left-hotplug_8cpp.html" title=" " alt="" coords="824,233,1037,258"/>
-<area shape="poly" title=" " alt="" coords="548,177,864,230,863,235,547,182"/>
-<area shape="poly" title=" " alt="" coords="516,116,480,154,476,150,512,112"/>
+<div class="center"><img src="service_8hpp__dep__incl.png" border="0" usemap="#ainclude_2co__usb_2detail_2service_8hppdep" alt=""/></div>
+<map name="ainclude_2co__usb_2detail_2service_8hppdep" id="ainclude_2co__usb_2detail_2service_8hppdep">
+<area shape="rect" title=" " alt="" coords="523,5,682,45"/>
+<area shape="rect" href="co__usb_8hpp.html" title=" " alt="" coords="393,167,540,192"/>
+<area shape="poly" title=" " alt="" coords="545,54,517,72,494,95,484,113,477,132,470,167,465,166,471,131,479,110,490,92,514,68,542,50"/>
+<area shape="rect" href="context_8hpp.html" title=" " alt="" coords="503,93,702,119"/>
+<area shape="poly" title=" " alt="" coords="605,59,605,93,600,93,600,59"/>
+<area shape="rect" href="service_8cpp.html" title=" " alt="" coords="725,93,885,119"/>
+<area shape="poly" title=" " alt="" coords="665,48,776,91,774,96,663,53"/>
+<area shape="rect" href="00-simple-echo_8cpp.html" title=" " alt="" coords="5,240,160,280"/>
+<area shape="poly" title=" " alt="" coords="397,197,173,243,161,245,160,240,171,237,396,192"/>
+<area shape="rect" href="01-multiple-transfers_8cpp.html" title=" " alt="" coords="184,240,349,280"/>
+<area shape="poly" title=" " alt="" coords="426,199,316,242,314,237,424,194"/>
+<area shape="rect" href="02-hotplug_8cpp.html" title=" " alt="" coords="373,247,560,273"/>
+<area shape="poly" title=" " alt="" coords="469,206,469,247,464,247,464,206"/>
+<area shape="rect" href="03-raw-hotplug_8cpp.html" title=" " alt="" coords="584,247,800,273"/>
+<area shape="poly" title=" " alt="" coords="513,194,660,245,658,250,511,199"/>
+<area shape="rect" href="04-cancellation_8cpp.html" title=" " alt="" coords="825,247,1042,273"/>
+<area shape="poly" title=" " alt="" coords="548,192,866,245,865,250,547,197"/>
+<area shape="poly" title=" " alt="" coords="570,127,490,169,488,164,568,122"/>
+<area shape="rect" href="context_8cpp.html" title=" " alt="" coords="565,167,686,192"/>
+<area shape="poly" title=" " alt="" coords="613,131,624,166,619,167,608,133"/>
 </map>
 </div>
 </div>

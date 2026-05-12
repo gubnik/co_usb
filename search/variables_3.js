@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['handle_0',['handle',['../structco__usb_1_1cb__data.html#a241c051b8d72ea2cfe0b21a69d244646',1,'co_usb::cb_data']]]
+  ['err_0',['err',['../structco__usb_1_1device__acceptor_1_1acceptor__awaitable.html#a0516fd1f3427230f2b36b73e5c21f003',1,'co_usb::device_acceptor::acceptor_awaitable']]]
 ];

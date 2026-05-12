@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['device_5facceptor_0',['device_acceptor',['../structco__usb_1_1device__acceptor.html',1,'co_usb']]],
-  ['device_5fleft_5fsignal_1',['device_left_signal',['../structco__usb_1_1device__left__signal.html',1,'co_usb']]],
-  ['device_5fref_2',['device_ref',['../structco__usb_1_1device__ref.html',1,'co_usb']]]
+  ['cb_5fdata_0',['cb_data',['../structco__usb_1_1transfer__awaitable_1_1cb__data.html',1,'co_usb::transfer_awaitable']]],
+  ['context_1',['context',['../structco__usb_1_1context.html',1,'co_usb']]],
+  ['context_3c_20use_5fservice_3a_3ano_20_3e_2',['context&lt; use_service::no &gt;',['../structco__usb_1_1context_3_01use__service_1_1no_01_4.html',1,'co_usb']]],
+  ['context_3c_20use_5fservice_3a_3ayes_20_3e_3',['context&lt; use_service::yes &gt;',['../structco__usb_1_1context_3_01use__service_1_1yes_01_4.html',1,'co_usb']]],
+  ['control_5ftransfer_4',['control_transfer',['../structco__usb_1_1control__transfer.html',1,'co_usb']]]
 ];
