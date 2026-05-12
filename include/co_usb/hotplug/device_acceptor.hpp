@@ -16,9 +16,6 @@
 namespace co_usb
 {
 
-constexpr struct use_left_t
-{
-} use_left;
 /**
  * @brief Accepts devices via hotplug
  *

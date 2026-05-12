@@ -34,6 +34,20 @@ FetchContent_MakeAvailable(co_usb)
 target_link_libraries(my_app co_usb::co_usb)
 ```
 
+# Build from source
+
+To build from source:
+```
+git clone https://github.com/gubnik/co_usb.git
+cd co_usb
+./setup.sh x64-static Debug # or x64-dyn instead of x64-static, or Release instead of Debug
+```
+
+To fully rebuild:
+```
+./setup.sh ${PRESET} ${BUILD_TYPE} reset
+```
+
 # Documentation
 
-See [docs](https://gubnik.github.io/co_usb) for WIP generated docs
+See [docs](https://gubnik.github.io/co_usb) for generated docs
