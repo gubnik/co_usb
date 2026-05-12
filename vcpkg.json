@@ -2,7 +2,7 @@
     "name": "cousb",
     "version": "1.0.0",
     "description": "Modern C++ library using C++20 coroutines and Boost.Capy to create a lightweight interface for libusb-1.0",
-    "license": "MIT",
+    "license": "BSL-1.0",
     "dependencies": [
         "boost-capy",
         "libusb",
@@ -12,6 +12,10 @@
         },
         {
             "name": "vcpkg-cmake-config",
+            "host": true
+        },
+        {
+            "name": "catch2",
             "host": true
         }
     ],

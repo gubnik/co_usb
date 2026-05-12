@@ -117,7 +117,7 @@ template <ep_direction Direction> struct endpoint
         {
             if (m_ep & LIBUSB_ENDPOINT_IN)
             {
-                return {m_ep, m_devh};
+                return endpoint<ep_direction::in>::make_unsafe(m_ep, m_devh);
             }
             return std::nullopt;
         }
@@ -127,11 +127,14 @@ template <ep_direction Direction> struct endpoint
             {
                 return std::nullopt;
             }
-            return {m_ep, m_devh};
+            return endpoint<ep_direction::out>::make_unsafe(m_ep, m_devh);
         }
     }
 
   private:
+    template <ep_direction ToDirection>
+    friend endpoint<ToDirection> endpoint_cast(endpoint<ep_direction::both> ep) noexcept;
+
     endpoint (uint8_t ep, libusb_device_handle *devh) noexcept : m_ep(ep), m_devh(devh)
     {
     }

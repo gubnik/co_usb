@@ -5,8 +5,7 @@ project(
   VERSION 0.1.0
   LANGUAGES CXX)
 
-# not supported yet
-option(COUSB_BUILD_TESTS "co_usb tests" OFF)
+option(COUSB_BUILD_TESTS "co_usb tests" ON)
 option(COUSB_BUILD_EXAMPLES "co_usb examples" ON)
 option(COUSB_BUILD_DOCS "co_usb docs" ON)
 option(COUSB_ONLY_BUILD_DOCS "co_usb only docs" OFF)
