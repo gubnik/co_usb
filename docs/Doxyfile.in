@@ -7,3 +7,4 @@ GENERATE_LATEX         = NO
 EXTRACT_ALL            = YES
 QUIET                  = YES
 HTML_EXTRA_STYLESHEET  = @AWESOME_CSS_DIR@/doxygen-awesome.css
+USE_MDFILE_AS_MAINPAGE = README.md

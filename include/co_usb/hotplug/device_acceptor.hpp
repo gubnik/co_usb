@@ -24,6 +24,8 @@ namespace co_usb
  * @details This class maintains a pool of currently connected devices and performs the book keeping
  * to ensure that the same device is not accepted while already connected.
  *
+ * @note There can only be a single accept point for each acceptor.
+ *
  * Internal map is allocated using @ref std::pmr::polymorphic_allocator to allow allocator
  * propagation from coroutine frame allocator.
  */
