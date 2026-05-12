@@ -26,6 +26,5 @@ fi
 cmake --preset="$PRESET" && \
 cmake --build "build/$PRESET" --config "$BUILD_TYPE"
 
-if [ ! -f compile_commands.json ]; then
-    ln -s "build/$PRESET/compile_commands.json" compile_commands.json 2>/dev/null || :
-fi
+rm -f compile_commands.json && \
+ln -s "build/$PRESET/compile_commands.json" compile_commands.json 2>/dev/null || :
