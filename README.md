@@ -3,12 +3,12 @@
 
 # co_usb
 
-Modern C++ library using C++20 coroutines and [Boost.Capy](https://github.com/cppalliance/capy) to
-create a lightweight interface for [libusb-1.0](https://libusb.info/). It provides minimal abstractions
+Asynchronous USB library using C++20 coroutines and [Boost.Capy](https://github.com/cppalliance/capy) to
+create a lightweight interface for [libusb-1.0](https://libusb.info/). It provides minimal necessary abstractions
 over base libusb to enable efficient and clean concurrent I/O using Boost.Capy's common interfaces
-so it can be used seamlessly with libraries that consume those interfaces, e.g. Boost.Http.
+for seamless interoperability with wider coroutine ecosystem.
 
-# Getting started
+## Getting started
 
 This project uses `vcpkg` as a package manager.
 To use it in your `vcpkg`-based projects, do the following:
@@ -34,7 +34,7 @@ FetchContent_MakeAvailable(co_usb)
 target_link_libraries(my_app co_usb::co_usb)
 ```
 
-# Build from source
+## Build from source
 
 To build from source:
 ```
@@ -48,6 +48,12 @@ To fully rebuild:
 ./setup.sh ${PRESET} ${BUILD_TYPE} reset
 ```
 
-# Documentation
+## Documentation
 
 See [docs](https://gubnik.github.io/co_usb) for generated docs
+
+## License
+
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file [LICENSE_1_0.txt](LICENSE_1_0.txt) or copy at
+https://www.boost.org/LICENSE_1_0.txt)
