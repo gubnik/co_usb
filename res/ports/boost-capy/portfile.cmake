@@ -4,9 +4,9 @@ vcpkg_from_github(
   REPO
   cppalliance/capy
   REF
-  develop
+  81a78e235d705ff5dfd114ac0a4850845ebf21f5
   SHA512
-  ea807eeb534fafca52d9a81f2822835cb18c361515d28205e67129176e83f8c5fbf25ba6eec4b2bbe9d0bc0dda6e208488f30842817a0bc10538e7d8a609c61e
+  a693c88371e204c1a21cb8be3d5296d1bd4fedf68be9bae22730dadfddb0e434c206bf6e2e89880f861739dbd1017a79e6454467b46cb06ba000c4c64102630b
 )
 
 vcpkg_configure_cmake(

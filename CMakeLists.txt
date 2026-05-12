@@ -26,14 +26,10 @@ target_include_directories(
 target_compile_definitions(${PROJECT_NAME} INTERFACE)
 
 if(COUSB_BUILD_EXAMPLES)
-  file(GLOB_RECURSE EXAMPLES ${CMAKE_CURRENT_SOURCE_DIR}/examples/*.cpp)
-  foreach(example_path IN LISTS EXAMPLES)
-    get_filename_component(fname "${example_path}" NAME)
-    get_filename_component(target_name "${fname}" NAME_WE)
-    add_executable("${target_name}" "${example_path}")
-    target_link_libraries(${target_name} PRIVATE ${PROJECT_NAME} -static)
-  endforeach()
+  add_subdirectory(examples)
 endif()
+
+# installation section
 
 include(GNUInstallDirs)
 

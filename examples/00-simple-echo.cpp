@@ -6,7 +6,6 @@
  * Demonstrates compile-time direction semantic and basics of reads and writes.
  */
 
-#include "co_usb/error.hpp"
 #include <array>
 #include <boost/capy.hpp>
 #include <co_usb.hpp>
