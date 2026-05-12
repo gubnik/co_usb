@@ -1,0 +1,29 @@
+<map id="/home/runner/work/co_usb/co_usb/src/hotplug/hotplug_awaitable.cpp" name="/home/runner/work/co_usb/co_usb/src/hotplug/hotplug_awaitable.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1056,5,1233,60"/>
+<area shape="rect" id="Node000002" href="$error_8hpp.html" title=" " alt="" coords="5,203,135,229"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1056,48,661,107,405,149,147,199,128,203,127,197,145,193,404,144,660,101,1055,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="702,284,843,309"/>
+<area shape="poly" id="edge15_Node000001_Node000003" title=" " alt="" coords="1220,58,1293,91,1330,111,1361,133,1386,157,1400,183,1401,210,1385,238,1358,252,1309,263,1167,280,1002,290,857,296,857,291,1001,285,1167,275,1308,258,1356,247,1381,234,1396,209,1395,184,1382,160,1358,137,1327,115,1291,95,1218,63"/>
+<area shape="rect" id="Node000005" href="$hotplug__awaitable_8hpp.html" title=" " alt="" coords="683,108,857,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1057,59,859,107,858,102,1055,53"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="1446,115,1529,141"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="1234,54,1428,105,1439,109,1437,114,1427,111,1233,59"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,226,146,233,295,255,444,271,688,289,688,294,444,276,295,260,146,239,111,231"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="16,284,124,309"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="73,229,73,270,67,270,67,229"/>
+<area shape="poly" id="edge10_Node000005_Node000002" title=" " alt="" coords="683,138,441,159,294,176,146,199,126,203,125,198,146,193,293,171,440,154,683,132"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="384,196,532,236"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="702,151,540,195,539,190,701,145"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="556,203,763,229"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="747,150,687,197,684,192,744,146"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="787,203,974,229"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="796,146,856,192,853,197,793,150"/>
+<area shape="rect" id="Node000009" href="$device__ref_8hpp.html" title=" " alt="" coords="1204,203,1371,229"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="857,140,1192,193,1218,198,1217,203,1191,199,856,145"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="998,203,1179,229"/>
+<area shape="poly" id="edge11_Node000005_Node000010" title=" " alt="" coords="841,145,1034,197,1033,202,839,151"/>
+<area shape="rect" id="Node000011" href="$hotplug_8hpp.html" title=" " alt="" coords="159,203,360,229"/>
+<area shape="poly" id="edge12_Node000005_Node000011" title=" " alt="" coords="683,147,341,204,340,198,682,141"/>
+<area shape="poly" id="edge9_Node000009_Node000003" title=" " alt="" coords="1232,231,1192,239,858,287,857,282,1191,233,1231,226"/>
+<area shape="poly" id="edge13_Node000011_Node000003" title=" " alt="" coords="328,226,373,233,689,281,688,286,372,239,327,231"/>
+</map>

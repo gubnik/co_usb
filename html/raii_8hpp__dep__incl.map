@@ -1,0 +1,26 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/raii.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/raii.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="464,5,635,60"/>
+<area shape="rect" id="Node000002" href="$co__usb_8hpp.html" title=" " alt="" coords="5,431,176,485"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="451,47,326,69,259,87,194,111,144,130,104,147,72,171,42,212,24,256,20,294,27,334,41,382,53,407,68,429,64,432,48,409,36,384,21,335,14,295,19,255,38,209,68,167,102,142,142,125,192,105,257,82,325,64,450,42"/>
+<area shape="rect" id="Node000003" href="$interface_8hpp.html" title=" " alt="" coords="205,108,376,163"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="470,67,359,110,357,105,468,62"/>
+<area shape="rect" id="Node000005" href="$transfer__types_8hpp.html" title=" " alt="" coords="331,313,501,383"/>
+<area shape="poly" id="edge13_Node000001_Node000005" title=" " alt="" coords="557,74,559,116,556,165,546,218,526,267,505,294,480,315,476,311,502,290,522,264,541,216,551,165,553,116,551,74"/>
+<area shape="rect" id="Node000008" href="$kernel__driver__guard_8hpp.html" title=" " alt="" coords="587,108,800,163"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="600,66,657,106,654,110,597,70"/>
+<area shape="rect" id="Node000010" href="$raii_8cpp.html" title=" " alt="" coords="824,115,1000,155"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="649,59,845,113,843,118,647,64"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="192,146,157,154,123,168,92,187,67,212,54,238,46,267,45,297,48,327,62,384,80,429,75,431,57,386,42,328,39,297,41,266,49,236,63,209,89,182,121,163,156,149,191,141"/>
+<area shape="rect" id="Node000004" href="$endpoint_8hpp.html" title=" " alt="" coords="78,211,274,265"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="252,174,208,213,204,209,249,170"/>
+<area shape="rect" id="Node000007" href="$interface_8cpp.html" title=" " alt="" coords="299,218,512,258"/>
+<area shape="poly" id="edge9_Node000003_Node000007" title=" " alt="" coords="333,170,385,216,382,220,329,174"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="143,277,118,315,108,344,100,376,94,431,89,430,95,375,102,343,114,312,138,274"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="248,269,342,311,340,316,246,274"/>
+<area shape="rect" id="Node000006" href="$endpoint_8cpp.html" title=" " alt="" coords="128,321,307,375"/>
+<area shape="poly" id="edge8_Node000004_Node000006" title=" " alt="" coords="194,278,210,319,205,321,189,280"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="319,385,173,433,171,428,317,380"/>
+<area shape="poly" id="edge11_Node000008_Node000002" title=" " alt="" coords="660,174,627,212,597,262,579,306,557,346,540,366,515,385,489,398,454,409,365,428,267,443,177,452,176,447,266,437,364,423,452,404,487,393,512,380,536,362,553,343,574,304,593,260,623,209,656,171"/>
+<area shape="rect" id="Node000009" href="$kernel__driver__guard_8cpp.html" title=" " alt="" coords="637,211,805,265"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="707,175,717,210,711,211,702,177"/>
+</map>

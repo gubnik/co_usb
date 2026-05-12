@@ -1,0 +1,23 @@
+<map id="/home/runner/work/co_usb/co_usb/src/transfer/transfer_awaitable.cpp" name="/home/runner/work/co_usb/co_usb/src/transfer/transfer_awaitable.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="235,5,414,60"/>
+<area shape="rect" id="Node000002" href="$transfer_2error_8hpp.html" title=" " alt="" coords="98,115,282,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="288,62,219,110,216,105,285,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="254,203,395,229"/>
+<area shape="poly" id="edge11_Node000001_Node000003" title=" " alt="" coords="327,60,327,189,322,189,322,60"/>
+<area shape="rect" id="Node000006" href="$transfer__awaitable_8hpp.html" title=" " alt="" coords="516,108,693,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="404,58,536,101,534,106,403,63"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="210,139,297,194,294,198,207,143"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,203,113,229"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="174,143,90,198,87,193,171,139"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="137,203,229,229"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="192,141,188,190,183,189,186,141"/>
+<area shape="poly" id="edge10_Node000006_Node000003" title=" " alt="" coords="544,151,376,202,374,197,542,146"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="625,196,773,236"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="627,146,670,185,666,189,624,150"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="797,203,1004,229"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="670,145,849,197,847,202,669,151"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="1029,203,1215,229"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="694,141,1017,193,1045,198,1044,203,1016,199,693,146"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="419,203,601,229"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="585,150,535,196,532,192,582,146"/>
+</map>

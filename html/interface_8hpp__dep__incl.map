@@ -1,0 +1,15 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/interface.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/interface.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="109,5,280,60"/>
+<area shape="rect" id="Node000002" href="$co__usb_8hpp.html" title=" " alt="" coords="5,328,176,383"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,70,103,87,86,109,75,137,68,166,66,227,74,283,85,327,79,328,68,284,61,227,63,166,70,135,82,107,99,84,121,65"/>
+<area shape="rect" id="Node000003" href="$endpoint_8hpp.html" title=" " alt="" coords="97,108,293,163"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,74,197,108,192,108,192,74"/>
+<area shape="rect" id="Node000006" href="$interface_8cpp.html" title=" " alt="" coords="317,115,531,155"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="268,63,382,113,380,118,266,68"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="150,173,132,192,118,212,106,241,99,272,93,328,88,327,93,271,101,240,114,209,128,188,146,170"/>
+<area shape="rect" id="Node000004" href="$transfer__types_8hpp.html" title=" " alt="" coords="128,211,299,280"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="204,176,210,210,205,211,199,177"/>
+<area shape="rect" id="Node000005" href="$endpoint_8cpp.html" title=" " alt="" coords="323,218,501,273"/>
+<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="261,167,360,215,358,220,259,171"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="167,291,122,330,119,326,163,287"/>
+</map>
