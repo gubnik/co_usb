@@ -121,6 +121,7 @@ Friends</h2></td></tr>
 <div class="textblock"><p>Accepts devices via hotplug. </p>
 <dl class="section note"><dt>Note</dt><dd>Totally unrelated to <a class="el" href="structco__usb_1_1hotplug__awaitable.html">hotplug_awaitable</a> in any way</dd></dl>
 <p>This class maintains a pool of currently connected devices and performs the book keeping to ensure that the same device is not accepted while already connected.</p>
+<dl class="section note"><dt>Note</dt><dd>There can only be a single accept point for each acceptor.</dd></dl>
 <p>Internal map is allocated using std::pmr::polymorphic_allocator to allow allocator propagation from coroutine frame allocator. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a98dc46bec5945b224387f57ec9eca84a" name="a98dc46bec5945b224387f57ec9eca84a"></a>
