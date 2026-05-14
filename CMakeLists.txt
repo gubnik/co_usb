@@ -37,11 +37,11 @@ else()
   endif()
 
   if(COUSB_BUILD_DOCS)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Doxygen.cmake)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CousbDoxygen.cmake)
   endif()
 
   if(COUSB_BUILD_TESTS)
-    add_subdirectory(tests)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CousbTests.cmake)
   endif()
 
   # installation section
