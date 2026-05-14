@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13...3.31)
 
 project(
   co_usb
-  VERSION 0.1.0
+  VERSION 1.0.0
   LANGUAGES CXX)
 
 option(COUSB_BUILD_TESTS "co_usb tests" ON)
