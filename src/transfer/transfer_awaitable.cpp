@@ -1,4 +1,4 @@
-#include "co_usb/transfer/error.hpp"
+#include "co_usb/transfer/transfer_status.hpp"
 #include <co_usb/transfer/transfer_awaitable.hpp>
 #include <libusb-1.0/libusb.h>
 

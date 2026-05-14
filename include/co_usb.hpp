@@ -11,8 +11,8 @@
 
 // Transfers
 #include <co_usb/transfer/endpoint.hpp>
-#include <co_usb/transfer/error.hpp>
 #include <co_usb/transfer/transfer_awaitable.hpp>
+#include <co_usb/transfer/transfer_status.hpp>
 #include <co_usb/transfer/transfer_types.hpp>
 
 // Hotplug
