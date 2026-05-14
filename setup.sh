@@ -23,7 +23,7 @@ if [ "$3" = "reset" ]; then
     mkdir -p "build/$PRESET"
 fi
 
-cmake --preset="$PRESET" && \
+cmake --preset="$PRESET" -DCOUSB_BUILD_DOCS=OFF && \
 cmake --build "build/$PRESET" --config "$BUILD_TYPE"
 
 rm -f compile_commands.json && \
