@@ -1,14 +1,16 @@
 #pragma once
 
 #include <co_usb.hpp>
-#include <cstring>
 #include <type_traits>
 
-template <typename T>
-    requires(!std::is_pointer_v<T>)
-constexpr auto const &mock ()
+/**
+ * @brief Rough mocking function
+ *
+ * It is, of course, UB to use but I don't care
+ */
+template <typename T> constexpr auto &mock ()
 {
-    static char storage[sizeof(T)];
-    std::memset(storage, 1, sizeof(storage));
-    return *reinterpret_cast<T *>(storage);
+    using type = std::remove_cvref_t<T>;
+    static char storage[sizeof(type)];
+    return *reinterpret_cast<type *>(storage);
 }
