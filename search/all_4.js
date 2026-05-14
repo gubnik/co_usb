@@ -13,6 +13,6 @@ var searchData=
   ['ep_5ftype_10',['ep_type',['../structco__usb_1_1basic__transfer.html#a66015537c6a588ed636972d4cf3fc02c',1,'co_usb::basic_transfer']]],
   ['err_11',['err',['../structco__usb_1_1device__acceptor_1_1acceptor__awaitable.html#a0516fd1f3427230f2b36b73e5c21f003',1,'co_usb::device_acceptor::acceptor_awaitable']]],
   ['error_12',['error',['../namespaceco__usb.html#a25f0b769747592400f5f0708a6363707acb5e100e5a9a3e7f6d1fd97512215282',1,'co_usb']]],
-  ['error_2ehpp_13',['error.hpp',['../error_8hpp.html',1,'(Global Namespace)'],['../transfer_2error_8hpp.html',1,'(Global Namespace)']]],
+  ['error_2ehpp_13',['error.hpp',['../error_8hpp.html',1,'']]],
   ['error_5fcategory_5ft_14',['error_category_t',['../structco__usb_1_1error__category__t.html',1,'co_usb']]]
 ];
