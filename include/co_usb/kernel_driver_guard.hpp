@@ -2,7 +2,6 @@
 
 #include "co_usb/raii.hpp"
 #include <boost/capy/io_result.hpp>
-#include <libusb-1.0/libusb.h>
 #include <memory>
 
 namespace co_usb

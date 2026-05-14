@@ -5,7 +5,6 @@
 #include <boost/capy/ex/this_coro.hpp>
 #include <boost/capy/task.hpp>
 #include <concepts>
-#include <libusb-1.0/libusb.h>
 #include <ranges>
 #include <stdexcept>
 #include <stop_token>

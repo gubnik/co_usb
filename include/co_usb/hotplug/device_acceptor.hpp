@@ -7,7 +7,7 @@
 #include <boost/capy/ex/io_env.hpp>
 #include <boost/capy/io_task.hpp>
 #include <functional>
-#include <libusb-1.0/libusb.h>
+#include <libusb.h>
 #include <map>
 #include <memory_resource>
 #include <mutex>

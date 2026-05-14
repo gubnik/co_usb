@@ -5,8 +5,6 @@
 #include <boost/capy/io_task.hpp>
 #include <co_usb/hotplug/device_acceptor.hpp>
 #include <coroutine>
-#include <libusb-1.0/libusb.h>
-#include <mutex>
 #include <system_error>
 
 /**

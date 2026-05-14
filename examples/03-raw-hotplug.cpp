@@ -7,7 +7,6 @@
 
 #include <boost/capy.hpp>
 #include <co_usb.hpp>
-#include <libusb-1.0/libusb.h>
 #include <print>
 
 constexpr uint16_t dev_vid      = 0x9f9f;

@@ -1,6 +1,5 @@
 #include "co_usb/error.hpp"
 #include <co_usb/kernel_driver_guard.hpp>
-#include <libusb-1.0/libusb.h>
 
 co_usb::kernel_driver_guard::kernel_driver_guard (libusb_device_handle *devh, int iface_num)
     : m_devh{devh, [iface_num = iface_num] (libusb_device_handle *devh)

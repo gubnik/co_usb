@@ -4,7 +4,7 @@
 #include "boost/capy/continuation.hpp"
 #include "boost/capy/ex/io_env.hpp"
 #include "boost/capy/io_result.hpp"
-#include <libusb-1.0/libusb.h>
+#include <libusb.h>
 
 namespace co_usb
 {

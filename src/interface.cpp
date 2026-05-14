@@ -1,6 +1,5 @@
 #include "co_usb/error.hpp"
 #include <co_usb/interface.hpp>
-#include <libusb-1.0/libusb.h>
 
 co_usb::interface::interface (libusb_device_handle *devh, int iface_num) noexcept
     : m_devh(devh, [iface = iface_num] (libusb_device_handle *devh)

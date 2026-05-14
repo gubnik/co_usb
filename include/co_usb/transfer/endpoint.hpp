@@ -2,7 +2,7 @@
 
 #include "co_usb/interface.hpp"
 #include <cstdint>
-#include <libusb-1.0/libusb.h>
+#include <libusb.h>
 #include <optional>
 #include <stdexcept>
 

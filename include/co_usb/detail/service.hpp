@@ -1,7 +1,7 @@
 #pragma once
 
 #include <boost/capy/ex/execution_context.hpp>
-#include <libusb-1.0/libusb.h>
+#include <libusb.h>
 #include <memory>
 #include <optional>
 #include <stop_token>

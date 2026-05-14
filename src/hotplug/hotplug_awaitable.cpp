@@ -1,7 +1,4 @@
-#include "co_usb/error.hpp"
 #include <co_usb/hotplug/hotplug_awaitable.hpp>
-#include <coroutine>
-#include <libusb-1.0/libusb.h>
 
 co_usb::hotplug_awaitable::hotplug_awaitable (libusb_context *ctx, int events, int flags, int vid,
                                               int pid, int dev_class)

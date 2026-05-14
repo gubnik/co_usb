@@ -6,7 +6,6 @@
 #include <boost/capy/buffers.hpp>
 #include <boost/capy/io_task.hpp>
 #include <chrono>
-#include <libusb-1.0/libusb.h>
 
 namespace co_usb
 {

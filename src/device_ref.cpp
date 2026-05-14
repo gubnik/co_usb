@@ -1,5 +1,4 @@
 #include <co_usb/device_ref.hpp>
-#include <libusb-1.0/libusb.h>
 
 co_usb::device_ref::device_ref () noexcept : m_dev(nullptr)
 {

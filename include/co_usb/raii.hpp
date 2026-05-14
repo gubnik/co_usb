@@ -3,7 +3,6 @@
 #include "co_usb/device_ref.hpp"
 #include "co_usb/device_triplet.hpp"
 #include <boost/capy/io_result.hpp>
-#include <libusb-1.0/libusb.h>
 #include <memory>
 #include <type_traits>
 

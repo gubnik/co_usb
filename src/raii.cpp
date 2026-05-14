@@ -1,6 +1,5 @@
 #include "co_usb/error.hpp"
 #include <co_usb/raii.hpp>
-#include <libusb-1.0/libusb.h>
 #include <system_error>
 
 boost::capy::io_result<co_usb::unique_dev_handle> co_usb::open (libusb_context *ctx,
