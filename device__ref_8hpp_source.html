@@ -84,7 +84,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="contents">
 <a href="device__ref_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;libusb-1.0/libusb.h&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;libusb.h&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceco__usb.html">co_usb</a></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span>{</div>
@@ -109,13 +109,13 @@ $(document).ready(function() { init_codefold(0); });
 </div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>} <span class="comment">// namespace co_usb</span></div>
-<div class="ttc" id="anamespaceco__usb_html"><div class="ttname"><a href="namespaceco__usb.html">co_usb</a></div><div class="ttdef"><b>Definition</b> context.hpp:14</div></div>
-<div class="ttc" id="anamespaceco__usb_html_a7afd52a765c03b1f9cdd1c7a19728a0c"><div class="ttname"><a href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">co_usb::use_service</a></div><div class="ttdeci">use_service</div><div class="ttdef"><b>Definition</b> context.hpp:17</div></div>
+<div class="ttc" id="anamespaceco__usb_html"><div class="ttname"><a href="namespaceco__usb.html">co_usb</a></div><div class="ttdef"><b>Definition</b> context.hpp:13</div></div>
+<div class="ttc" id="anamespaceco__usb_html_a7afd52a765c03b1f9cdd1c7a19728a0c"><div class="ttname"><a href="namespaceco__usb.html#a7afd52a765c03b1f9cdd1c7a19728a0c">co_usb::use_service</a></div><div class="ttdeci">use_service</div><div class="ttdef"><b>Definition</b> context.hpp:16</div></div>
 <div class="ttc" id="astructco__usb_1_1device__ref_html"><div class="ttname"><a href="structco__usb_1_1device__ref.html">co_usb::device_ref</a></div><div class="ttdoc">Wrapper for nullable libusb_device that increments ref count on ctor and decrements on dtor.</div><div class="ttdef"><b>Definition</b> device_ref.hpp:17</div></div>
-<div class="ttc" id="astructco__usb_1_1device__ref_html_a0606f82cfa23f76ce25ee7bba1a59a0e"><div class="ttname"><a href="structco__usb_1_1device__ref.html#a0606f82cfa23f76ce25ee7bba1a59a0e">co_usb::device_ref::device_ref</a></div><div class="ttdeci">device_ref() noexcept</div><div class="ttdoc">constructs a null ref</div><div class="ttdef"><b>Definition</b> device_ref.cpp:4</div></div>
-<div class="ttc" id="astructco__usb_1_1device__ref_html_a1a0b8234bfafc5517f143937a8cb4047"><div class="ttname"><a href="structco__usb_1_1device__ref.html#a1a0b8234bfafc5517f143937a8cb4047">co_usb::device_ref::get</a></div><div class="ttdeci">libusb_device * get() const noexcept</div><div class="ttdef"><b>Definition</b> device_ref.cpp:19</div></div>
-<div class="ttc" id="astructco__usb_1_1device__ref_html_a7dba0269935232e1386fe562cd6fa686"><div class="ttname"><a href="structco__usb_1_1device__ref.html#a7dba0269935232e1386fe562cd6fa686">co_usb::device_ref::operator=</a></div><div class="ttdeci">device_ref &amp; operator=(const device_ref &amp;) noexcept</div><div class="ttdef"><b>Definition</b> device_ref.cpp:31</div></div>
-<div class="ttc" id="astructco__usb_1_1device__ref_html_ae0ac00ab1be7114f6050ee3ca55c93c2"><div class="ttname"><a href="structco__usb_1_1device__ref.html#ae0ac00ab1be7114f6050ee3ca55c93c2">co_usb::device_ref::~device_ref</a></div><div class="ttdeci">~device_ref() noexcept</div><div class="ttdef"><b>Definition</b> device_ref.cpp:13</div></div>
+<div class="ttc" id="astructco__usb_1_1device__ref_html_a0606f82cfa23f76ce25ee7bba1a59a0e"><div class="ttname"><a href="structco__usb_1_1device__ref.html#a0606f82cfa23f76ce25ee7bba1a59a0e">co_usb::device_ref::device_ref</a></div><div class="ttdeci">device_ref() noexcept</div><div class="ttdoc">constructs a null ref</div><div class="ttdef"><b>Definition</b> device_ref.cpp:3</div></div>
+<div class="ttc" id="astructco__usb_1_1device__ref_html_a1a0b8234bfafc5517f143937a8cb4047"><div class="ttname"><a href="structco__usb_1_1device__ref.html#a1a0b8234bfafc5517f143937a8cb4047">co_usb::device_ref::get</a></div><div class="ttdeci">libusb_device * get() const noexcept</div><div class="ttdef"><b>Definition</b> device_ref.cpp:18</div></div>
+<div class="ttc" id="astructco__usb_1_1device__ref_html_a7dba0269935232e1386fe562cd6fa686"><div class="ttname"><a href="structco__usb_1_1device__ref.html#a7dba0269935232e1386fe562cd6fa686">co_usb::device_ref::operator=</a></div><div class="ttdeci">device_ref &amp; operator=(const device_ref &amp;) noexcept</div><div class="ttdef"><b>Definition</b> device_ref.cpp:30</div></div>
+<div class="ttc" id="astructco__usb_1_1device__ref_html_ae0ac00ab1be7114f6050ee3ca55c93c2"><div class="ttname"><a href="structco__usb_1_1device__ref.html#ae0ac00ab1be7114f6050ee3ca55c93c2">co_usb::device_ref::~device_ref</a></div><div class="ttdeci">~device_ref() noexcept</div><div class="ttdef"><b>Definition</b> device_ref.cpp:12</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

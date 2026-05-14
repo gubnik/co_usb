@@ -1,7 +1,7 @@
 <map id="/home/runner/work/co_usb/co_usb/include/co_usb/error.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/error.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="65,5,236,60"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,147,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,62,97,99,93,96,126,58"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="171,108,279,133"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="175,58,208,96,204,99,171,62"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="14,5,185,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,79,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,62,60,98,55,95,80,59"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="103,108,211,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="119,59,143,95,139,98,115,62"/>
 </map>
