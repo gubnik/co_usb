@@ -52,6 +52,10 @@ To fully rebuild:
 
 See [docs](https://gubnik.github.io/co_usb) for generated docs
 
+## Tests
+
+WIP, basic [tests](./tests/) are provided but none of the real I/O is tested.
+
 ## License
 
 Distributed under the Boost Software License, Version 1.0.
