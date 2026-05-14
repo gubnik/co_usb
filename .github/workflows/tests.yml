@@ -22,4 +22,4 @@ jobs:
         run: PATH=$(pwd)/vcpkg:$PATH VCPKG_ROOT=$(pwd)/vcpkg ./ci_setup.sh x64-static Debug
 
       - name: Run test
-        run: cd build/x64-static && ctest -V -R .
+        run: cd build/x64-static && mkdir -p test-reports && ctest -V -R .
