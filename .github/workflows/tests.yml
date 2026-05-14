@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y git cmake gcc libusb-1.0-0-dev autoconf autoconf-archive automake libtoolize
+        run: sudo apt-get update && sudo apt-get install -y git cmake gcc libusb-1.0-0-dev autoconf autoconf-archive automake libtool
 
       - name: Install vcpkg
         run: git clone https://github.com/microsoft/vcpkg && ./vcpkg/bootstrap-vcpkg.sh
