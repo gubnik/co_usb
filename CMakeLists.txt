@@ -11,7 +11,7 @@ option(COUSB_BUILD_DOCS "co_usb docs" ON)
 option(COUSB_ONLY_BUILD_DOCS "co_usb only docs" OFF)
 
 if(COUSB_ONLY_BUILD_DOCS)
-  include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Doxygen.cmake)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CousbDoxygen.cmake)
 else()
   # libusb-1.0
   find_package(PkgConfig REQUIRED)
