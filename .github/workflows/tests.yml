@@ -16,7 +16,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y git cmake gcc libusb-1.0-0-dev
 
       - name: Install vcpkg
-        run: git clone https://github.com/vcpkg/vcpkg && ./vcpkg/bootstrap-vcpkg.sh
+        run: git clone https://github.com/microsoft/vcpkg && ./vcpkg/bootstrap-vcpkg.sh
 
       - name: Run cmake
         run: VCPKG_ROOT=$(pwd)/vcpkg ./setup.sh x64-static Debug
