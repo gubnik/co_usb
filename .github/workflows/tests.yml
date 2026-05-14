@@ -2,46 +2,25 @@ name: Build and run tests
 
 on:
   push:
-    branches:
-      - dev
-      - master
+    branches: [ dev, master ]
 
 jobs:
   tests:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y git cmake gcc libusb-1.0-0-dev autoconf autoconf-archive automake libtool
 
-      - name: Install system dependencies
-        run: |
-          set -eux
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            git cmake build-essential gcc libusb-1.0-0-dev \
-            autoconf autoconf-archive automake libtool pkg-config
-          
-      - name: Install vcpkg (local)
-        run: |
-          set -eux
-          git clone --depth=1 https://github.com/microsoft/vcpkg vcpkg
-          ./vcpkg/bootstrap-vcpkg.sh -useSystemBinaries
-        working-directory: ${{ github.workspace }}
+      - name: Install vcpkg
+        run: git clone https://github.com/microsoft/vcpkg && ./vcpkg/bootstrap-vcpkg.sh
 
-      - name: Configure (cmake)
-        env:
-          VCPKG_ROOT: ${{ github.workspace }}/vcpkg
-          PATH: ${{ github.workspace }}/vcpkg:${{ env.PATH }}
-        run: |
-          set -eux
-          ./ci_setup.sh x64-static Debug
+      - name: Run cmake
+        run: PATH=$(pwd)/vcpkg:$PATH VCPKG_ROOT=$(pwd)/vcpkg ./ci_setup.sh x64-static Debug
 
-      - name: Build & Run tests
-        run: |
-          set -eux
-          cd build/x64-static
-          mkdir -p test_reports
-          ctest -V -R .
+      - name: Run test
+        run: cd build/x64-static && mkdir -p test_reports && ctest -V -R .
+
