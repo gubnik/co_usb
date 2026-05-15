@@ -1,3 +1,7 @@
+## Release v1.0.1
+
+- add range clause to read/write_some of transfer types
+
 ## Release v1.0.0
 
 - add transfer status and usb error mappings to std::error_code

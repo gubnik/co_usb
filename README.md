@@ -1,5 +1,5 @@
 # co_usb
-> v1.0.0
+> v1.0.1
 
 Asynchronous USB library using C++20 coroutines and [Boost.Capy](https://github.com/cppalliance/capy) to
 create a lightweight interface for [libusb-1.0](https://libusb.info/). It provides minimal necessary abstractions
