@@ -6,6 +6,7 @@
 #include <boost/capy/buffers.hpp>
 #include <boost/capy/io_task.hpp>
 #include <chrono>
+#include <type_traits>
 
 namespace co_usb
 {
@@ -30,7 +31,7 @@ template <endpoint_type EpType, ep_direction Direction> struct basic_transfer
         return Direction;
     }
 
-    constexpr endpoint_type ep_type () const noexcept
+    consteval endpoint_type ep_type () const noexcept
     {
         return EpType;
     }
@@ -44,34 +45,78 @@ template <endpoint_type EpType, ep_direction Direction> struct basic_transfer
      * @brief Partial read from an endpoint.
      *
      * @details Provides a buffer to the transfer and submits it via @ref transfer_awaitable.
+     * For buffer sequences that are ranges, does that N times for each of N buffers reusing the
+     * internal transfer.
      *
      * @note Overrides the existing buffer, length, user_data and callback_fn of the internal
      * libusb_transfer.
      */
-    [[nodiscard]] boost::capy::io_task<size_t> read_some (boost::capy::mutable_buffer buf)
+    template <boost::capy::MutableBufferSequence MB>
+    boost::capy::io_task<size_t> read_some (MB buffers)
         requires(Direction == ep_direction::in || Direction == ep_direction::both)
     {
-        auto tfer    = m_tfer.get();
-        tfer->buffer = (uint8_t *)buf.data();
-        tfer->length = buf.size();
-        co_return co_await transfer_awaitable{tfer};
+        if constexpr (std::is_convertible_v<MB, boost::capy::mutable_buffer>)
+        {
+            boost::capy::mutable_buffer buf = buffers;
+
+            auto tfer    = m_tfer.get();
+            tfer->buffer = (uint8_t *)buf.data();
+            tfer->length = buf.size();
+            co_return co_await transfer_awaitable{tfer};
+        }
+        size_t total = 0;
+        for (boost::capy::mutable_buffer buf : buffers)
+        {
+            auto tfer    = m_tfer.get();
+            tfer->buffer = (uint8_t *)buf.data();
+            tfer->length = buf.size();
+            auto [ec, n] = co_await transfer_awaitable{tfer};
+            if (ec)
+            {
+                co_return {ec, total};
+            }
+            total += n;
+        }
+        co_return {{}, total};
     }
 
     /**
      * @brief Partial write to an endpoint.
      *
      * @details Provides a buffer to the transfer and submits it via @ref transfer_awaitable.
+     * For buffer sequences that are ranges, does that N times for each of N buffers reusing the
+     * internal transfer.
      *
      * @note Overrides the existing buffer, length, user_data and callback_fn of the internal
      * libusb_transfer.
      */
-    boost::capy::io_task<size_t> write_some (boost::capy::const_buffer buf)
+    template <boost::capy::ConstBufferSequence CB>
+    boost::capy::io_task<size_t> write_some (CB buffers)
         requires(Direction == ep_direction::out || Direction == ep_direction::both)
     {
-        auto tfer    = m_tfer.get();
-        tfer->buffer = (uint8_t *)buf.data();
-        tfer->length = buf.size();
-        co_return co_await transfer_awaitable{tfer};
+        if constexpr (std::is_convertible_v<CB, boost::capy::const_buffer>)
+        {
+            boost::capy::const_buffer buf = buffers;
+
+            auto tfer    = m_tfer.get();
+            tfer->buffer = (uint8_t *)buf.data();
+            tfer->length = buf.size();
+            co_return co_await transfer_awaitable{tfer};
+        }
+        size_t total = 0;
+        for (boost::capy::const_buffer buf : buffers)
+        {
+            auto tfer    = m_tfer.get();
+            tfer->buffer = (uint8_t *)buf.data();
+            tfer->length = buf.size();
+            auto [ec, n] = co_await transfer_awaitable{tfer};
+            if (ec)
+            {
+                co_return {ec, total};
+            }
+            total += n;
+        }
+        co_return {{}, total};
     }
 
   protected:
