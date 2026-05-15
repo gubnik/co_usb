@@ -1,8 +1,13 @@
 // clang-format off
 #include <boost/capy/concept/read_stream.hpp>
+#include <boost/capy/io/any_read_stream.hpp>
+#include <boost/capy/io/any_write_stream.hpp>
 #include <boost/capy/concept/write_stream.hpp>
 #include <catch2/catch_all.hpp>
+#include <catch2/catch_test_macros.hpp>
 #include <co_usb.hpp>
+#include "co_usb/transfer/endpoint.hpp"
+#include "co_usb/transfer/transfer_types.hpp"
 #include "test_mock.hpp"
 // clang-format on
 
@@ -36,4 +41,22 @@ TEST_CASE("transfer-buffers", "[transfer][buffers]")
         { tfer.write_some(buffer) };
         { tfer.write_some(buffers) };
     });
+}
+
+TEST_CASE("any-transfer", "[transfers]")
+{
+    REQUIRE(
+        [&]
+        {
+            auto tfer = co_usb::bulk_transfer(co_usb::ep_in(0x81, iface));
+            boost::capy::any_read_stream read_s{&tfer};
+            return true;
+        }());
+    REQUIRE(
+        [&]
+        {
+            auto tfer = co_usb::bulk_transfer(co_usb::ep_out(0x01, iface));
+            boost::capy::any_write_stream write_s{&tfer};
+            return true;
+        }());
 }
