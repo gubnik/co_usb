@@ -21,3 +21,19 @@ TEST_CASE("transfer-sfinae", "[transfer]")
     REQUIRE(boost::capy::ReadStream<co_usb::control_transfer> == true);
     REQUIRE(boost::capy::WriteStream<co_usb::control_transfer> == true);
 }
+
+TEST_CASE("transfer-buffers", "[transfer][buffers]")
+{
+    REQUIRE(requires(co_usb::bulk_transfer<co_usb::ep_direction::in> &tfer,
+                     boost::capy::mutable_buffer buffer,
+                     std::span<boost::capy::mutable_buffer> buffers) {
+        { tfer.read_some(buffer) };
+        { tfer.read_some(buffers) };
+    });
+    REQUIRE(requires(co_usb::bulk_transfer<co_usb::ep_direction::out> &tfer,
+                     boost::capy::const_buffer buffer,
+                     std::span<boost::capy::const_buffer> buffers) {
+        { tfer.write_some(buffer) };
+        { tfer.write_some(buffers) };
+    });
+}
