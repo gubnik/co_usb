@@ -10,7 +10,7 @@ var searchData=
   ['ep_5fdirection_7',['ep_direction',['../namespaceco__usb.html#a35417684dfe6d97668e0851c45d97676',1,'co_usb']]],
   ['ep_5fin_8',['ep_in',['../namespaceco__usb.html#ab3ba4c5c199e3f5d45fcda0df5bf7206',1,'co_usb']]],
   ['ep_5fout_9',['ep_out',['../namespaceco__usb.html#a396b14ab643bfcf1a3041f7828415050',1,'co_usb']]],
-  ['ep_5ftype_10',['ep_type',['../structco__usb_1_1basic__transfer.html#a66015537c6a588ed636972d4cf3fc02c',1,'co_usb::basic_transfer']]],
+  ['ep_5ftype_10',['ep_type',['../structco__usb_1_1basic__transfer.html#a2d0bff219270938598167742b71e509c',1,'co_usb::basic_transfer']]],
   ['err_11',['err',['../structco__usb_1_1device__acceptor_1_1acceptor__awaitable.html#a0516fd1f3427230f2b36b73e5c21f003',1,'co_usb::device_acceptor::acceptor_awaitable']]],
   ['error_12',['error',['../namespaceco__usb.html#a25f0b769747592400f5f0708a6363707acb5e100e5a9a3e7f6d1fd97512215282',1,'co_usb']]],
   ['error_2ehpp_13',['error.hpp',['../error_8hpp.html',1,'']]],
