@@ -28,6 +28,7 @@ namespace co_usb
  */
 struct transfer_awaitable
 {
+    constexpr transfer_awaitable() noexcept = default;
     transfer_awaitable(libusb_transfer *tfer) noexcept;
 
     /**
