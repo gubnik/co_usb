@@ -41,7 +41,11 @@ concept transfer_buffer =
  * @note Prefer using concrete transfer types which are correctly prefilled on construction
  */
 template <endpoint_type EpType, ep_direction Direction, size_t Preallocated = 1>
-    requires(Preallocated > 0)
+    requires(
+        Preallocated > 0 &&
+        (Direction != ep_direction::both ||
+         EpType ==
+             endpoint_type::control)) // both is malformed for anything except control transfers
 struct basic_transfer
 {
     explicit basic_transfer (int iso_packets = 0)
@@ -122,7 +126,7 @@ struct basic_transfer
         {
             buffer_t buf = buffers;
             auto tfer    = m_tfers[0].get();
-            tfer->buffer = reinterpret_cast<uint8_t *>(const_cast<void *>(buf.data()));
+            tfer->buffer = static_cast<uint8_t *>(const_cast<void *>(buf.data()));
             tfer->length = buf.size();
             co_return co_await transfer_awaitable{tfer};
         }
