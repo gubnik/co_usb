@@ -12,14 +12,9 @@
 #include <boost/capy/when_all.hpp>
 #include <chrono>
 #include <concepts>
-#include <cstring>
-#include <iterator>
 #include <libusb.h>
 #include <numeric>
 #include <ranges>
-#include <stdexcept>
-#include <type_traits>
-#include <utility>
 
 namespace co_usb
 {
