@@ -23,8 +23,8 @@ TEST_CASE("transfer-sfinae", "[transfer]")
     REQUIRE(boost::capy::WriteStream<co_usb::bulk_transfer<co_usb::ep_direction::out>> == true);
 
     // a control transfer is bidirectional and must have both read and write awailable
-    REQUIRE(boost::capy::ReadStream<co_usb::control_transfer> == true);
-    REQUIRE(boost::capy::WriteStream<co_usb::control_transfer> == true);
+    REQUIRE(boost::capy::ReadStream<co_usb::control_transfer<>> == true);
+    REQUIRE(boost::capy::WriteStream<co_usb::control_transfer<>> == true);
 }
 
 TEST_CASE("transfer-buffers", "[transfer][buffers]")

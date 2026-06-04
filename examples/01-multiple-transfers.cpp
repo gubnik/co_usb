@@ -15,6 +15,7 @@
 #include <co_usb.hpp>
 #include <csignal>
 #include <print>
+#include <utility>
 
 constexpr uint8_t total         = 8;
 constexpr uint16_t dev_vid      = 0x9f9f;
@@ -32,7 +33,8 @@ boost::capy::task<void> process_transfer (const co_usb::interface &iface)
     };
     while (!st.stop_requested())
     {
-        auto [ec, n] = co_await tfer.read_some({data.data(), data.size()});
+        auto [ec, n] =
+            co_await tfer.read_some(boost::capy::mutable_buffer{data.data(), data.size()});
         if (ec)
         {
             std::println("Got error: {}", ec.message());
@@ -40,6 +42,7 @@ boost::capy::task<void> process_transfer (const co_usb::interface &iface)
         }
         std::println("Got data: {}", std::string_view{(char *)data.data(), n});
     }
+    std::println("{}", std::to_underlying(tfer.ep_type()));
     std::println("Gracefully exited");
 }
 
