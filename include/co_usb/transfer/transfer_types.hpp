@@ -6,10 +6,12 @@
 #include <array>
 #include <boost/capy/buffers.hpp>
 #include <boost/capy/buffers/buffer_param.hpp>
+#include <boost/capy/concept/io_awaitable.hpp>
 #include <boost/capy/ex/this_coro.hpp>
 #include <boost/capy/io_task.hpp>
 #include <boost/capy/when_all.hpp>
 #include <chrono>
+#include <concepts>
 #include <cstring>
 #include <iterator>
 #include <libusb.h>
@@ -94,7 +96,7 @@ struct basic_transfer
      * libusb_transfer.
      */
     template <boost::capy::MutableBufferSequence MB>
-    auto read_some (MB buffers) -> boost::capy::io_task<size_t>
+    auto read_some (MB buffers) -> boost::capy::IoAwaitable auto
         requires(Direction == ep_direction::in || Direction == ep_direction::both)
     {
         return submit(buffers);
@@ -110,7 +112,7 @@ struct basic_transfer
      * libusb_transfer.
      */
     template <boost::capy::ConstBufferSequence CB>
-    auto write_some (CB buffers) -> boost::capy::io_task<size_t>
+    auto write_some (CB buffers) -> boost::capy::IoAwaitable auto
         requires(Direction == ep_direction::out || Direction == ep_direction::both)
     {
         return submit(buffers);
@@ -118,53 +120,58 @@ struct basic_transfer
 
   private:
     template <transfer_buffer<Direction> AnyBufferSequence>
+        requires(
+            std::convertible_to<AnyBufferSequence, boost::capy::buffer_type<AnyBufferSequence>> &&
+            !std::ranges::bidirectional_range<AnyBufferSequence>)
+    auto submit (AnyBufferSequence buffers) -> boost::capy::IoAwaitable auto
+    {
+        using buffer_t = boost::capy::buffer_type<AnyBufferSequence>;
+        buffer_t buf   = buffers;
+        auto tfer      = m_tfers[0].get();
+        tfer->buffer   = static_cast<uint8_t *>(const_cast<void *>(buf.data()));
+        tfer->length   = buf.size();
+        return transfer_awaitable{tfer};
+    }
+
+    template <transfer_buffer<Direction> AnyBufferSequence>
+        requires(
+            !std::convertible_to<AnyBufferSequence, boost::capy::buffer_type<AnyBufferSequence>> &&
+            std::ranges::bidirectional_range<AnyBufferSequence>)
     auto submit (AnyBufferSequence buffers) -> boost::capy::io_task<size_t>
     {
         using buffer_t = boost::capy::buffer_type<AnyBufferSequence>;
 
-        if constexpr (std::is_convertible_v<AnyBufferSequence, buffer_t>)
+        const size_t buffers_given = boost::capy::buffer_length(buffers);
+        const size_t pool          = m_tfers.size();
+        size_t total               = 0;
+        size_t remaining           = buffers_given;
+        auto it                    = std::ranges::begin(buffers);
+        std::array<transfer_awaitable, Preallocated> ops;
+        while (remaining > 0)
         {
-            buffer_t buf = buffers;
-            auto tfer    = m_tfers[0].get();
-            tfer->buffer = static_cast<uint8_t *>(const_cast<void *>(buf.data()));
-            tfer->length = buf.size();
-            co_return co_await transfer_awaitable{tfer};
-        }
-        else
-        {
-            const size_t buffers_given = boost::capy::buffer_length(buffers);
-            const size_t pool          = m_tfers.size();
-            size_t total               = 0;
-            size_t remaining           = buffers_given;
-            auto it                    = std::ranges::begin(buffers);
-            std::array<transfer_awaitable, Preallocated> ops;
-            while (remaining > 0)
+            const size_t count = std::min(pool, remaining);
+            for (size_t i = 0; i < count; ++i)
             {
-                const size_t count = std::min(pool, remaining);
-                for (size_t i = 0; i < count; ++i)
-                {
-                    buffer_t buf = *it;
-                    ++it;
-                    libusb_transfer *tfer = m_tfers[i].get();
-                    // de facto const for OUT but we have to cast away const anyway
-                    tfer->buffer = static_cast<uint8_t *>(const_cast<void *>(buf.data()));
-                    tfer->length = buf.size();
+                buffer_t buf = *it;
+                ++it;
+                libusb_transfer *tfer = m_tfers[i].get();
+                // de facto const for OUT but we have to cast away const anyway
+                tfer->buffer = static_cast<uint8_t *>(const_cast<void *>(buf.data()));
+                tfer->length = buf.size();
 
-                    ops[i] = tfer;
-                }
-
-                auto [ec, vec] =
-                    co_await boost::capy::when_all(ops | std::ranges::views::take(count));
-                total += std::accumulate(vec.begin(), vec.end(), size_t{0});
-
-                if (ec)
-                {
-                    co_return {ec, total};
-                }
-                remaining -= count;
+                ops[i] = tfer;
             }
-            co_return {{}, total};
+
+            auto [ec, vec] = co_await boost::capy::when_all(ops | std::ranges::views::take(count));
+            total += std::accumulate(vec.begin(), vec.end(), size_t{0});
+
+            if (ec)
+            {
+                co_return {ec, total};
+            }
+            remaining -= count;
         }
+        co_return {{}, total};
     }
 
   protected:
