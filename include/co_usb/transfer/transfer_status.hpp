@@ -3,6 +3,7 @@
 #include <libusb.h>
 #include <system_error>
 #include <type_traits>
+
 namespace co_usb
 {
 

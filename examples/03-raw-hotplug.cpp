@@ -5,6 +5,7 @@
  *
  */
 
+/*
 #include <boost/capy.hpp>
 #include <co_usb.hpp>
 #include <print>
@@ -74,4 +75,9 @@ int main (int argc, char **argv)
     co_usb::context<> ctx(tp.get_executor());
     boost::capy::run_async(tp.get_executor())(accept_hotplug(ctx.get()));
     tp.join();
+}
+*/
+
+int main (int argc, char **)
+{
 }

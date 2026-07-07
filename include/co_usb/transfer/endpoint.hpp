@@ -1,8 +1,7 @@
 #pragma once
 
-#include "co_usb/interface.hpp"
+#include "co_usb/transfer/detail/device_handle_source.hpp"
 #include <cstdint>
-#include <libusb.h>
 #include <optional>
 #include <stdexcept>
 
@@ -18,7 +17,7 @@ enum class endpoint_type : uint8_t
     bulk_stream,
 };
 
-enum class ep_direction
+enum class endpoint_direction
 {
     out  = 0x00,
     in   = 0x80,
@@ -35,7 +34,7 @@ enum class ep_direction
  * equal to an unknown endpoint direction and as such only allows casts to either in or out
  * endpoint.
  */
-template <ep_direction Direction> struct endpoint
+template <endpoint_direction Direction> struct endpoint
 {
     /**
      * @brief Makes an endpoint and completes address to proper value
@@ -45,18 +44,21 @@ template <ep_direction Direction> struct endpoint
      * @li ep_direction::in ep = 0x83 -> 0x83
      * @li ep_direction::in ep = 0x03 -> 0x83
      */
-    static endpoint<Direction> make_safe (uint8_t ep, const interface &iface) noexcept
-        requires(Direction != ep_direction::both)
+    template <co_usb::detail::DeviceHandleSource DevSourceTy>
+    static endpoint<Direction> make_safe (uint8_t ep, DevSourceTy const &dev_source) noexcept
+        requires(Direction != endpoint_direction::both)
     {
-        if constexpr (Direction == ep_direction::out)
+        if constexpr (Direction == endpoint_direction::out)
         {
-            return {static_cast<uint8_t>(ep & ~LIBUSB_ENDPOINT_IN), iface.dev()};
+            return endpoint<Direction>{static_cast<uint8_t>(ep & ~LIBUSB_ENDPOINT_IN),
+                                       detail::device_handle_of(dev_source)};
         }
-        else if constexpr (Direction == ep_direction::in)
+        else if constexpr (Direction == endpoint_direction::in)
         {
-            return {static_cast<uint8_t>(ep | LIBUSB_ENDPOINT_IN), iface.dev()};
+            return endpoint<Direction>{static_cast<uint8_t>(ep | LIBUSB_ENDPOINT_IN),
+                                       detail::device_handle_of(dev_source)};
         }
-        return {ep, iface.dev()};
+        return endpoint<Direction>{ep, detail::device_handle_of(dev_source)};
     }
 
     static endpoint<Direction> make_unsafe (uint8_t ep, libusb_device_handle *devh) noexcept
@@ -70,16 +72,16 @@ template <ep_direction Direction> struct endpoint
      * @throws @ref std::invalid_argument when endpoint address does not match @tp Direction
      */
     static endpoint<Direction> make_throwing (uint8_t ep, libusb_device_handle *devh)
-        requires(Direction != ep_direction::both)
+        requires(Direction != endpoint_direction::both)
     {
-        if constexpr (Direction == ep_direction::out)
+        if constexpr (Direction == endpoint_direction::out)
         {
             if (ep & LIBUSB_ENDPOINT_IN)
             {
                 throw std::invalid_argument{"Cannot use IN endpoint for OUT"};
             }
         }
-        else if constexpr (Direction == ep_direction::in)
+        else if constexpr (Direction == endpoint_direction::in)
         {
             if (!(ep & LIBUSB_ENDPOINT_IN))
             {
@@ -90,13 +92,13 @@ template <ep_direction Direction> struct endpoint
     }
 
     uint8_t addr () const noexcept
-        requires(Direction != ep_direction::both)
+        requires(Direction != endpoint_direction::both)
     {
         return m_ep;
     }
 
-    auto *dev () const noexcept
-        requires(Direction != ep_direction::both)
+    auto *devh () const noexcept
+        requires(Direction != endpoint_direction::both)
     {
         return m_devh;
     }
@@ -109,31 +111,31 @@ template <ep_direction Direction> struct endpoint
      * to control endpoint (0x80)
      * @returns Properly typed endpoint if conversion is possible
      */
-    template <ep_direction ToDirection>
+    template <endpoint_direction ToDirection>
     std::optional<endpoint<ToDirection>> as () const noexcept
-        requires(Direction == ep_direction::both)
+        requires(Direction == endpoint_direction::both)
     {
-        if constexpr (ToDirection == ep_direction::in)
+        if constexpr (ToDirection == endpoint_direction::in)
         {
             if (m_ep & LIBUSB_ENDPOINT_IN)
             {
-                return endpoint<ep_direction::in>::make_unsafe(m_ep, m_devh);
+                return endpoint<endpoint_direction::in>::make_unsafe(m_ep, m_devh);
             }
             return std::nullopt;
         }
-        else if constexpr (ToDirection == ep_direction::out)
+        else if constexpr (ToDirection == endpoint_direction::out)
         {
             if (m_ep & LIBUSB_ENDPOINT_IN)
             {
                 return std::nullopt;
             }
-            return endpoint<ep_direction::out>::make_unsafe(m_ep, m_devh);
+            return endpoint<endpoint_direction::out>::make_unsafe(m_ep, m_devh);
         }
     }
 
   private:
-    template <ep_direction ToDirection>
-    friend endpoint<ToDirection> endpoint_cast(endpoint<ep_direction::both> ep) noexcept;
+    template <endpoint_direction ToDirection>
+    friend endpoint<ToDirection> endpoint_cast(endpoint<endpoint_direction::both> ep) noexcept;
 
     endpoint (uint8_t ep, libusb_device_handle *devh) noexcept : m_ep(ep), m_devh(devh)
     {
@@ -144,19 +146,23 @@ template <ep_direction Direction> struct endpoint
     libusb_device_handle *m_devh;
 };
 
-/**
- * @brief Wrapper around endpoint<co_usb::ep_direction::in>::make_safe
- */
-endpoint<ep_direction::in> ep_in(uint8_t ep, const interface &iface) noexcept;
+inline auto endpoint_out (uint8_t ep_addr, detail::DeviceHandleSource auto const &devh_src)
+    -> endpoint<endpoint_direction::out>
+{
+    return endpoint<endpoint_direction::out>::make_safe(ep_addr, devh_src);
+}
 
-/**
- * @brief Wrapper around endpoint<co_usb::ep_direction::out>::make_safe
- */
-endpoint<ep_direction::out> ep_out(uint8_t ep, const interface &iface) noexcept;
+inline auto endpoint_in (uint8_t ep_addr, detail::DeviceHandleSource auto const &devh_src)
+    -> endpoint<endpoint_direction::in>
+{
+    return endpoint<endpoint_direction::in>::make_safe(ep_addr, devh_src);
+}
 
-/**
- * @brief Creates an endpoint with an unknown direction
- */
-endpoint<ep_direction::both> ep_any(uint8_t ep, const interface &iface) noexcept;
+inline auto endpoint_any (uint8_t ep_addr, detail::DeviceHandleSource auto const &devh_src)
+    -> endpoint<endpoint_direction::both>
+{
+    return endpoint<endpoint_direction::both>::make_unsafe(ep_addr,
+                                                           detail::device_handle_of(devh_src));
+}
 
 } // namespace co_usb

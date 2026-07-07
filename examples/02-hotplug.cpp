@@ -10,8 +10,9 @@
  * For raw @ref co_usb::hotplug_awaitable, see example 03
  */
 
+/*
 #include <boost/capy.hpp>
-#include <co_usb.hpp>
+#include <co_usb/co_usb.hpp>
 #include <print>
 
 constexpr uint16_t dev_vid      = 0x9f9f;
@@ -73,4 +74,9 @@ int main (int argc, char **argv)
     co_usb::context<> ctx(tp.get_executor());
     boost::capy::run_async(tp.get_executor())(accept_hotplug(ctx.get()));
     tp.join();
+}
+*/
+
+int main (int argc, char **)
+{
 }

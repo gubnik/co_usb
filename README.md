@@ -1,17 +1,24 @@
 # co_usb
-> v1.0.1
+> v2.0.0
 
 Asynchronous USB library using C++20 coroutines and [Boost.Capy](https://github.com/cppalliance/capy) to
 create a lightweight interface for [libusb-1.0](https://libusb.info/). It provides minimal necessary abstractions
 over base libusb to enable efficient and clean concurrent I/O using Boost.Capy's common interfaces
 for seamless interoperability with wider coroutine ecosystem.
 
+## Features
+- Full support for asynchronous transfers in a way that saturates libusb ring
+- Full support for hotplug API in form of Asio-like acceptor and one-shot hotplugs
+- Allocator and cancellation aware by default
+- Extendable event handling logic that works with any Capy-based executor
+- Efficient without compromising the functionality, comparable performance to raw libusb
+
 ## Getting started
 
 This project uses `vcpkg` as a package manager.
 To use it in your `vcpkg`-based projects, do the following:
-1. Add [portfile](`./portfile.cmake`) and [vcpkg.json](./vcpkg.json) to your ports directory
-2. Copy `./res/ports/boost-capy/` and `./res/ports/libusb/` to your ports dir
+1. Add [portfile](`./portfile.cmake`) and [vcpkg.json](./vcpkg.json) to your `ports` directory
+2. Copy `./res/ports/boost-capy/` and `./res/ports/libusb/` to your `ports` directory
 3. Provide them as overlay to the `vcpkg`
 4. Add the following to your `CMakeLists.txt`:
 ```cmake

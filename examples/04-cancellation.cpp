@@ -8,171 +8,191 @@
  * It will likely not work for a random device :-)
  */
 
-#include <atomic>
+#include "co_usb/ev/context.hpp"
+#include "co_usb/ev/detail/event_handler.hpp"
+#include "co_usb/hotplug/device_acceptor.hpp"
+#include "co_usb/transfer/endpoint.hpp"
+#include "co_usb/wrapper/device_handle.hpp"
+#include "co_usb/wrapper/error_protocol.hpp"
+#include <array>
 #include <boost/capy.hpp>
-#include <co_usb.hpp>
+#include <boost/capy/buffers.hpp>
+#include <boost/capy/buffers/make_buffer.hpp>
+#include <boost/capy/delay.hpp>
+#include <chrono>
+#include <co_usb/co_usb.hpp>
+#include <csignal>
+#include <libusb.h>
 #include <print>
-#include <type_traits>
 
 constexpr uint16_t dev_vid      = 0x9f9f;
 constexpr uint16_t dev_pid      = 0x9f9f;
 constexpr uint8_t dev_iface_num = 0;
 
-// helper function to help with managing active work
-// this is one of many ways to manage that and may be not ideal, it is not the part of co_usb's API
-template <class F>
-    requires std::invocable<F>
-auto defer (F &&f)
-{
-    auto deleter    = [f = std::forward<F>(f)] (void *) { f(); };
-    using deleter_t = std::decay_t<decltype(deleter)>;
-    return std::unique_ptr<void, deleter_t>{(void *)1, deleter};
-}
-
 // Greets the device nicely
-boost::capy::task<> dev_loop (co_usb::device_ref dev, std::atomic<size_t> &active_work)
+boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
 {
-    // increment active_work counter and decrement it at scope's end
-    active_work.fetch_add(1, std::memory_order_release);
-    auto defer_dec = defer([&active_work] { active_work.fetch_sub(1, std::memory_order_release); });
+    auto exec = co_await boost::capy::this_coro::executor;
+    auto stop = co_await boost::capy::this_coro::stop_token;
 
-    // propagate the stop token
-    auto stop_token = co_await boost::capy::this_coro::stop_token;
-
-    // open the device
-    auto [dec, devh] = co_usb::open(dev);
-    if (dec)
+    /*
+    for (;;)
     {
-        std::println(stderr, "Error during device opening: {}", dec.message());
+        if (stop.stop_requested())
+            break;
+    }
+    */
+
+    std::error_code ec;
+    // open the device
+    auto maybe_devh = dev.valid() ? co_usb::open_device(dev, co_usb::as_optional(ec))
+                                  : co_usb::open_device(exec,
+                                                        {
+                                                            .vid = dev_vid,
+                                                            .pid = dev_pid,
+                                                        },
+                                                        co_usb::as_optional(ec));
+    if (ec)
+    {
+        std::println(stderr, "Error during device opening: {}", ec.message());
         co_return;
     }
+    auto devh = std::move(*maybe_devh);
 
     // guard to detach and reattach kernel driver
-    auto [gec, guard] = co_usb::kernel_driver_guard::detach(devh, dev_iface_num);
-    if (gec && gec != co_usb::make_usb_error_code(co_usb::usb_error::not_found))
-    {
-        std::println(stderr, "Error during driver detachment: {}", gec.message());
-        co_return;
-    }
+    auto maybe_guard = co_usb::detach_driver(devh, dev_iface_num, co_usb::as_expected());
 
     // claim the interface
-    auto [iec, iface] = co_usb::interface::claim(devh, dev_iface_num);
-    if (iec)
+    auto maybe_iface = co_usb::claim_interface(devh, dev_iface_num, co_usb::as_optional(ec));
+    if (ec)
     {
-        std::println(stderr, "Error during interface claiming: {}", iec.message());
+        std::println(stderr, "Error during interface claiming: {}", ec.message());
         co_return;
     }
+    auto iface = std::move(*maybe_iface);
 
     // allocate and pre-fill the transfer
     // libusb doesn't have allocator API so we can't propagate frame allocator
-    // this operation can only fail with bad_alloc, so no error code
-    co_usb::bulk_transfer hello_tfer{co_usb::ep_out(0x02, iface)};
+    using namespace std::chrono_literals;
+    co_usb::bulk_transfer<co_usb::endpoint_direction::out, 4> hello_tfer{
+        exec, co_usb::endpoint_out(0x02, iface), 50ms};
+    co_usb::bulk_transfer<co_usb::endpoint_direction::in, 4> in_tfer{
+        exec, co_usb::endpoint_in(0x01, iface), 50ms};
 
-    // set up an stop observer to cancel outgoing transfers when the stop is requested
-    // libusb_cancel_transfer is thread-safe so it is safe to call from this callback without
-    // additional synchronization
-    std::stop_callback cancel_tfer_cb{stop_token,
-                                      [tfer = hello_tfer.raw()] { libusb_cancel_transfer(tfer); }};
+    size_t total_bytes{0};
 
-    constexpr std::string_view hello = "Hello there, a friendly device!";
-    while (!stop_token.stop_requested())
+    constexpr std::string_view hello   = "Hello there, a friendly device!";
+    constexpr std::string_view goodbye = "Goodbye, a friendly device!";
+    std::array bufs{
+        boost::capy::const_buffer{hello.data(), hello.size()},
+        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
+        boost::capy::const_buffer{hello.data(), hello.size()},
+        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
+        boost::capy::const_buffer{hello.data(), hello.size()},
+        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
+        boost::capy::const_buffer{hello.data(), hello.size()},
+        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
+        boost::capy::const_buffer{hello.data(), hello.size()},
+        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
+        boost::capy::const_buffer{hello.data(), hello.size()},
+        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
+        boost::capy::const_buffer{hello.data(), hello.size()},
+        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
+    };
+    constexpr size_t bufsz = 1 << 18;
+    char buf[16][bufsz];
+    std::array<boost::capy::mutable_buffer, 16> bufs_in;
+    for (size_t i = 0; i < bufs_in.size(); i++)
     {
-        auto [wec, wn] =
-            co_await hello_tfer.write_some(boost::capy::const_buffer{hello.data(), hello.size()});
+        bufs_in[i] = boost::capy::mutable_buffer{buf[i], bufsz};
+    }
+    while (!stop.stop_requested())
+    {
+        // auto [wec, wn] = co_await hello_tfer.write_some(boost::capy::make_buffer(hello));
+        // total_bytes += wn;
+        auto [rec, rn] = co_await in_tfer.read_some(bufs_in);
+        total_bytes += rn;
+        if (!rec)
+        {
+            std::println("Got {} bytes", rn);
+        }
+        else
+        {
+            std::println(stderr, "Critical transfer error: {}; exiting the process loop...",
+                         rec.message());
+            break;
+        }
 
-        if (!wec)
+        // std::println("Wrote {} bytes", wn);
+        if (!rec)
         {
             continue;
-        }
-
-        auto err = static_cast<co_usb::transfer_status>(wec.value());
-
-        // timeouts are normal, continue
-        if (err == co_usb::transfer_status::timed_out)
-        {
-            continue;
-        }
-
-        if (err == co_usb::transfer_status::cancelled)
-        {
-            std::println("Transfer was cancelled; exiting the process loop...");
-            co_return;
-        }
-
-        if (err == co_usb::transfer_status::no_device)
-        {
-            std::println(stderr, "Device was detached; exiting the process loop...");
-            co_return;
         }
 
         // some other error we don't have anything special to say about
         std::println(stderr, "Critical transfer error: {}; exiting the process loop...",
-                     wec.message());
-        co_return;
+                     rec.message());
+        break;
     }
+    std::println("Coro exit, total bytes transfered: {}", total_bytes);
 }
 
-boost::capy::task<> accept_hotplug (libusb_context *ctx, std::atomic<size_t> &active_work)
+boost::capy::task<> accept_hotplug ()
 {
-    auto exec       = co_await boost::capy::this_coro::executor;
-    auto stop_token = co_await boost::capy::this_coro::stop_token;
-    auto allocator  = co_await boost::capy::this_coro::frame_allocator;
-
-    co_usb::device_acceptor acceptor{ctx, allocator};
-    while (!stop_token.stop_requested())
+    auto exec  = co_await boost::capy::this_coro::executor;
+    auto stop  = co_await boost::capy::this_coro::stop_token;
+    auto alloc = co_await boost::capy::this_coro::frame_allocator;
+    std::error_code ec;
+    co_usb::device_acceptor acceptor{exec, alloc};
+    ec = acceptor.bind({.vid = 0x9f9f, .pid = 0x9f9f});
+    ec = acceptor.listen();
+    if (ec)
     {
-        auto [ec, dev] = co_await acceptor.accept({.vid = dev_vid, .pid = dev_pid});
+        std::println(stderr, "Failed to bind hotplug router with error: `{}` (code={})",
+                     ec.message(), ec.value());
+    }
 
-        if (ec) // should never happen unless we really messed up!
+    while (!stop.stop_requested())
+    {
+        auto [ec, dev] = co_await acceptor.accept();
+
+        if (ec)
         {
+            std::println("Exiting router loop with error: `{}` (code={})", ec.message(),
+                         ec.value());
             break;
         }
 
         // start the device processing loop with propagated executor, stop token and allocator
-        boost::capy::run_async(exec, stop_token, allocator)(dev_loop(dev, active_work));
+        boost::capy::run_async(exec, stop, alloc)(dev_loop(dev));
     }
+    // acceptor.shutdown();
+
+    // boost::capy::run_async(exec, stop, allocator)(dev_loop());
 }
 
-// the default handler does not provide any kind of tracking of pending events before
-// exiting on stop_requested(), so we have to provide our own
-auto make_tracking_event_handler (std::atomic<size_t> &active_work)
-{
-    return [&active_work] (libusb_context *ctx, std::stop_token st)
-    {
-        const timeval ctv = {.tv_sec = 0, .tv_usec = 10'000};
-        for (;;)
-        {
-            timeval tv = ctv;
-            auto r     = libusb_handle_events_timeout(ctx, &tv);
-            if (r != LIBUSB_SUCCESS)
-            {
-                throw std::system_error{make_usb_error_code(static_cast<co_usb::usb_error>(r))};
-            }
-            // no work and cancellation was required - oblige and leave
-            if (st.stop_requested() && active_work.load(std::memory_order_acquire) == 0)
-            {
-                break;
-            }
-        }
-    };
-}
+volatile sig_atomic_t g_sigint = 0;
 
 int main (int argc, char **argv)
 {
     boost::capy::thread_pool tp{1};
 
-    // counter for the number of active libusb work to correctly time event loop cancellation
-    // this is so transfer cancellations get handled and we don't end up in a broken state
-    // some of the alternatives are: latches, semaphores, barries, etc.
-    std::atomic<size_t> active_work{0};
-
     // initiates a libusb context and binds a libusb event handler thread to executor's execution
     // context with an associated stop source
-    co_usb::context<> ctx(tp.get_executor(), make_tracking_event_handler(active_work));
+    co_usb::context ctx =
+        co_usb::make_context<co_usb::detail::refcounted_event_handler>(tp.get_executor());
+
+    boost::capy::run_async(
+        tp.get_executor(), [] () {}, [] (std::exception_ptr e) {})(
+        [] (co_usb::context &ctx) -> boost::capy::task<>
+        {
+            auto [ec] = co_await boost::capy::delay(std::chrono::seconds{1});
+            ctx.request_stop();
+            co_return;
+        }(ctx));
 
     // start the acceptor loop with event handler stop token
     // this allows to gracefully exit with correct handling order
-    boost::capy::run_async(tp.get_executor(),
-                           ctx.get_token())(accept_hotplug(ctx.get(), active_work));
+    boost::capy::run_async(tp.get_executor(), ctx.get_token())(accept_hotplug());
     tp.join();
 }

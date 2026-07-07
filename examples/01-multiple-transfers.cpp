@@ -11,25 +11,29 @@
  * I test all my examples on a primitive virtual device in QEMU.
  */
 
+#include "co_usb/wrapper/error_protocol.hpp"
 #include <boost/capy.hpp>
-#include <co_usb.hpp>
+#include <co_usb/co_usb.hpp>
 #include <csignal>
 #include <print>
+#include <system_error>
 #include <utility>
 
-constexpr uint8_t total         = 8;
 constexpr uint16_t dev_vid      = 0x9f9f;
 constexpr uint16_t dev_pid      = 0x9f9f;
 constexpr uint8_t dev_ep        = 0x81;
 constexpr uint8_t dev_iface_num = 0;
 
+constexpr uint8_t total = 8;
+
 boost::capy::task<void> process_transfer (const co_usb::interface &iface)
 {
-    auto st = co_await boost::capy::this_coro::stop_token;
+    auto exec = co_await boost::capy::this_coro::executor;
+    auto st   = co_await boost::capy::this_coro::stop_token;
 
     std::array<uint8_t, 1024> data;
     co_usb::bulk_transfer tfer{
-        co_usb::ep_in(0x81, iface), std::chrono::milliseconds{0'050} // timeout
+        exec, co_usb::endpoint_in(0x81, iface), std::chrono::milliseconds{0'050} // timeout
     };
     while (!st.stop_requested())
     {
@@ -42,41 +46,32 @@ boost::capy::task<void> process_transfer (const co_usb::interface &iface)
         }
         std::println("Got data: {}", std::string_view{(char *)data.data(), n});
     }
-    std::println("{}", std::to_underlying(tfer.ep_type()));
+    std::println("{}", std::to_underlying(tfer.endpoint_type()));
     std::println("Gracefully exited");
 }
 
 int main (int argc, char **argv)
 {
     boost::capy::thread_pool tp{total};
+    std::error_code ec;
 
-    // create a context with a default event handler service bound to execution service
-    // this allows to not depend on a single type of executor and interop with any Capy library
-    static co_usb::context<> ctx(tp.get_executor());
+    // create a context that references a newly create service with a specific event handler bound
+    // to execution service this allows to not depend on a single type of executor and interop with
+    // any Capy-based library
+    static auto ctx =
+        co_usb::make_context<co_usb::detail::refcounted_event_handler>(tp.get_executor());
 
-    auto [dec, devh] = co_usb::open(ctx.get(), {dev_vid, dev_pid});
-    if (dec)
-    {
-        std::println(stderr, "Error during device opening: {}", dec.message());
-        return dec.value();
-    }
-    auto [gec, guard] = co_usb::kernel_driver_guard::detach(devh, dev_iface_num);
-    if (gec && gec != co_usb::make_usb_error_code(co_usb::usb_error::not_found))
-    {
-        std::println(stderr, "Error during driver detachment: {}", gec.message());
-        return gec.value();
-    }
-    auto [iec, iface] = co_usb::interface::claim(devh, dev_iface_num);
-    if (iec)
-    {
-        std::println(stderr, "Error during interface claiming: {}", iec.message());
-        return iec.value();
-    }
-
+    // throw std::system_error on error, we expect the device to exist and don't care for errors!
+    auto devh = co_usb::open_device(tp.get_executor(), {dev_vid, dev_pid}, co_usb::as_exception());
+    // error is irrelevant, we can check it but we are unbothered either way
+    auto maybe_guard = co_usb::detach_driver(devh, dev_iface_num, co_usb::as_expected());
+    // once again, just throw and hope
+    auto iface = co_usb::claim_interface(devh, dev_iface_num, co_usb::as_exception());
     for (uint8_t i = 0; i < total; i++)
     {
         boost::capy::run_async(tp.get_executor(), ctx.get_token())(process_transfer(iface));
     }
+
     // rough cancellation example, do not do that in production
     std::signal(SIGINT, [] (int) { ctx.request_stop(); });
     tp.join();
