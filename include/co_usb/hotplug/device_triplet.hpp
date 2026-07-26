@@ -6,9 +6,11 @@ namespace co_usb
 {
 
 /**
- * @brief Aggregate struct to pass to functions requiring device information.
+ * @ingroup Hotplug
  *
- * Default values are set to LIBUSB_HOTPLUG_MATCH_ANY for brievity in hotplug usage.
+ * @brief An aggregate struct to pass to functions requiring device information.
+ *
+ * @note Default values are set to LIBUSB_HOTPLUG_MATCH_ANY.
  */
 struct device_triplet
 {

@@ -1,3 +1,7 @@
+/**
+ * @file Strongly typed wrappers libusb hotplug flag types (flags & events).
+ */
+
 #pragma once
 
 #include "co_usb/detail/flag_type.hpp"
@@ -7,18 +11,18 @@ namespace co_usb
 {
 
 /**
- * @brief wrapper for hotplug flags
+ * @ingroup Hotplug
  *
- * There is only two of them
+ * @brief enum type for libusb_hotplug_event
  */
-enum class _hotplug_flag
-{
-    none      = LIBUSB_HOTPLUG_NO_FLAGS,
-    enumerate = LIBUSB_HOTPLUG_ENUMERATE,
-};
-
 using hotplug_event = detail::flag_type<libusb_hotplug_event, struct hotplug_event_t>;
-using hotplug_flag  = detail::flag_type<libusb_hotplug_flag, struct hotplug_flag_t>;
+
+/**
+ * @ingroup Hotplug
+ *
+ * @brief enum type for libusb_hotplug_flag
+ */
+using hotplug_flag = detail::flag_type<libusb_hotplug_flag, struct hotplug_flag_t>;
 
 namespace hotplug_events
 {

@@ -5,6 +5,12 @@
 namespace co_usb::detail
 {
 
+/**
+ * @brief Generic struct for flag types
+ *
+ * @tparam E enumeration type
+ * @tparam Tag tag type, unused
+ */
 template <typename E, typename Tag> struct flag_type
 {
     using storage_t = std::underlying_type_t<E>;

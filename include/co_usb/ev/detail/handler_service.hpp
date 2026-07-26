@@ -27,11 +27,20 @@ namespace co_usb::detail
 /**
  * @brief Execution context service that owns a libusb context and an event handler.
  *
- * The service:
- * - initializes `libusb_context` on construction
- * - instantiates a concrete `EventHandler` via `emplace_handler`
- * - starts/stops the handler in coordination with a `std::stop_source`
- * - triggers libusb interruption on `request_stop()` to prompt handler shutdown
+ * @details Since co_usb is bound to Capy and as such its task could get rather scattered across
+ * executor threads, there must be a uniform way to access co_usb's `libusb_context` and the running
+ * event handler. Thankfuly, Capy provides just the needed facilities in form of executor services.
+ *
+ * To create this service, refer to @ref co_usb::context
+ *
+ * @code
+ * int main (int argc, char **argv)
+ * {
+ *     boost::capy::thread_pool;
+ *     // this creates handler service with handler_type event handler
+ *     co_usb::context usb_ctx = co_usb::make_context<handler_type>(...);
+ * }
+ * @endcode
  */
 struct handler_service : public boost::capy::execution_context::service
 {

@@ -14,6 +14,16 @@
 namespace co_usb
 {
 
+/**
+ * @ingroup Hotplug
+ *
+ * @brief Oneshot coroutine to get a one-time hotplug accept.
+ *
+ * @note Includes cancellation semantics.
+ *
+ * @details It may be more beneficial than @ref device_accepto for simpler applications
+ * due to noticably less performance overhead and ease-of-use.
+ */
 inline auto oneshot_hotplug (hotplug_event events, hotplug_flag flags, device_triplet triplet)
     -> boost::capy::io_task<hotplug_event, device_ref>
 {

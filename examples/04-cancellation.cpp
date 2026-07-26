@@ -1,5 +1,5 @@
 /**
- * 04-cancellation.cpp
+ * @file 04-cancellation.cpp
  * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  *
  * An example program demonstrating proper transfer cancellation logic via a relatively simple
@@ -18,12 +18,14 @@
 #include <boost/capy.hpp>
 #include <boost/capy/buffers.hpp>
 #include <boost/capy/buffers/make_buffer.hpp>
-#include <boost/capy/delay.hpp>
 #include <chrono>
 #include <co_usb/co_usb.hpp>
 #include <csignal>
 #include <libusb.h>
 #include <print>
+#include <thread>
+
+constexpr size_t working_seconds = 3;
 
 constexpr uint16_t dev_vid      = 0x9f9f;
 constexpr uint16_t dev_pid      = 0x9f9f;
@@ -34,14 +36,6 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
 {
     auto exec = co_await boost::capy::this_coro::executor;
     auto stop = co_await boost::capy::this_coro::stop_token;
-
-    /*
-    for (;;)
-    {
-        if (stop.stop_requested())
-            break;
-    }
-    */
 
     std::error_code ec;
     // open the device
@@ -135,6 +129,8 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
         break;
     }
     std::println("Coro exit, total bytes transfered: {}", total_bytes);
+    auto gbit = total_bytes * 8 * 1e-9;
+    std::println("Average throughput: {} Gbit/second", gbit / working_seconds);
 }
 
 boost::capy::task<> accept_hotplug ()
@@ -166,16 +162,14 @@ boost::capy::task<> accept_hotplug ()
         // start the device processing loop with propagated executor, stop token and allocator
         boost::capy::run_async(exec, stop, alloc)(dev_loop(dev));
     }
-    // acceptor.shutdown();
-
-    // boost::capy::run_async(exec, stop, allocator)(dev_loop());
+    acceptor.shutdown();
 }
 
 volatile sig_atomic_t g_sigint = 0;
 
 int main (int argc, char **argv)
 {
-    boost::capy::thread_pool tp{1};
+    boost::capy::thread_pool tp{2};
 
     // initiates a libusb context and binds a libusb event handler thread to executor's execution
     // context with an associated stop source
@@ -186,7 +180,15 @@ int main (int argc, char **argv)
         tp.get_executor(), [] () {}, [] (std::exception_ptr e) {})(
         [] (co_usb::context &ctx) -> boost::capy::task<>
         {
-            auto [ec] = co_await boost::capy::delay(std::chrono::seconds{1});
+            // !! HACK ALERT
+            // It is not recommended to do timed cancellation this way. Capy provides async_waker
+            // you are ought to use with a dedicated timer thread to do such patter. However, as to
+            // not bloat the example I will allow myself such dirty hack.
+            std::this_thread::sleep_for(std::chrono::seconds{working_seconds});
+
+            // old remove API
+            // auto [ec] = co_await boost::capy::delay(std::chrono::seconds{1});
+
             ctx.request_stop();
             co_return;
         }(ctx));

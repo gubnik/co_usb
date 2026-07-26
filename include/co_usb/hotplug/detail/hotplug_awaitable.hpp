@@ -13,6 +13,8 @@ namespace co_usb::detail
 {
 
 /**
+ * @ingroup Hotplug
+ *
  * @brief Low-level awaitable primitive for strapping hotplug callbacks to a coroutine ecosystem.
  *
  * @details This is the lowest possible layer of abstraction over libusb's hotplug API. It should be

@@ -10,6 +10,11 @@ namespace co_usb
 
 struct event_handler_ref;
 
+/**
+ * @brief Owning type-erased wrapper for @ref EventHandler.
+ *
+ * @details This wrapper cannot type-erase objects of its own type and @ref event_handler_ref.
+ */
 struct any_event_handler
 {
     friend event_handler_ref;

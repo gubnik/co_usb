@@ -1,3 +1,6 @@
+/**
+ * @defgroup Hotplug
+ */
 #pragma once
 
 #include "co_usb/hotplug/detail/hotplug_awaitable.hpp"

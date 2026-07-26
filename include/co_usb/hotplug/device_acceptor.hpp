@@ -29,6 +29,15 @@
 namespace co_usb
 {
 
+/**
+ * @ingroup Hotplug
+ *
+ * @brief Asio/Corosio-like acceptor for devices via hotplug API.
+ *
+ * @details Use this class to create a structured accept loop for your application.
+ * The acceptor allows for foregoing suspension entirely if the device arrived before `acccept` was
+ * called.
+ */
 struct device_acceptor
 {
     explicit device_acceptor (boost::capy::executor_ref exec,
@@ -183,20 +192,27 @@ struct device_acceptor
 
         inline bool await_ready ()
         {
+            std::unique_lock lock{acceptor->m_mutex};
+            if (!acceptor->m_arrived_devices.empty())
+            {
+                op_res->dev_ref = acceptor->m_arrived_devices.back();
+                acceptor->m_arrived_devices.pop_back();
+                return true;
+            }
             return false;
         }
 
         inline std::coroutine_handle<> await_suspend (std::coroutine_handle<> h,
                                                       boost::capy::io_env const *env)
         {
-            std::unique_lock lock{acceptor->m_mutex};
-
             if (env->stop_token.stop_requested())
             {
+                std::unique_lock lock{acceptor->m_mutex};
                 op_res->ec = std::make_error_code(std::errc::operation_canceled);
                 return h;
             }
 
+            std::unique_lock lock{acceptor->m_mutex};
             if (!acceptor->m_arrived_devices.empty())
             {
                 op_res->dev_ref = acceptor->m_arrived_devices.back();
@@ -212,7 +228,6 @@ struct device_acceptor
         inline boost::capy::io_result<device_ref> await_resume ()
         {
             std::unique_lock lock{acceptor->m_mutex};
-
             if (op_res->ec)
             {
                 return {op_res->ec, device_ref{}};
