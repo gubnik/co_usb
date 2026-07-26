@@ -64,5 +64,5 @@ WIP, basic [tests](./tests/) are provided but none of the real I/O is tested.
 ## License
 
 Distributed under the Boost Software License, Version 1.0.
-(See accompanying file [LICENSE_1_0.txt](LICENSE_1_0.txt) or copy at
+(See accompanying file [LICENSE.md](LICENSE.md) or copy at
 https://www.boost.org/LICENSE_1_0.txt)
