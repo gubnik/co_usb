@@ -8,7 +8,11 @@
 #include <catch2/catch_all.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <co_usb/co_usb.hpp>
+#include <libusb.h>
+#include <optional>
+#include <vector>
 #include "co_usb/transfer/endpoint.hpp"
+#include "co_usb/transfer/transfer_pool.hpp"
 #include "co_usb/transfer/transfer_types.hpp"
 #include "test_mock.hpp"
 // clang-format on
@@ -75,4 +79,38 @@ TEST_CASE("any-transfer", "[transfers]")
                       boost::capy::any_write_stream write_s{&tfer};
                   }()
                       .handle());
+}
+
+TEST_CASE("transfer-pool", "[transfers]")
+{
+    REQUIRE(
+        [&] () -> bool
+        {
+            std::vector<libusb_transfer *> tfers;
+            tfers.resize(16);
+            co_usb::transfer_pool pool(tfers);
+            libusb_transfer *tfer{nullptr};
+            {
+                std::optional<size_t> maybe_idx = pool.acquire(tfer);
+                if (!maybe_idx.has_value() || *maybe_idx != 0)
+                {
+                    return false;
+                }
+                pool.release(*maybe_idx);
+            }
+            {
+                std::optional<size_t> maybe_idx = pool.acquire(tfer);
+                if (!maybe_idx.has_value() || *maybe_idx != 0)
+                {
+                    return false;
+                }
+                maybe_idx = pool.acquire(tfer);
+                if (!maybe_idx.has_value() || *maybe_idx != 1)
+                {
+                    return false;
+                }
+                pool.release(*maybe_idx);
+            }
+            return true;
+        }());
 }
