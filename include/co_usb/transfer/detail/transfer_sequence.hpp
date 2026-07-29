@@ -28,6 +28,7 @@ constexpr inline auto transfer_of (Ty const &tfer_res) -> libusb_transfer *
 
 template <typename Ty>
 concept TransferSequence =
-    std::ranges::random_access_range<Ty> && TransferResource<std::ranges::range_value_t<Ty>>;
+    TransferResource<Ty> ||
+    (std::ranges::bidirectional_range<Ty> && TransferResource<std::ranges::range_value_t<Ty>>);
 
 } // namespace co_usb::detail

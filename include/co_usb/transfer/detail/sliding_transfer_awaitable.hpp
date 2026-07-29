@@ -77,8 +77,9 @@ template <typename AnyBufferSequence> struct sliding_transfer_awaitable
             tfer->length    = buf.size();
             tfer->callback  = [] (libusb_transfer *transfer)
             {
-                using aw_state_t          = await_state;
-                aw_state_t &self          = *static_cast<aw_state_t *>(transfer->user_data);
+                using aw_state_t = await_state;
+                aw_state_t &self = *static_cast<aw_state_t *>(transfer->user_data);
+                // auto ev_ref               = self.ev_ref;
                 const auto resume_on_zero = [&] ()
                 {
                     if (self.in_flight == 0)

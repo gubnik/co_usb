@@ -178,4 +178,17 @@ inline auto get_handler_service (boost::capy::executor_ref exec) -> handler_serv
     return *srv;
 }
 
+/**
+ * @brief Retrieve the `handler_service` from a given executor.
+ *
+ * @param exec Executor reference to query.
+ * @return Reference to the `handler_service` instance.
+ * @throws whatever can find_service throw.
+ */
+inline auto nothrow_get_handler_service (boost::capy::executor_ref exec) -> handler_service *
+{
+    handler_service *srv = exec.context().find_service<handler_service>();
+    return srv;
+}
+
 } // namespace co_usb::detail

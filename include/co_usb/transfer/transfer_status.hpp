@@ -8,6 +8,8 @@ namespace co_usb
 {
 
 /**
+ * @ingroup transfer
+ *
  * @brief Status codes for transfers
  *
  * @note Can be casted from @ref libusb_transfer_status

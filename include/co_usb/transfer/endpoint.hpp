@@ -19,12 +19,14 @@ enum class endpoint_type : uint8_t
 
 enum class endpoint_direction
 {
-    out  = 0x00,
-    in   = 0x80,
+    out = 0x00,
+    in = 0x80,
     both = 0xFF,
 };
 
 /**
+ * @ingroup transfer
+ *
  * @brief USB endpoint templated on its direction
  *
  * @details Must be used with transfer types to provide directional information.

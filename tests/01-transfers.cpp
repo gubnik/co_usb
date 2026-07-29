@@ -1,4 +1,5 @@
 // clang-format off
+#include <boost/capy/buffers/make_buffer.hpp>
 #include <boost/capy/concept/read_stream.hpp>
 #include <boost/capy/ex/this_coro.hpp>
 #include <boost/capy/io/any_read_stream.hpp>
@@ -9,10 +10,12 @@
 #include <catch2/catch_test_macros.hpp>
 #include <co_usb/co_usb.hpp>
 #include <libusb.h>
-#include <optional>
 #include <vector>
 #include "co_usb/transfer/endpoint.hpp"
-#include "co_usb/transfer/transfer_pool.hpp"
+#include "co_usb/transfer/stream.hpp"
+#include "co_usb/transfer/transfer_operations.hpp"
+#include "co_usb/transfer/transfer_sequence_view.hpp"
+#include "co_usb/transfer/transfer_resource.hpp"
 #include "co_usb/transfer/transfer_types.hpp"
 #include "test_mock.hpp"
 // clang-format on
@@ -81,36 +84,86 @@ TEST_CASE("any-transfer", "[transfers]")
                       .handle());
 }
 
-TEST_CASE("transfer-pool", "[transfers]")
+TEST_CASE("transfer-operations", "[transfer]")
 {
     REQUIRE(
-        [&] () -> bool
+        [] () -> bool
         {
-            std::vector<libusb_transfer *> tfers;
+            auto ep_out =
+                co_usb::endpoint<co_usb::endpoint_direction::out>::make_unsafe(0x01, nullptr);
+            co_usb::transfer_resource tfer;
+            co_usb::prefill_bulk_transfer(tfer, ep_out);
+            return tfer.get()->endpoint == 0x01 &&
+                   tfer.get()->type == LIBUSB_ENDPOINT_TRANSFER_TYPE_BULK;
+        }());
+    REQUIRE(
+        [] () -> bool
+        {
+            auto ep_out_1 =
+                co_usb::endpoint<co_usb::endpoint_direction::out>::make_unsafe(0x01, nullptr);
+            auto ep_out_2 =
+                co_usb::endpoint<co_usb::endpoint_direction::out>::make_unsafe(0x02, nullptr);
+            std::vector<co_usb::transfer_resource> tfers;
             tfers.resize(16);
-            co_usb::transfer_pool pool(tfers);
-            libusb_transfer *tfer{nullptr};
+            co_usb::prefill_bulk_transfer(tfers, ep_out_1);
+            for (auto const &tfer_res : tfers)
             {
-                std::optional<size_t> maybe_idx = pool.acquire(tfer);
-                if (!maybe_idx.has_value() || *maybe_idx != 0)
-                {
-                    return false;
-                }
-                pool.release(*maybe_idx);
+                if (tfer_res.get()->endpoint == 0x01 &&
+                    tfer_res.get()->type == LIBUSB_ENDPOINT_TRANSFER_TYPE_BULK)
+                    continue;
+                return false;
             }
+            co_usb::prefill_interrupt_transfer(tfers, ep_out_2);
+            for (auto const &tfer_res : tfers)
             {
-                std::optional<size_t> maybe_idx = pool.acquire(tfer);
-                if (!maybe_idx.has_value() || *maybe_idx != 0)
-                {
-                    return false;
-                }
-                maybe_idx = pool.acquire(tfer);
-                if (!maybe_idx.has_value() || *maybe_idx != 1)
-                {
-                    return false;
-                }
-                pool.release(*maybe_idx);
+                if (tfer_res.get()->endpoint == 0x02 &&
+                    tfer_res.get()->type == LIBUSB_ENDPOINT_TRANSFER_TYPE_INTERRUPT)
+                    continue;
+                return false;
             }
             return true;
         }());
+}
+
+TEST_CASE("transfer-sequence-view", "[transfer]")
+{
+    REQUIRE(
+        [] () -> bool
+        {
+            co_usb::transfer_resource tfer;
+            co_usb::transfer_sequence_view pool_1{tfer};
+            if (pool_1.size() != 1)
+            {
+                return false;
+            }
+            return true;
+        });
+    REQUIRE(
+        [] () -> bool
+        {
+            std::vector<co_usb::transfer_resource> tfers;
+            tfers.resize(16);
+            co_usb::transfer_sequence_view pool_1{tfers};
+            if (pool_1.size() != 16)
+            {
+                return false;
+            }
+            return true;
+        });
+}
+
+TEST_CASE("transfer-stream", "[transfer]")
+{
+    REQUIRE(
+        [] () -> boost::capy::task<>
+                 {
+                     auto exec = co_await boost::capy::this_coro::executor;
+                     std::vector<co_usb::transfer_resource> tfers;
+                     tfers.resize(16);
+                     co_usb::raw_transfer_stream stream{exec, tfers};
+                     char buf[1024];
+                     (void)co_await stream.submit(boost::capy::make_buffer(buf));
+                     co_return;
+                 }()
+                     .handle());
 }

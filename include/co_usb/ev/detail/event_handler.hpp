@@ -72,7 +72,7 @@ struct trivial_event_handler
             while (!stop.stop_requested())
             {
                 timeval tv = ctv;
-                auto r     = libusb_handle_events_timeout(usb_ctx, &tv);
+                auto r = libusb_handle_events_timeout(usb_ctx, &tv);
                 if (r != LIBUSB_SUCCESS)
                 {
                     throw std::system_error{make_usb_error_code(static_cast<usb_error>(r))};
@@ -154,15 +154,15 @@ struct refcounted_event_handler
                 for (;;)
                 {
                     timeval tv = ctv;
-                    auto r     = libusb_handle_events_timeout(usb_ctx, &tv);
-                    if (r != LIBUSB_SUCCESS)
+                    auto r = libusb_handle_events_timeout(usb_ctx, &tv);
+                    if (r != LIBUSB_SUCCESS) [[unlikely]]
                     {
                         throw std::system_error{
                             make_usb_error_code(static_cast<co_usb::usb_error>(r))};
                     }
 
-                    // no work and cancellation was required - oblige and leave
                     if (stop.stop_requested() && m_counter.load(std::memory_order_acquire) == 0)
+                        [[unlikely]]
                     {
                         break;
                     }
