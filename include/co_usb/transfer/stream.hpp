@@ -24,7 +24,7 @@ namespace co_usb
  *
  * @note Handles cancellation.
  *
- * @detail This type is designed to be a barebones wrapper around raw machinery for tying
+ * @details This type is designed to be a barebones wrapper around raw machinery for tying
  * asynchronous transfers into coroutine ecosystem.
  *
  * The submissions are done in a streaming manner, hence the name, where the N transfers from a
