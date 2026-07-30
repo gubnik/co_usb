@@ -121,6 +121,11 @@ struct control_transfer_stream : detail::direction_transfer_stream_base<TSeq, Ep
     }
 };
 
+template <detail::TransferSequence TSeq>
+using control_transfer_write_stream = control_transfer_stream<TSeq, endpoint_direction::out>;
+template <detail::TransferSequence TSeq>
+using control_transfer_read_stream = control_transfer_stream<TSeq, endpoint_direction::in>;
+
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct bulk_transfer_stream : detail::direction_transfer_stream_base<TSeq, EpDirection>
 {
@@ -132,6 +137,11 @@ struct bulk_transfer_stream : detail::direction_transfer_stream_base<TSeq, EpDir
         prefill_bulk_transfer(tfer_seq, endpoint, timeout_ms);
     }
 };
+
+template <detail::TransferSequence TSeq>
+using bulk_transfer_write_stream = bulk_transfer_stream<TSeq, endpoint_direction::out>;
+template <detail::TransferSequence TSeq>
+using bulk_transfer_read_stream = bulk_transfer_stream<TSeq, endpoint_direction::in>;
 
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct interrupt_transfer_stream : detail::direction_transfer_stream_base<TSeq, EpDirection>
@@ -145,6 +155,11 @@ struct interrupt_transfer_stream : detail::direction_transfer_stream_base<TSeq, 
     }
 };
 
+template <detail::TransferSequence TSeq>
+using interrupt_transfer_write_stream = interrupt_transfer_stream<TSeq, endpoint_direction::out>;
+template <detail::TransferSequence TSeq>
+using interrupt_transfer_read_stream = interrupt_transfer_stream<TSeq, endpoint_direction::in>;
+
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct isochronous_transfer_stream : detail::direction_transfer_stream_base<TSeq, EpDirection>
 {
@@ -157,6 +172,12 @@ struct isochronous_transfer_stream : detail::direction_transfer_stream_base<TSeq
     }
 };
 
+template <detail::TransferSequence TSeq>
+using isochronous_transfer_write_stream =
+    isochronous_transfer_stream<TSeq, endpoint_direction::out>;
+template <detail::TransferSequence TSeq>
+using isochronous_transfer_read_stream = isochronous_transfer_stream<TSeq, endpoint_direction::in>;
+
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct bulk_stream_transfer_stream : detail::direction_transfer_stream_base<TSeq, EpDirection>
 {
@@ -168,5 +189,11 @@ struct bulk_stream_transfer_stream : detail::direction_transfer_stream_base<TSeq
         prefill_bulk_stream_transfer(tfer_seq, endpoint, stream_id, timeout_ms);
     }
 };
+
+template <detail::TransferSequence TSeq>
+using bulk_stream_transfer_write_stream =
+    bulk_stream_transfer_stream<TSeq, endpoint_direction::out>;
+template <detail::TransferSequence TSeq>
+using bulk_stream_transfer_read_stream = bulk_stream_transfer_stream<TSeq, endpoint_direction::in>;
 
 } // namespace co_usb
