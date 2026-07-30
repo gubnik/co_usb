@@ -1,5 +1,5 @@
 /**
- * @file 04-cancellation.cpp
+ * @file 05-stream.cpp
  * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  *
  * An example program demonstrating proper transfer cancellation logic via a relatively simple
@@ -8,25 +8,15 @@
  * It will likely not work for a random device :-)
  */
 
-#include "co_usb/ev/context.hpp"
-#include "co_usb/ev/detail/event_handler.hpp"
-#include "co_usb/hotplug/device_acceptor.hpp"
-#include "co_usb/transfer/endpoint.hpp"
-#include "co_usb/wrapper/device_handle.hpp"
-#include "co_usb/wrapper/error_protocol.hpp"
 #include <array>
 #include <boost/capy.hpp>
-#include <boost/capy/buffers.hpp>
-#include <boost/capy/buffers/make_buffer.hpp>
 #include <chrono>
 #include <co_usb/co_usb.hpp>
-#include <csignal>
-#include <libusb.h>
 #include <print>
 #include <ranges>
 #include <thread>
 
-constexpr size_t working_seconds = 20;
+constexpr size_t working_seconds = 5;
 
 constexpr uint16_t dev_vid = 0x9f9f;
 constexpr uint16_t dev_pid = 0x9f9f;
@@ -35,6 +25,7 @@ constexpr uint8_t dev_iface_num = 0;
 // Greets the device nicely
 boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
 {
+    using namespace std::chrono_literals;
     auto exec = co_await boost::capy::this_coro::executor;
     auto stop = co_await boost::capy::this_coro::stop_token;
 
@@ -66,34 +57,21 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
     }
     auto iface = std::move(*maybe_iface);
 
-    // allocate and pre-fill the transfer
-    // libusb doesn't have allocator API so we can't propagate frame allocator
-    using namespace std::chrono_literals;
-    co_usb::bulk_transfer<co_usb::endpoint_direction::out, 4> out_tfer{
-        exec, co_usb::endpoint_out(0x02, iface), 50ms};
-    co_usb::bulk_transfer<co_usb::endpoint_direction::in, 4> in_tfer{
-        exec, co_usb::endpoint_in(0x01, iface), 50ms};
+    std::vector<co_usb::transfer_resource> transfers_in;
+    transfers_in.resize(6);
+
+    /*
+    co_usb::prefill_bulk_transfer(transfers_in, co_usb::endpoint_in(0x01, iface), 50ms);
+    co_usb::raw_transfer_stream in_stream{transfers_in};
+    */
+
+    const auto ep_in = co_usb::endpoint_in(0x01, iface);
+    // co_usb::bulk_transfer_stream bulk_in_stream{exec, transfers_in, ep_in, 50ms};
+
+    co_usb::bulk_transfer_source complete_io{exec, transfers_in, ep_in};
 
     size_t total_bytes{0};
 
-    constexpr std::string_view hello = "Hello there, a friendly device!";
-    constexpr std::string_view goodbye = "Goodbye, a friendly device!";
-    std::array bufs{
-        boost::capy::const_buffer{hello.data(), hello.size()},
-        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
-        boost::capy::const_buffer{hello.data(), hello.size()},
-        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
-        boost::capy::const_buffer{hello.data(), hello.size()},
-        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
-        boost::capy::const_buffer{hello.data(), hello.size()},
-        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
-        boost::capy::const_buffer{hello.data(), hello.size()},
-        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
-        boost::capy::const_buffer{hello.data(), hello.size()},
-        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
-        boost::capy::const_buffer{hello.data(), hello.size()},
-        boost::capy::const_buffer{goodbye.data(), goodbye.size()},
-    };
     constexpr size_t bufsz = 1 << 18;
     char buf[16][bufsz];
     std::array<boost::capy::mutable_buffer, 16> bufs_in;
@@ -101,15 +79,16 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
     {
         bufs_in[i] = boost::capy::mutable_buffer{buf[i], bufsz};
     }
-    while (!stop.stop_requested())
+    while (1) //! stop.stop_requested())
     {
-        // auto [wec, wn] = co_await hello_tfer.write_some(boost::capy::make_buffer(hello));
-        // total_bytes += wn;
-        auto [rec, rn] = co_await in_tfer.read_some(bufs_in);
+        // auto [rec, rn] = co_await bulk_in_stream.read_some(bufs_in);
+        auto [rec, rn] =
+            co_await complete_io.read_all(boost::capy::mutable_buffer{buf, 16 * bufsz}, bufsz);
         total_bytes += rn;
         if (!rec)
         {
-            std::println("Got {} bytes", rn);
+            // std::println("Got {} bytes", rn);
+            // break;
         }
         else
         {
@@ -117,17 +96,6 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
                          rec.message());
             break;
         }
-
-        // std::println("Wrote {} bytes", wn);
-        if (!rec)
-        {
-            continue;
-        }
-
-        // some other error we don't have anything special to say about
-        std::println(stderr, "Critical transfer error: {}; exiting the process loop...",
-                     rec.message());
-        break;
     }
     std::println("Coro exit, total bytes transfered: {}", total_bytes);
     auto gbit = total_bytes * 8 * 1e-9;
@@ -165,8 +133,6 @@ boost::capy::task<> accept_hotplug ()
     }
     acceptor.shutdown();
 }
-
-volatile sig_atomic_t g_sigint = 0;
 
 int main (int argc, char **argv)
 {

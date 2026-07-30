@@ -72,7 +72,7 @@ template <endpoint_direction Direction = endpoint_direction::any> struct endpoin
     /**
      * @brief Creates an endpoint or throws if the address doesn't match expected direction
      *
-     * @throws @ref std::invalid_argument when endpoint address does not match @tp Direction
+     * @throws std::invalid_argument when endpoint address does not match Direction
      */
     template <co_usb::detail::DeviceHandleSource DevSourceTy>
     static endpoint<Direction> make_throwing (uint8_t ep, DevSourceTy const &devh)

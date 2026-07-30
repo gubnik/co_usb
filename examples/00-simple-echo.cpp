@@ -1,5 +1,5 @@
 /**
- * 00-simple-echo.cpp
+ * @file 00-simple-echo.cpp
  * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  * Simple USB echo across 2 bulk endpoints (IN and OUT)
  *
@@ -9,8 +9,8 @@
 #include <boost/capy.hpp>
 #include <co_usb/co_usb.hpp>
 
-constexpr uint16_t dev_vid      = 0x9f9f;
-constexpr uint16_t dev_pid      = 0x9f9f;
+constexpr uint16_t dev_vid = 0x9f9f;
+constexpr uint16_t dev_pid = 0x9f9f;
 constexpr uint8_t dev_iface_num = 0;
 
 // simple asynchronous operation that reads from one endpoint and writes to another
@@ -30,8 +30,9 @@ boost::capy::task<> echo (const co_usb::interface &iface)
     // direction. This ensures that you cannot read from an out endpoint and write into the read
     // one. Of course, control_transfer supports both read and write operation, as per specification
     // for control endpoint, and does not take endpoint parameter at all.
-    auto in_tfer  = co_usb::bulk_transfer{exec, co_usb::endpoint_in(0x81, iface)};
-    auto out_tfer = co_usb::bulk_transfer{exec, co_usb::endpoint_out(0x02, iface)};
+    co_usb::transfer_resource tfers[2];
+    co_usb::bulk_transfer_read_stream in_tfer{exec, tfers[0], co_usb::endpoint_in(0x81, iface)};
+    co_usb::bulk_transfer_write_stream out_tfer{exec, tfers[1], co_usb::endpoint_out(0x02, iface)};
     while (!stop.stop_requested())
     {
         // partial read from an endpoint. Transfer types are qualified ReadStream/WriteStream and

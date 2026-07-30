@@ -19,22 +19,22 @@
 #include <system_error>
 #include <utility>
 
-constexpr uint16_t dev_vid      = 0x9f9f;
-constexpr uint16_t dev_pid      = 0x9f9f;
-constexpr uint8_t dev_ep        = 0x81;
+constexpr uint16_t dev_vid = 0x9f9f;
+constexpr uint16_t dev_pid = 0x9f9f;
+constexpr uint8_t dev_ep = 0x81;
 constexpr uint8_t dev_iface_num = 0;
 
 constexpr uint8_t total = 8;
 
 boost::capy::task<void> process_transfer (const co_usb::interface &iface)
 {
+    using namespace std::chrono_literals;
     auto exec = co_await boost::capy::this_coro::executor;
-    auto st   = co_await boost::capy::this_coro::stop_token;
+    auto st = co_await boost::capy::this_coro::stop_token;
 
     std::array<uint8_t, 1024> data;
-    co_usb::bulk_transfer tfer{
-        exec, co_usb::endpoint_in(0x81, iface), std::chrono::milliseconds{0'050} // timeout
-    };
+    co_usb::transfer_resource tfer_res;
+    co_usb::bulk_transfer_read_stream tfer{exec, tfer_res, co_usb::endpoint_in(0x81, iface), 50ms};
     while (!st.stop_requested())
     {
         auto [ec, n] =
@@ -46,7 +46,6 @@ boost::capy::task<void> process_transfer (const co_usb::interface &iface)
         }
         std::println("Got data: {}", std::string_view{(char *)data.data(), n});
     }
-    std::println("{}", std::to_underlying(tfer.endpoint_type()));
     std::println("Gracefully exited");
 }
 

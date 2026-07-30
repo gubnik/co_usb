@@ -16,7 +16,6 @@
 #include "co_usb/transfer/transfer_operations.hpp"
 #include "co_usb/transfer/transfer_sequence_view.hpp"
 #include "co_usb/transfer/transfer_resource.hpp"
-#include "co_usb/transfer/transfer_types.hpp"
 #include "test_mock.hpp"
 // clang-format on
 
@@ -33,30 +32,25 @@ static_assert(co_usb::detail::DeviceHandleSource<devh_provider>, "Not a Device S
 
 TEST_CASE("transfer-sfinae", "[transfer]")
 {
+    using tfer_seq_t = std::vector<co_usb::transfer_resource>;
     // bulk, interrupt, iso and bulk stream transfers must have read for IN and write for OUT
     // endpoints, i.e. satisfy ReadStream and WriteStream concepts
-    REQUIRE(boost::capy::ReadStream<co_usb::bulk_transfer<co_usb::endpoint_direction::in>> == true);
-    REQUIRE(boost::capy::WriteStream<co_usb::bulk_transfer<co_usb::endpoint_direction::in>> ==
-            false);
-    REQUIRE(boost::capy::ReadStream<co_usb::bulk_transfer<co_usb::endpoint_direction::out>> ==
-            false);
-    REQUIRE(boost::capy::WriteStream<co_usb::bulk_transfer<co_usb::endpoint_direction::out>> ==
-            true);
-
-    // a control transfer is bidirectional and must have both read and write awailable
-    REQUIRE(boost::capy::ReadStream<co_usb::control_transfer<>> == true);
-    REQUIRE(boost::capy::WriteStream<co_usb::control_transfer<>> == true);
+    REQUIRE(boost::capy::ReadStream<co_usb::bulk_transfer_read_stream<tfer_seq_t>> == true);
+    REQUIRE(boost::capy::WriteStream<co_usb::bulk_transfer_read_stream<tfer_seq_t>> == false);
+    REQUIRE(boost::capy::ReadStream<co_usb::bulk_transfer_write_stream<tfer_seq_t>> == false);
+    REQUIRE(boost::capy::WriteStream<co_usb::bulk_transfer_write_stream<tfer_seq_t>> == true);
 }
 
 TEST_CASE("transfer-buffers", "[transfer][buffers]")
 {
-    REQUIRE(requires(co_usb::bulk_transfer<co_usb::endpoint_direction::in> &tfer,
+    using tfer_seq_t = std::vector<co_usb::transfer_resource>;
+    REQUIRE(requires(co_usb::bulk_transfer_read_stream<tfer_seq_t> &tfer,
                      boost::capy::mutable_buffer buffer,
                      std::span<boost::capy::mutable_buffer> buffers) {
         { tfer.read_some(buffer) };
         { tfer.read_some(buffers) };
     });
-    REQUIRE(requires(co_usb::bulk_transfer<co_usb::endpoint_direction::out> &tfer,
+    REQUIRE(requires(co_usb::bulk_transfer_write_stream<tfer_seq_t> &tfer,
                      boost::capy::const_buffer buffer,
                      std::span<boost::capy::const_buffer> buffers) {
         { tfer.write_some(buffer) };
@@ -66,19 +60,24 @@ TEST_CASE("transfer-buffers", "[transfer][buffers]")
 
 TEST_CASE("any-transfer", "[transfers]")
 {
+    using tfer_seq_t = std::vector<co_usb::transfer_resource>;
     REQUIRE(
         [&] () -> boost::capy::task<>
                   {
+                      tfer_seq_t tfer_seq{};
                       auto exec = co_await boost::capy::this_coro::executor;
-                      auto tfer = co_usb::bulk_transfer(exec, co_usb::endpoint_in(0x81, iface));
+                      co_usb::bulk_transfer_read_stream tfer(exec, tfer_seq,
+                                                             co_usb::endpoint_in(0x81, iface));
                       boost::capy::any_read_stream read_s{&tfer};
                   }()
                       .handle());
     REQUIRE(
         [&] () -> boost::capy::task<>
                   {
+                      tfer_seq_t tfer_seq{};
                       auto exec = co_await boost::capy::this_coro::executor;
-                      auto tfer = co_usb::bulk_transfer(exec, co_usb::endpoint_out(0x01, iface));
+                      co_usb::bulk_transfer_write_stream tfer(exec, tfer_seq,
+                                                              co_usb::endpoint_out(0x01, iface));
                       boost::capy::any_write_stream write_s{&tfer};
                   }()
                       .handle());
