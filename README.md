@@ -1,17 +1,35 @@
 # co_usb
 > v2.0.0
 
-Asynchronous USB library using C++20 coroutines and [Boost.Capy](https://github.com/cppalliance/capy) to
+Asynchronous USB library using C++20 coroutines and [Capy](https://github.com/cppalliance/capy) to
 create a lightweight interface for [libusb-1.0](https://libusb.info/). It provides minimal necessary abstractions
-over base libusb to enable efficient and clean concurrent I/O using Boost.Capy's common interfaces
+over base libusb to enable efficient and clean concurrent I/O using Capy's common interfaces
 for seamless interoperability with wider coroutine ecosystem.
 
-## Features
-- Full support for asynchronous transfers in a way that saturates libusb ring
-- Full support for hotplug API in form of Asio-like acceptor and one-shot hotplugs
-- Allocator and cancellation aware by default
-- Extendable event handling logic that works with any Capy-based executor
-- Efficient without compromising the functionality, comparable performance to raw libusb
+## Rationale
+
+`libusb` asynchronous code is very efficient, but because it is a C library it is lacking in ergonomics when
+put into modern C++20 project, especially one utilizing coroutines. This library serves as a bridge between
+Capy based coroutine ecosystem and `libusb` asynchronous code.
+
+### What co_usb does
+
+- Asynchronous transfer submission for partial and complete I/O in a form of light adaptor types
+- Hotplug API for dynamically connecting devices with an Asio style acceptor loop
+- Wrappers around core `libusb` entities such as devices for smooth initialization of the library
+- Robust event handler system for easy extension and safe shutdown
+
+### What co_usb does not do
+
+- Querying information for devices and endpoint
+- Iteration over device list
+- Generally, everything that does not relate to asynchronous operations
+
+## Why not Asio??
+
+Not all USB code needs a whole networking library. Using Capy allows the user to choose not to use
+networking code. If networking is needed the user is free to use `co_usb` with [Corosio](https://github.com/cppalliance/corosio),
+since both operate on shared Capy concepts the code is easily made interoperable!
 
 ## Getting started
 
@@ -27,7 +45,7 @@ target_link_libraries(my_app PRIVATE co_usb::co_usb)
 ```
 
 For non-`vcpkg` projects, you will have to use CMake's `FetchContent` module and provide
-Boost.Capy and libusb on your own. This is method of consuming `co_usb` is not endorsed and may not work.
+Capy and libusb on your own. This is method of consuming `co_usb` is not endorsed and may not work.
 ```cmake
 include(FetchContent)
 FetchContent_Declare(co_usb
@@ -59,10 +77,12 @@ See [docs](https://gubnik.github.io/co_usb) for generated docs
 
 ## Tests
 
-WIP, basic [tests](./tests/) are provided but none of the real I/O is tested.
+For unit tests, see `./tests`. For QEMU device code, see `./qemu`. I will gladly accept contributions to the testing suite.
 
 ## License
 
 Distributed under the Boost Software License, Version 1.0.
 (See accompanying file [LICENSE.md](LICENSE.md) or copy at
 https://www.boost.org/LICENSE_1_0.txt)
+
+QEMU devices code at `qemu/` is distributed under GNU General Public License v3
