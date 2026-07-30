@@ -2,7 +2,6 @@ name: Build and deploy Doxygen
 
 on:
   push:
-    branches: [ dev, master, refactor/v2.0 ]
 
 jobs:
   doxygen:

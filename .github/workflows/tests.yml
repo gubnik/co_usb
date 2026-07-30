@@ -2,7 +2,6 @@ name: Build and run tests
 
 on:
   push:
-    branches: [ dev, master ]
 
 jobs:
   tests:
