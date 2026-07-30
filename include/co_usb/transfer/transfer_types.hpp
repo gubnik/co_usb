@@ -10,12 +10,12 @@ namespace co_usb
  */
 template <size_t Preallocated = 1>
 struct control_transfer
-    : public detail::basic_transfer<endpoint_type::control, endpoint_direction::both, Preallocated>
+    : public detail::basic_transfer<endpoint_type::control, endpoint_direction::any, Preallocated>
 {
     template <detail::DeviceHandleSource DevSourceTy>
     explicit control_transfer (boost::capy::executor_ref exec, DevSourceTy &&dev_source,
                                std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
-        : detail::basic_transfer<endpoint_type::control, endpoint_direction::both, Preallocated>(
+        : detail::basic_transfer<endpoint_type::control, endpoint_direction::any, Preallocated>(
               exec)
     {
         for (auto &ptr : this->m_tfers)
@@ -31,7 +31,7 @@ struct control_transfer
  * @brief Transfer type for bulk transfers
  */
 template <endpoint_direction Dir, size_t Preallocated = 1>
-    requires(Dir != endpoint_direction::both)
+    requires(Dir != endpoint_direction::any)
 struct bulk_transfer : public detail::basic_transfer<endpoint_type::bulk, Dir, Preallocated>
 {
     explicit bulk_transfer (boost::capy::executor_ref exec, endpoint<Dir> ep,
@@ -50,7 +50,7 @@ struct bulk_transfer : public detail::basic_transfer<endpoint_type::bulk, Dir, P
  * @brief Transfer type for interrupt transfers
  */
 template <endpoint_direction Dir, size_t Preallocated = 1>
-    requires(Dir != endpoint_direction::both)
+    requires(Dir != endpoint_direction::any)
 struct interrupt_transfer
     : public detail::basic_transfer<endpoint_type::interrupt, Dir, Preallocated>
 {
@@ -71,7 +71,7 @@ struct interrupt_transfer
  * @brief Transfer type for isochronous transfers
  */
 template <endpoint_direction Dir, size_t Preallocated = 1>
-    requires(Dir != endpoint_direction::both)
+    requires(Dir != endpoint_direction::any)
 struct isochronous_transfer
     : public detail::basic_transfer<endpoint_type::isochronous, Dir, Preallocated>
 {
@@ -92,7 +92,7 @@ struct isochronous_transfer
  * @brief Transfer type for bulk stream transfers
  */
 template <endpoint_direction Dir, size_t Preallocated = 1>
-    requires(Dir != endpoint_direction::both)
+    requires(Dir != endpoint_direction::any)
 struct bulk_stream_transfer
     : public detail::basic_transfer<endpoint_type::bulk_stream, Dir, Preallocated>
 {

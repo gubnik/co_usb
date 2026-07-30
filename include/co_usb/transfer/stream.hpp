@@ -52,7 +52,7 @@ template <detail::TransferSequence TSeq> struct raw_transfer_stream
     /**
      * @brief Submit a transfer sequence for a buffer sequence
      *
-     * @return result of the operation
+     * @returns result of the operation
      */
     template <detail::AnyBufferSequence BuffersTy>
     auto submit (BuffersTy const &buffers) -> boost::capy::io_task<size_t>

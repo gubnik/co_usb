@@ -11,6 +11,7 @@
 #include "co_usb/ev/context.hpp"
 #include "co_usb/ev/detail/event_handler.hpp"
 #include "co_usb/hotplug/device_acceptor.hpp"
+#include "co_usb/transfer/complete_io.hpp"
 #include "co_usb/transfer/endpoint.hpp"
 #include "co_usb/transfer/stream.hpp"
 #include "co_usb/transfer/transfer_resource.hpp"
@@ -79,6 +80,8 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
     const auto ep_in = co_usb::endpoint_in(0x01, iface);
     co_usb::bulk_transfer_stream bulk_in_stream{exec, transfers_in, ep_in, 50ms};
 
+    co_usb::detail::raw_transfer_complete_io_base complete_io{exec, transfers_in};
+
     size_t total_bytes{0};
 
     constexpr size_t bufsz = 1 << 18;
@@ -90,11 +93,14 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
     }
     while (1) //! stop.stop_requested())
     {
-        auto [rec, rn] = co_await bulk_in_stream.read_some(bufs_in);
+        // auto [rec, rn] = co_await bulk_in_stream.read_some(bufs_in);
+        auto [rec, rn] = co_await complete_io.complete_submit(
+            boost::capy::mutable_buffer{buf, 16 * bufsz}, bufsz);
         total_bytes += rn;
         if (!rec)
         {
             // std::println("Got {} bytes", rn);
+            break;
         }
         else
         {

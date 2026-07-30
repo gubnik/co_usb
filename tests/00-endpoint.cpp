@@ -40,25 +40,20 @@ TEST_CASE("ep-safe", "[endpoint]")
 
 TEST_CASE("ep-throwing", "[endpoint]")
 {
-    REQUIRE_NOTHROW(co_usb::endpoint<co_usb::endpoint_direction::in>::make_throwing(0x80, nullptr));
-    REQUIRE_NOTHROW(co_usb::endpoint<co_usb::endpoint_direction::in>::make_throwing(0x81, nullptr));
-    REQUIRE_THROWS_AS(
-        co_usb::endpoint<co_usb::endpoint_direction::in>::make_throwing(0x00, nullptr),
-        std::invalid_argument);
-    REQUIRE_THROWS_AS(
-        co_usb::endpoint<co_usb::endpoint_direction::in>::make_throwing(0x01, nullptr),
-        std::invalid_argument);
+    libusb_device_handle *ndevh = nullptr;
+    REQUIRE_NOTHROW(co_usb::endpoint<co_usb::endpoint_direction::in>::make_throwing(0x80, ndevh));
+    REQUIRE_NOTHROW(co_usb::endpoint<co_usb::endpoint_direction::in>::make_throwing(0x81, ndevh));
+    REQUIRE_THROWS_AS(co_usb::endpoint<co_usb::endpoint_direction::in>::make_throwing(0x00, ndevh),
+                      std::invalid_argument);
+    REQUIRE_THROWS_AS(co_usb::endpoint<co_usb::endpoint_direction::in>::make_throwing(0x01, ndevh),
+                      std::invalid_argument);
 
-    REQUIRE_NOTHROW(
-        co_usb::endpoint<co_usb::endpoint_direction::out>::make_throwing(0x00, nullptr));
-    REQUIRE_NOTHROW(
-        co_usb::endpoint<co_usb::endpoint_direction::out>::make_throwing(0x01, nullptr));
-    REQUIRE_THROWS_AS(
-        co_usb::endpoint<co_usb::endpoint_direction::out>::make_throwing(0x80, nullptr),
-        std::invalid_argument);
-    REQUIRE_THROWS_AS(
-        co_usb::endpoint<co_usb::endpoint_direction::out>::make_throwing(0x81, nullptr),
-        std::invalid_argument);
+    REQUIRE_NOTHROW(co_usb::endpoint<co_usb::endpoint_direction::out>::make_throwing(0x00, ndevh));
+    REQUIRE_NOTHROW(co_usb::endpoint<co_usb::endpoint_direction::out>::make_throwing(0x01, ndevh));
+    REQUIRE_THROWS_AS(co_usb::endpoint<co_usb::endpoint_direction::out>::make_throwing(0x80, ndevh),
+                      std::invalid_argument);
+    REQUIRE_THROWS_AS(co_usb::endpoint<co_usb::endpoint_direction::out>::make_throwing(0x81, ndevh),
+                      std::invalid_argument);
 }
 
 TEST_CASE("ep-conversion", "[endpoint]")

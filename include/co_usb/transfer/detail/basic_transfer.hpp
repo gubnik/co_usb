@@ -33,7 +33,7 @@ namespace co_usb::detail
 template <endpoint_type EpType, endpoint_direction Direction, size_t Preallocated = 1>
     requires(
         Preallocated > 0 &&
-        (Direction != endpoint_direction::both ||
+        (Direction != endpoint_direction::any ||
          EpType ==
              endpoint_type::control)) // both is malformed for anything except control transfers
 struct basic_transfer
@@ -100,7 +100,7 @@ struct basic_transfer
      */
     template <boost::capy::MutableBufferSequence MB>
     auto read_some (MB const &buffers) -> boost::capy::IoAwaitable auto
-        requires(Direction == endpoint_direction::in || Direction == endpoint_direction::both)
+        requires(Direction == endpoint_direction::in || Direction == endpoint_direction::any)
     {
         return submit(buffers);
     }
@@ -116,7 +116,7 @@ struct basic_transfer
      */
     template <boost::capy::ConstBufferSequence CB>
     auto write_some (CB const &buffers) -> boost::capy::IoAwaitable auto
-        requires(Direction == endpoint_direction::out || Direction == endpoint_direction::both)
+        requires(Direction == endpoint_direction::out || Direction == endpoint_direction::any)
     {
         return submit(buffers);
     }
@@ -128,11 +128,11 @@ struct basic_transfer
             !std::ranges::bidirectional_range<AnyBufferSequence>)
     auto submit (AnyBufferSequence const &buffers) -> boost::capy::io_task<size_t>
     {
-        auto stop      = co_await boost::capy::this_coro::stop_token;
+        auto stop = co_await boost::capy::this_coro::stop_token;
         using buffer_t = boost::capy::buffer_type<AnyBufferSequence>;
 
         buffer_t buf = buffers;
-        auto tfer    = m_tfers[0].get();
+        auto tfer = m_tfers[0].get();
         tfer->buffer = static_cast<uint8_t *>(const_cast<void *>(buf.data()));
         tfer->length = buf.size();
         transfer_awaitable::resumption_t res{};
@@ -146,10 +146,10 @@ struct basic_transfer
             std::ranges::bidirectional_range<AnyBufferSequence>)
     auto submit (AnyBufferSequence const &buffers) -> boost::capy::io_task<size_t>
     {
-        auto stop         = co_await boost::capy::this_coro::stop_token;
-        using buffer_t    = boost::capy::buffer_type<AnyBufferSequence>;
+        auto stop = co_await boost::capy::this_coro::stop_token;
+        using buffer_t = boost::capy::buffer_type<AnyBufferSequence>;
         using awaitable_t = sliding_transfer_awaitable<AnyBufferSequence>;
-        using aw_state_t  = typename awaitable_t::await_state;
+        using aw_state_t = typename awaitable_t::await_state;
         aw_state_t aw_state(buffers, m_ev_handler_ref);
         std::array<libusb_transfer *, Preallocated> raw_tfers;
         for (size_t i = 0; i < Preallocated; i++)

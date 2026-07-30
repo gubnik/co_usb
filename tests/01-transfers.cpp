@@ -86,23 +86,24 @@ TEST_CASE("any-transfer", "[transfers]")
 
 TEST_CASE("transfer-operations", "[transfer]")
 {
+    libusb_device_handle *ndevh = nullptr;
     REQUIRE(
-        [] () -> bool
+        [=] () -> bool
         {
             auto ep_out =
-                co_usb::endpoint<co_usb::endpoint_direction::out>::make_unsafe(0x01, nullptr);
+                co_usb::endpoint<co_usb::endpoint_direction::out>::make_unsafe(0x01, ndevh);
             co_usb::transfer_resource tfer;
             co_usb::prefill_bulk_transfer(tfer, ep_out);
             return tfer.get()->endpoint == 0x01 &&
                    tfer.get()->type == LIBUSB_ENDPOINT_TRANSFER_TYPE_BULK;
         }());
     REQUIRE(
-        [] () -> bool
+        [=] () -> bool
         {
             auto ep_out_1 =
-                co_usb::endpoint<co_usb::endpoint_direction::out>::make_unsafe(0x01, nullptr);
+                co_usb::endpoint<co_usb::endpoint_direction::out>::make_unsafe(0x01, ndevh);
             auto ep_out_2 =
-                co_usb::endpoint<co_usb::endpoint_direction::out>::make_unsafe(0x02, nullptr);
+                co_usb::endpoint<co_usb::endpoint_direction::out>::make_unsafe(0x02, ndevh);
             std::vector<co_usb::transfer_resource> tfers;
             tfers.resize(16);
             co_usb::prefill_bulk_transfer(tfers, ep_out_1);
