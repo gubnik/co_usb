@@ -40,7 +40,7 @@ namespace co_usb
  * handler ref is held during the submission operation.
  *
  * @see event_handler_ref
- * @see handler_service
+ * @see detail::handler_service
  */
 template <detail::TransferSequence TSeq> struct raw_transfer_stream
 {

@@ -34,7 +34,7 @@ namespace detail
  * in-flight transfers. Event handler ref is held for the entire lifetime of an object of this type.
  *
  * @see event_handler_ref
- * @see handler_service
+ * @see detail::handler_service
  */
 template <TransferSequence TSeq> struct raw_transfer_complete_io_base
 {
