@@ -1,3 +1,7 @@
+/**
+ * @defgroup transfer
+ */
+
 #pragma once
 
 #include "co_usb/transfer/detail/any_buffer_sequence.hpp"
