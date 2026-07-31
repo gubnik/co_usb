@@ -9,7 +9,7 @@
 #include <boost/capy/io_result.hpp>
 #include <system_error>
 
-namespace co_usb::detail
+namespace co_usb::hotplug::detail
 {
 
 /**
@@ -31,7 +31,7 @@ struct hotplug_awaitable
     struct op_result
     {
         std::error_code ec;
-        hotplug_event event;
+        event event;
         device_ref dev;
     };
 
@@ -84,7 +84,7 @@ struct hotplug_awaitable
                 void *user_data) -> int
             {
                 resumption_t *res = (resumption_t *)user_data;
-                res->op_res->event = hotplug_event(ev);
+                res->op_res->event = event(ev);
                 res->op_res->dev = device_ref{dev};
                 res->io_env->executor.post(res->cont);
                 return 1;
@@ -98,7 +98,7 @@ struct hotplug_awaitable
         return std::noop_coroutine();
     }
 
-    boost::capy::io_result<hotplug_event, device_ref> await_resume ()
+    boost::capy::io_result<event, device_ref> await_resume ()
     {
         if (op_res->ec)
         {
@@ -120,4 +120,4 @@ struct hotplug_awaitable
 
 static_assert(boost::capy::IoAwaitable<hotplug_awaitable>, "Not an IoAwaitable");
 
-} // namespace co_usb::detail
+} // namespace co_usb::hotplug::detail

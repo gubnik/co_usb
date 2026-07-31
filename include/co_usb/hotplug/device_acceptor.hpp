@@ -2,9 +2,9 @@
 
 #include "co_usb/ev/detail/handler_service.hpp"
 #include "co_usb/ev/event_handler_ref.hpp"
-#include "co_usb/hotplug/device_triplet.hpp"
 #include "co_usb/usb_error.hpp"
 #include "co_usb/wrapper/device_ref.hpp"
+#include "co_usb/wrapper/device_triplet.hpp"
 #include <algorithm>
 #include <boost/capy/concept/io_awaitable.hpp>
 #include <boost/capy/continuation.hpp>
@@ -26,7 +26,7 @@
 #include <system_error>
 #include <utility>
 
-namespace co_usb
+namespace co_usb::hotplug
 {
 
 /**
@@ -252,4 +252,4 @@ struct device_acceptor
     libusb_hotplug_callback_handle m_handle{0};
 };
 
-} // namespace co_usb
+} // namespace co_usb::hotplug

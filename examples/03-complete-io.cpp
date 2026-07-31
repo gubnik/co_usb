@@ -67,9 +67,9 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
     // a read with a buffer size that the kernel may disallow
     co_usb::transfer::bulk_source complete_io{exec, transfers_in, ep_in, bufsz};
 
-    while (stop.stop_requested())
+    while (!stop.stop_requested())
     {
-        auto [rec, rn] = co_await complete_io.read(boost::capy::mutable_buffer{buf, sizeof(buf)});
+        auto [rec, rn] = co_await complete_io.read(boost::capy::mutable_buffer{buf, 16 * bufsz});
         total_bytes += rn;
         if (!rec)
         {
@@ -94,7 +94,7 @@ boost::capy::task<> accept_hotplug ()
     auto stop = co_await boost::capy::this_coro::stop_token;
     auto alloc = co_await boost::capy::this_coro::frame_allocator;
     std::error_code ec;
-    co_usb::device_acceptor acceptor{exec, alloc};
+    co_usb::hotplug::device_acceptor acceptor{exec, alloc};
     ec = acceptor.bind({.vid = 0x9f9f, .pid = 0x9f9f});
     ec = acceptor.listen();
     if (ec)

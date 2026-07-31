@@ -1,10 +1,10 @@
 #pragma once
 
 #include "co_usb/ev/detail/handler_service.hpp"
-#include "co_usb/hotplug/device_triplet.hpp"
 #include "co_usb/usb_error.hpp"
 #include "co_usb/wrapper/detail/error_protocol.hpp"
 #include "co_usb/wrapper/device_ref.hpp"
+#include "co_usb/wrapper/device_triplet.hpp"
 #include "co_usb/wrapper/error_protocol.hpp"
 #include <boost/capy/ex/executor_ref.hpp>
 #include <libusb.h>

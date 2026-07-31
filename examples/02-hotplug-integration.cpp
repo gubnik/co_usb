@@ -89,7 +89,7 @@ boost::capy::task<> accept_hotplug ()
     auto stop = co_await boost::capy::this_coro::stop_token;
     auto alloc = co_await boost::capy::this_coro::frame_allocator;
     std::error_code ec;
-    co_usb::device_acceptor acceptor{exec, alloc};
+    co_usb::hotplug::device_acceptor acceptor{exec, alloc};
     ec = acceptor.bind({.vid = 0x9f9f, .pid = 0x9f9f});
     ec = acceptor.listen();
     if (ec)
