@@ -49,8 +49,8 @@ namespace detail
  * event handler consuming it. To prevent the event handler from shutting down prematurely the event
  * handler ref is held during the submission operation.
  *
- * @see raw_transfer_stream
- * @see event_handler_ref
+ * @see transfer::raw_transfer_stream
+ * @see ev::event_handler_ref
  */
 template <detail::TransferSequence TSeq> struct complete_io_base : public partial_io_base<TSeq>
 {
