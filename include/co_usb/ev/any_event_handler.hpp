@@ -5,7 +5,7 @@
 #include <memory_resource>
 #include <type_traits>
 #include <utility>
-namespace co_usb
+namespace co_usb::ev
 {
 
 struct event_handler_ref;
@@ -204,4 +204,4 @@ struct any_event_handler
 };
 static_assert(detail::EventHandler<any_event_handler>, "Not a proper USB event handler");
 
-} // namespace co_usb
+} // namespace co_usb::ev

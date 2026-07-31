@@ -76,7 +76,7 @@ auto open_device (boost::capy::executor_ref exec, device_triplet triplet,
 {
     try
     {
-        libusb_context *ctx = detail::get_handler_service(exec).usb_context();
+        libusb_context *ctx = ::co_usb::ev::detail::get_handler_service(exec).usb_context();
         libusb_device_handle *devh = libusb_open_device_with_vid_pid(ctx, triplet.vid, triplet.pid);
         if (!devh)
         {

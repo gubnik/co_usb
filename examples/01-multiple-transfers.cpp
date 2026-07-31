@@ -56,8 +56,7 @@ int main (int argc, char **argv)
     // create a context that references a newly create service with a specific event handler bound
     // to execution service this allows to not depend on a single type of executor and interop with
     // any Capy-based library
-    static auto ctx =
-        co_usb::make_context<co_usb::detail::refcounted_event_handler>(tp.get_executor());
+    static auto ctx = co_usb::make_context<co_usb::ev::refcounted_event_handler>(tp.get_executor());
 
     // throw std::system_error on error, we expect the device to exist and don't care for errors!
     auto devh = co_usb::open_device(tp.get_executor(), {dev_vid, dev_pid}, co_usb::as_exception());

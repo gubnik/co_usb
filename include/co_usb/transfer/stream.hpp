@@ -56,7 +56,7 @@ namespace detail
 template <detail::TransferSequence TSeq> struct partial_io_base
 {
     explicit partial_io_base (boost::capy::executor_ref exec, TSeq const &tfer_seq)
-        : m_ev_ref(co_usb::detail::get_handler_service(exec).handler()), m_view(tfer_seq)
+        : m_ev_ref(::co_usb::ev::detail::get_handler_service(exec).handler()), m_view(tfer_seq)
     {
     }
 
@@ -87,7 +87,7 @@ template <detail::TransferSequence TSeq> struct partial_io_base
     }
 
   protected:
-    event_handler_ref m_ev_ref;
+    ev::event_handler_ref m_ev_ref;
     sequence_view<TSeq> m_view;
 };
 

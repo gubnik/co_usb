@@ -2,17 +2,22 @@
 
 #include "co_usb/ev/detail/handler_service.hpp"
 #include <memory_resource>
-
 namespace co_usb
 {
-
+namespace ev
+{
+struct context;
+}
 /**
  * @brief Factory for obtaining a co_usb context.
  */
-template <detail::EventHandler HandlerTy, typename... Args>
+template <ev::detail::EventHandler HandlerTy, typename... Args>
 inline auto make_context(boost::capy::executor_ref exec, Args &&...args,
                          std::pmr::memory_resource *memres = std::pmr::get_default_resource())
-    -> context;
+    -> ev::context;
+} // namespace co_usb
+namespace co_usb::ev
+{
 
 /**
  * @brief A co_usb context referencing event handler service.
@@ -51,16 +56,21 @@ struct context
     detail::handler_service *m_srv_ptr;
 };
 
-template <detail::EventHandler HandlerTy, typename... Args>
+} // namespace co_usb::ev
+
+namespace co_usb
+{
+
+template <ev::detail::EventHandler HandlerTy, typename... Args>
 inline auto make_context (boost::capy::executor_ref exec, Args &&...args,
-                          std::pmr::memory_resource *memres) -> context
+                          std::pmr::memory_resource *memres) -> ev::context
 {
     boost::capy::execution_context &exec_ctx = exec.context();
 
-    auto &srv = exec_ctx.use_service<detail::handler_service>();
+    auto &srv = exec_ctx.use_service<ev::detail::handler_service>();
     srv.emplace_handler<HandlerTy>(std::forward<Args>(args)..., memres);
     srv.start();
-    return context{&srv};
+    return ev::context{&srv};
 }
 
 } // namespace co_usb

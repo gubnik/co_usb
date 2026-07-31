@@ -121,12 +121,11 @@ int main (int argc, char **argv)
 
     // initiates a libusb context and binds a libusb event handler thread to executor's execution
     // context with an associated stop source
-    co_usb::context ctx =
-        co_usb::make_context<co_usb::detail::refcounted_event_handler>(tp.get_executor());
+    auto ctx = co_usb::make_context<co_usb::ev::refcounted_event_handler>(tp.get_executor());
 
     boost::capy::run_async(
         tp.get_executor(), [] () {}, [] (std::exception_ptr e) {})(
-        [] (co_usb::context &ctx) -> boost::capy::task<>
+        [] (co_usb::ev::context &ctx) -> boost::capy::task<>
         {
             // !! HACK ALERT
             // It is not recommended to do timed cancellation this way. Capy provides async_waker

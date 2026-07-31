@@ -42,9 +42,9 @@ struct device_acceptor
 {
     explicit device_acceptor (boost::capy::executor_ref exec,
                               std::pmr::memory_resource *memres = std::pmr::get_default_resource())
-        : m_ev_handler_ref(detail::get_handler_service(exec).handler()),
-          m_usb_ctx(detail::get_handler_service(exec).usb_context()), m_memres(memres),
-          m_resumptions(memres), m_arrived_devices(memres), m_handle(0)
+        : m_ev_handler_ref(::co_usb::ev::detail::get_handler_service(exec).handler()),
+          m_usb_ctx(::co_usb::ev::detail::get_handler_service(exec).usb_context()),
+          m_memres(memres), m_resumptions(memres), m_arrived_devices(memres), m_handle(0)
     {
     }
 
@@ -240,7 +240,7 @@ struct device_acceptor
         resumption_t *res;
     };
 
-    event_handler_ref m_ev_handler_ref;
+    ev::event_handler_ref m_ev_handler_ref;
     std::mutex m_mutex;
     std::pmr::memory_resource *m_memres;
 

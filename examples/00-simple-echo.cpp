@@ -69,8 +69,8 @@ int main (int argc, char **argv)
     // Event handler function can be provided via a functor as a second constructor parameter
     // if the default one is not enough - it often is not and should only be used for simple
     // examples such as this
-    co_usb::context ctx =
-        co_usb::make_context<co_usb::detail::trivial_event_handler>(tp.get_executor());
+    co_usb::ev::context ctx =
+        co_usb::make_context<co_usb::ev::trivial_event_handler>(tp.get_executor());
 
     // co_usb consistently uses error_code + value schema for handling errors, especially
     // for thin wrappers over libusb functions. It provides error categories for both of libusb

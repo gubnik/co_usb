@@ -31,7 +31,7 @@ inline auto oneshot_hotplug (hotplug_event events, hotplug_flag flags, device_tr
     auto stop = co_await boost::capy::this_coro::stop_token;
     detail::hotplug_awaitable::op_result op_res{};
     detail::hotplug_awaitable::resumption_t res{};
-    auto &srv = detail::get_handler_service(exec);
+    auto &srv = ::co_usb::ev::detail::get_handler_service(exec);
     auto ev_ref = srv.handler();
     libusb_context *ctx = srv.usb_context();
     libusb_hotplug_callback_handle handle{0};

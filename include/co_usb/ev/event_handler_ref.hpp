@@ -4,7 +4,7 @@
 #include "co_usb/ev/detail/event_handler.hpp"
 #include <concepts>
 
-namespace co_usb
+namespace co_usb::ev
 {
 
 /**
@@ -43,10 +43,10 @@ struct event_handler_ref
         if (m_original == &handler)
             return *this;
         m_original = &handler;
-        m_vtable   = vtable{
+        m_vtable = vtable{
             .start_fn = +[] (void *orig, libusb_context *ctx, std::stop_token stop) -> bool
             { return static_cast<HandlerTy *>(orig)->start(ctx, stop); },
-            .ref_fn   = +[] (void *orig) -> void { return static_cast<HandlerTy *>(orig)->ref(); },
+            .ref_fn = +[] (void *orig) -> void { return static_cast<HandlerTy *>(orig)->ref(); },
             .unref_fn = +[] (void *orig) -> void
             { return static_cast<HandlerTy *>(orig)->unref(); },
             .stop_fn = +[] (void *orig) -> void { return static_cast<HandlerTy *>(orig)->stop(); },
@@ -68,7 +68,7 @@ struct event_handler_ref
         if (m_original)
             unref();
         m_original = other.m_original;
-        m_vtable   = other.m_vtable;
+        m_vtable = other.m_vtable;
         ref();
         return *this;
     }
@@ -87,8 +87,8 @@ struct event_handler_ref
         }
         if (m_original)
             unref();
-        m_original       = other.m_original;
-        m_vtable         = other.m_vtable;
+        m_original = other.m_original;
+        m_vtable = other.m_vtable;
         other.m_original = nullptr;
         return *this;
     }
@@ -147,9 +147,9 @@ struct event_handler_ref
     struct vtable
     {
         using start_fn_t = auto (*)(void *, libusb_context *, std::stop_token) -> bool;
-        using ref_fn_t   = auto (*)(void *) -> void;
+        using ref_fn_t = auto (*)(void *) -> void;
         using unref_fn_t = auto (*)(void *) -> void;
-        using stop_fn_t  = auto (*)(void *) -> void;
+        using stop_fn_t = auto (*)(void *) -> void;
 
         start_fn_t start_fn{nullptr};
         ref_fn_t ref_fn{nullptr};
@@ -162,4 +162,4 @@ struct event_handler_ref
 
 static_assert(detail::EventHandler<event_handler_ref>, "Not a proper USB event handler");
 
-} // namespace co_usb
+} // namespace co_usb::ev

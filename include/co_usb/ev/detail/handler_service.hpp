@@ -21,7 +21,7 @@ namespace co_usb
 struct context;
 }
 
-namespace co_usb::detail
+namespace co_usb::ev::detail
 {
 
 /**
@@ -193,4 +193,4 @@ inline auto nothrow_get_handler_service (boost::capy::executor_ref exec) -> hand
     return srv;
 }
 
-} // namespace co_usb::detail
+} // namespace co_usb::ev::detail
