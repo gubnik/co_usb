@@ -7,7 +7,7 @@
  */
 
 #include <boost/capy.hpp>
-#include <co_usb/co_usb.hpp>
+#include <co_usb.hpp>
 
 constexpr uint16_t dev_vid = 0x9f9f;
 constexpr uint16_t dev_pid = 0x9f9f;

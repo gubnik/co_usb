@@ -1,21 +1,10 @@
 // clang-format off
-#include <boost/capy/buffers/make_buffer.hpp>
-#include <boost/capy/concept/read_stream.hpp>
-#include <boost/capy/ex/this_coro.hpp>
-#include <boost/capy/io/any_read_stream.hpp>
-#include <boost/capy/io/any_write_stream.hpp>
-#include <boost/capy/concept/write_stream.hpp>
-#include <boost/capy/task.hpp>
+#include <boost/capy.hpp>
 #include <catch2/catch_all.hpp>
 #include <catch2/catch_test_macros.hpp>
-#include <co_usb/co_usb.hpp>
+#include <co_usb.hpp>
 #include <libusb.h>
 #include <vector>
-#include "co_usb/transfer/endpoint.hpp"
-#include "co_usb/transfer/stream.hpp"
-#include "co_usb/transfer/transfer_operations.hpp"
-#include "co_usb/transfer/transfer_sequence_view.hpp"
-#include "co_usb/transfer/transfer_resource.hpp"
 #include "test_mock.hpp"
 // clang-format on
 

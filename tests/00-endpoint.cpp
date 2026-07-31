@@ -1,8 +1,7 @@
 // clang-format off
 #include <catch2/catch_all.hpp>
 #include <catch2/catch_test_macros.hpp>
-#include <co_usb/co_usb.hpp>
-#include "co_usb/transfer/detail/device_handle_source.hpp"
+#include <co_usb.hpp>
 #include "test_mock.hpp"
 // clang-format on
 

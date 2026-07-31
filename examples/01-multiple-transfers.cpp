@@ -11,9 +11,8 @@
  * I test all my examples on a primitive virtual device in QEMU.
  */
 
-#include "co_usb/wrapper/error_protocol.hpp"
 #include <boost/capy.hpp>
-#include <co_usb/co_usb.hpp>
+#include <co_usb.hpp>
 #include <csignal>
 #include <print>
 #include <system_error>

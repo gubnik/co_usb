@@ -10,7 +10,7 @@
 #include <array>
 #include <boost/capy.hpp>
 #include <chrono>
-#include <co_usb/co_usb.hpp>
+#include <co_usb.hpp>
 #include <print>
 #include <ranges>
 #include <thread>
