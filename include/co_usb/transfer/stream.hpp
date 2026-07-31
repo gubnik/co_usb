@@ -75,7 +75,7 @@ template <detail::TransferSequence TSeq> struct raw_transfer_stream
         co_return co_await awaitable_t(&await_state, &m_view, buffers, transfers_used);
     }
 
-  private:
+  protected:
     event_handler_ref m_ev_ref;
     transfer_sequence_view<TSeq> m_view;
 };
