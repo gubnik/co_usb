@@ -1,7 +1,7 @@
 #pragma once
 
 #include <boost/capy/buffers.hpp>
-namespace co_usb::detail
+namespace co_usb::transfer::detail
 {
 
 template <typename Ty>

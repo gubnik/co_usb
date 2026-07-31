@@ -4,19 +4,17 @@
 #include <libusb.h>
 #include <memory>
 
-namespace co_usb
+namespace co_usb::transfer
 {
 
 /**
  * @ingroup transfer
  *
  * @brief Generic RAII wrapper over a transfer allocation.
- *
- * @notes Satisfies TransferResource concept.
  */
-struct transfer_resource
+struct resource
 {
-    explicit transfer_resource (int iso_packets = 0)
+    explicit resource (int iso_packets = 0)
         : m_utfer(libusb_alloc_transfer(iso_packets), libusb_free_transfer)
     {
         if (!m_utfer)
@@ -35,6 +33,6 @@ struct transfer_resource
     std::unique_ptr<libusb_transfer, deleter_t> m_utfer{nullptr, libusb_free_transfer};
 };
 
-static_assert(detail::TransferResource<transfer_resource>, "Not a proper transfer resource");
+static_assert(detail::TransferResource<resource>, "Not a proper transfer resource");
 
-} // namespace co_usb
+} // namespace co_usb::transfer

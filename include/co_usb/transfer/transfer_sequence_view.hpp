@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-namespace co_usb
+namespace co_usb::transfer
 {
 
 /**
@@ -21,10 +21,10 @@ namespace co_usb
  */
 template <detail::TransferSequence Seq> struct transfer_sequence_view
 {
-    using iterator_type = decltype(co_usb::detail::transfer_begin(std::declval<Seq const &>()));
+    using iterator_type = decltype(detail::transfer_begin(std::declval<Seq const &>()));
 
     transfer_sequence_view (Seq const &seq) noexcept
-        : m_begin(co_usb::detail::transfer_begin(seq)), m_end(co_usb::detail::transfer_end(seq))
+        : m_begin(detail::transfer_begin(seq)), m_end(detail::transfer_end(seq))
     {
     }
 
@@ -62,4 +62,4 @@ static_assert(detail::TransferSequence<transfer_sequence_view<libusb_transfer *>
 static_assert(detail::TransferSequence<transfer_sequence_view<std::vector<libusb_transfer *>>>,
               "Not a proper transfer sequence");
 
-} // namespace co_usb
+} // namespace co_usb::transfer

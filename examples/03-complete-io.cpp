@@ -58,14 +58,14 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
     char buf[16 * bufsz];
 
     // prepare transfer resource
-    std::vector<co_usb::transfer_resource> transfers_in;
+    std::vector<co_usb::transfer::resource> transfers_in;
     transfers_in.resize(6);
 
-    const auto ep_in = co_usb::endpoint_in(0x01, iface);
+    const auto ep_in = co_usb::transfer::ep_in(0x01, iface);
     // create a buffer source
     // last parameter (bufsz) is a size limit for a single transfer, otherwise we'd attempt
     // a read with a buffer size that the kernel may disallow
-    co_usb::bulk_transfer_source complete_io{exec, transfers_in, ep_in, bufsz};
+    co_usb::transfer::bulk_source complete_io{exec, transfers_in, ep_in, bufsz};
 
     while (stop.stop_requested())
     {

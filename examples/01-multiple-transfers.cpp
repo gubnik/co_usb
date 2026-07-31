@@ -32,8 +32,8 @@ boost::capy::task<void> process_transfer (const co_usb::interface &iface)
     auto st = co_await boost::capy::this_coro::stop_token;
 
     std::array<uint8_t, 1024> data;
-    co_usb::transfer_resource tfer_res;
-    co_usb::bulk_transfer_read_stream tfer{exec, tfer_res, co_usb::endpoint_in(0x81, iface), 50ms};
+    co_usb::transfer::resource tfer_res;
+    co_usb::transfer::bulk_in tfer{exec, tfer_res, co_usb::transfer::ep_in(0x81, iface), 50ms};
     while (!st.stop_requested())
     {
         auto [ec, n] =

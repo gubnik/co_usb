@@ -1,8 +1,9 @@
 #pragma once
 
-#include "co_usb/transfer/detail/device_handle_source.hpp"
 #include "co_usb/usb_error.hpp"
+#include "co_usb/wrapper/detail/device_handle_source.hpp"
 #include "co_usb/wrapper/detail/error_protocol.hpp"
+#include "co_usb/wrapper/error_protocol.hpp"
 #include <libusb.h>
 #include <system_error>
 
@@ -21,7 +22,7 @@ struct driver_guard
         }
     }
 
-    driver_guard(driver_guard const &)            = delete;
+    driver_guard(driver_guard const &) = delete;
     driver_guard &operator=(driver_guard const &) = delete;
 
     driver_guard (driver_guard &&other) noexcept
@@ -42,9 +43,9 @@ struct driver_guard
         {
             throw std::system_error{ec};
         }
-        m_devh          = other.m_devh;
+        m_devh = other.m_devh;
         m_interface_num = other.m_interface_num;
-        other.m_devh    = nullptr;
+        other.m_devh = nullptr;
         return *this;
     }
 
@@ -85,7 +86,8 @@ static_assert(detail::DeviceHandleSource<driver_guard>, "Not a proper device han
 
 template <detail::ErrorProtocol<driver_guard> ErrTy>
 auto detach_driver (detail::DeviceHandleSource auto const &devh_src, int interface_num,
-                    ErrTy &&errp) noexcept -> typename ErrTy::template return_type<driver_guard>
+                    ErrTy &&errp = as_exception()) noexcept ->
+    typename ErrTy::template return_type<driver_guard>
 {
     try
     {

@@ -54,6 +54,11 @@ struct device_ref
         return *this;
     }
 
+    /**
+     * @brief Checks if a device reference is valid.
+     *
+     * @returns `true` if reference is valid.
+     */
     auto valid () const noexcept -> bool
     {
         return m_dev != nullptr;
@@ -78,7 +83,7 @@ struct device_ref
     auto release () noexcept -> libusb_device *
     {
         auto tmp = m_dev;
-        m_dev    = nullptr;
+        m_dev = nullptr;
         return tmp;
     }
 

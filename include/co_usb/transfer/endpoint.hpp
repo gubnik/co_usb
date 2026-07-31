@@ -1,11 +1,11 @@
 #pragma once
 
-#include "co_usb/transfer/detail/device_handle_source.hpp"
+#include "co_usb/wrapper/detail/device_handle_source.hpp"
 #include <cstdint>
 #include <optional>
 #include <stdexcept>
 
-namespace co_usb
+namespace co_usb::transfer
 {
 
 enum class endpoint_type : uint8_t
@@ -53,20 +53,20 @@ template <endpoint_direction Direction = endpoint_direction::any> struct endpoin
         if constexpr (Direction == endpoint_direction::out)
         {
             return endpoint<Direction>{static_cast<uint8_t>(ep & ~LIBUSB_ENDPOINT_IN),
-                                       detail::device_handle_of(dev_source)};
+                                       co_usb::detail::device_handle_of(dev_source)};
         }
         else if constexpr (Direction == endpoint_direction::in)
         {
             return endpoint<Direction>{static_cast<uint8_t>(ep | LIBUSB_ENDPOINT_IN),
-                                       detail::device_handle_of(dev_source)};
+                                       co_usb::detail::device_handle_of(dev_source)};
         }
-        return endpoint<Direction>{ep, detail::device_handle_of(dev_source)};
+        return endpoint<Direction>{ep, co_usb::detail::device_handle_of(dev_source)};
     }
 
     template <co_usb::detail::DeviceHandleSource DevSourceTy>
     static endpoint<Direction> make_unsafe (uint8_t ep, DevSourceTy const &devh) noexcept
     {
-        return {ep, detail::device_handle_of(devh)};
+        return {ep, co_usb::detail::device_handle_of(devh)};
     }
 
     /**
@@ -92,7 +92,7 @@ template <endpoint_direction Direction = endpoint_direction::any> struct endpoin
                 throw std::invalid_argument{"Cannot use OUT endpoint for IN"};
             }
         }
-        return {ep, detail::device_handle_of(devh)};
+        return {ep, co_usb::detail::device_handle_of(devh)};
     }
 
     uint8_t addr () const noexcept
@@ -147,23 +147,23 @@ template <endpoint_direction Direction = endpoint_direction::any> struct endpoin
     uint8_t m_ep;
 };
 
-inline auto endpoint_out (uint8_t ep_addr, detail::DeviceHandleSource auto const &devh_src)
+inline auto ep_out (uint8_t ep_addr, co_usb::detail::DeviceHandleSource auto const &devh_src)
     -> endpoint<endpoint_direction::out>
 {
     return endpoint<endpoint_direction::out>::make_safe(ep_addr, devh_src);
 }
 
-inline auto endpoint_in (uint8_t ep_addr, detail::DeviceHandleSource auto const &devh_src)
+inline auto ep_in (uint8_t ep_addr, co_usb::detail::DeviceHandleSource auto const &devh_src)
     -> endpoint<endpoint_direction::in>
 {
     return endpoint<endpoint_direction::in>::make_safe(ep_addr, devh_src);
 }
 
-inline auto endpoint_any (uint8_t ep_addr, detail::DeviceHandleSource auto const &devh_src)
+inline auto ep_any (uint8_t ep_addr, co_usb::detail::DeviceHandleSource auto const &devh_src)
     -> endpoint<endpoint_direction::any>
 {
-    return endpoint<endpoint_direction::any>::make_unsafe(ep_addr,
-                                                          detail::device_handle_of(devh_src));
+    return endpoint<endpoint_direction::any>::make_unsafe(
+        ep_addr, co_usb::detail::device_handle_of(devh_src));
 }
 
-} // namespace co_usb
+} // namespace co_usb::transfer

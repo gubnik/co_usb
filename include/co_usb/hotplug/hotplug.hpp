@@ -1,5 +1,5 @@
 /**
- * @defgroup Hotplug
+ * @defgroup hotplug Async hotplug adaptors
  */
 #pragma once
 

@@ -9,9 +9,11 @@
 #include <boost/capy/io_task.hpp>
 #include <memory_resource>
 
-namespace co_usb
+namespace co_usb::transfer
 {
 
+namespace detail
+{
 /**
  * @ingroup transfer
  *
@@ -23,21 +25,39 @@ namespace co_usb
  * until each buffer is fully processed. This operation is transfer-affine, meaning that a single
  * transfer will not jump to another buffer until it has finished filling the current one it holds.
  *
- * Similar to @ref raw_transfer_stream, submissions are done in a streaming manner.
+ * @par Transfer sequence guarantee
  *
- * Similar to @ref raw_transfer_stream, the operation creates a stop callback for cancelling
- * in-flight transfers. Event handler ref is held for the entire lifetime of an object of this type.
+ * Transfer sequence is expected to outlive an instance of this type which uses it.
+ * Deallocating, modifying and replacing transfers while an asynchronous operation is
+ * pending is undefined behaviour unless it is a `cancel_transfer` call in which case the operation
+ * is well-defined and will cause this particular transfer to be cancelled and cause an error
+ * with @ref transfer_status `cancelled` value.
  *
+ * @par Submission
+ *
+ * The submissions are done in a streaming manner, hence the name, where the N transfers from a
+ * sequence will be reused for M buffers, in an order in which the transfers complete. This allows
+ * to saturate the USB controller ring with large enough set of buffers. In practice, however, the
+ * amount of transfers provided has diminishing returns due to internal libusb mutex and ring
+ * oversaturation, and after a certain points using more transfers will be slower than using fewer.
+ *
+ * @par Event handler guarantee
+ *
+ * Submission also creates a proper cancellation callback based on a stop token propagated through
+ * Capy's io_env protocol. The cancellation ONLY signals cancellation via `libusb_cancel_transfer`
+ * for each transfer in a sequence. Actual handling of this signal is entirely dependent on the
+ * event handler consuming it. To prevent the event handler from shutting down prematurely the event
+ * handler ref is held during the submission operation.
+ *
+ * @see raw_transfer_stream
  * @see event_handler_ref
- * @see detail::handler_service
  */
-template <detail::TransferSequence TSeq>
-struct raw_transfer_complete_io : public raw_transfer_stream<TSeq>
+template <detail::TransferSequence TSeq> struct complete_io_base : public partial_io_base<TSeq>
 {
-    explicit raw_transfer_complete_io (
-        boost::capy::executor_ref exec, TSeq const &tfer_seq, size_t single_transfer_limit,
-        std::pmr::memory_resource *memres = std::pmr::get_default_resource())
-        : raw_transfer_stream<TSeq>(exec, tfer_seq), m_memres(memres),
+    explicit complete_io_base (boost::capy::executor_ref exec, TSeq const &tfer_seq,
+                               size_t single_transfer_limit,
+                               std::pmr::memory_resource *memres = std::pmr::get_default_resource())
+        : partial_io_base<TSeq>(exec, tfer_seq), m_memres(memres),
           m_single_transfer_limit(single_transfer_limit)
     {
     }
@@ -70,9 +90,6 @@ struct raw_transfer_complete_io : public raw_transfer_stream<TSeq>
     size_t m_single_transfer_limit;
 };
 
-namespace detail
-{
-
 /**
  * @ingroup transfer
  *
@@ -80,12 +97,13 @@ namespace detail
  *
  * @details ReadSource and WriteSink concepts were once defined in Capy. Since then they had
  * been moved to Boost.Http because they were only used in it and the libraries based on it.
- * This interface, however, will be kept regardless to increase interoperability.
+ * This interface will be kept regardless to increase interoperability.
+ *
+ * @note EOF handling is ignored because USB does not always operate with EOF in mind.
  */
-template <TransferSequence TSeq, endpoint_direction EpDirection>
-struct direction_transfer_complete_io_base
+template <TransferSequence TSeq, endpoint_direction EpDirection> struct direction_complete_io_base
 {
-    explicit direction_transfer_complete_io_base (
+    explicit direction_complete_io_base (
         boost::capy::executor_ref exec, TSeq const &tfer_seq, size_t single_transfer_limit,
         std::pmr::memory_resource *memres = std::pmr::get_default_resource())
         : m_raw(exec, tfer_seq, single_transfer_limit, memres)
@@ -94,14 +112,7 @@ struct direction_transfer_complete_io_base
 
     template <boost::capy::MutableBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::in)
-    constexpr inline auto read_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
-    {
-        return m_raw.submit(buffers);
-    }
-
-    template <boost::capy::ConstBufferSequence BuffersTy>
-        requires(EpDirection == endpoint_direction::out)
-    constexpr inline auto write_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    inline auto read_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
     {
         return m_raw.submit(buffers);
     }
@@ -111,6 +122,13 @@ struct direction_transfer_complete_io_base
     inline auto read (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
     {
         return m_raw.complete_submit(buffers);
+    }
+
+    template <boost::capy::ConstBufferSequence BuffersTy>
+        requires(EpDirection == endpoint_direction::out)
+    inline auto write_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    {
+        return m_raw.submit(buffers);
     }
 
     template <boost::capy::ConstBufferSequence BuffersTy>
@@ -135,112 +153,108 @@ struct direction_transfer_complete_io_base
     }
 
   private:
-    raw_transfer_complete_io<TSeq> m_raw;
+    complete_io_base<TSeq> m_raw;
 };
 
 } // namespace detail
 
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
-struct control_transfer_complete_io : detail::direction_transfer_complete_io_base<TSeq, EpDirection>
+struct control_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
-    explicit control_transfer_complete_io (
+    explicit control_complete_io (
         boost::capy::executor_ref exec, TSeq const &tfer_seq, endpoint<EpDirection> endpoint,
         size_t single_transfer_limit,
         std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0},
         std::pmr::memory_resource *memres = std::pmr::get_default_resource())
-        : detail::direction_transfer_complete_io_base<TSeq, EpDirection>(
-              exec, tfer_seq, single_transfer_limit, memres)
+        : detail::direction_complete_io_base<TSeq, EpDirection>(exec, tfer_seq,
+                                                                single_transfer_limit, memres)
     {
         prefill_control_transfer(tfer_seq, endpoint, timeout_ms);
     }
 };
 
-template <detail::TransferSequence TSeq>
-using control_transfer_sink = control_transfer_complete_io<TSeq, endpoint_direction::out>;
-template <detail::TransferSequence TSeq>
-using control_transfer_source = control_transfer_complete_io<TSeq, endpoint_direction::in>;
-
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
-struct bulk_transfer_complete_io : detail::direction_transfer_complete_io_base<TSeq, EpDirection>
+struct bulk_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
-    explicit bulk_transfer_complete_io (
-        boost::capy::executor_ref exec, TSeq const &tfer_seq, endpoint<EpDirection> endpoint,
-        size_t single_transfer_limit,
-        std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0},
-        std::pmr::memory_resource *memres = std::pmr::get_default_resource())
-        : detail::direction_transfer_complete_io_base<TSeq, EpDirection>(
-              exec, tfer_seq, single_transfer_limit, memres)
+    explicit bulk_complete_io (boost::capy::executor_ref exec, TSeq const &tfer_seq,
+                               endpoint<EpDirection> endpoint, size_t single_transfer_limit,
+                               std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0},
+                               std::pmr::memory_resource *memres = std::pmr::get_default_resource())
+        : detail::direction_complete_io_base<TSeq, EpDirection>(exec, tfer_seq,
+                                                                single_transfer_limit, memres)
     {
         prefill_bulk_transfer(tfer_seq, endpoint, timeout_ms);
     }
 };
 
-template <detail::TransferSequence TSeq>
-using bulk_transfer_sink = bulk_transfer_complete_io<TSeq, endpoint_direction::out>;
-template <detail::TransferSequence TSeq>
-using bulk_transfer_source = bulk_transfer_complete_io<TSeq, endpoint_direction::in>;
-
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
-struct interrupt_transfer_complete_io
-    : detail::direction_transfer_complete_io_base<TSeq, EpDirection>
+struct interrupt_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
-    explicit interrupt_transfer_complete_io (
+    explicit interrupt_complete_io (
         boost::capy::executor_ref exec, TSeq const &tfer_seq, endpoint<EpDirection> endpoint,
         size_t single_transfer_limit,
         std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0},
         std::pmr::memory_resource *memres = std::pmr::get_default_resource())
-        : detail::direction_transfer_complete_io_base<TSeq, EpDirection>(
-              exec, tfer_seq, single_transfer_limit, memres)
+        : detail::direction_complete_io_base<TSeq, EpDirection>(exec, tfer_seq,
+                                                                single_transfer_limit, memres)
     {
         prefill_interrupt_transfer(tfer_seq, endpoint, timeout_ms);
     }
 };
 
-template <detail::TransferSequence TSeq>
-using interrupt_transfer_sink = interrupt_transfer_complete_io<TSeq, endpoint_direction::out>;
-template <detail::TransferSequence TSeq>
-using interrupt_transfer_source = interrupt_transfer_complete_io<TSeq, endpoint_direction::in>;
-
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
-struct isochronous_transfer_complete_io
-    : detail::direction_transfer_complete_io_base<TSeq, EpDirection>
+struct isochronous_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
-    explicit isochronous_transfer_complete_io (
+    explicit isochronous_complete_io (
         boost::capy::executor_ref exec, TSeq const &tfer_seq, endpoint<EpDirection> endpoint,
         int iso_packets, size_t single_transfer_limit,
         std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0},
         std::pmr::memory_resource *memres = std::pmr::get_default_resource())
-        : detail::direction_transfer_complete_io_base<TSeq, EpDirection>(
-              exec, tfer_seq, single_transfer_limit, memres)
+        : detail::direction_complete_io_base<TSeq, EpDirection>(exec, tfer_seq,
+                                                                single_transfer_limit, memres)
     {
         prefill_iso_transfer(tfer_seq, endpoint, iso_packets, timeout_ms);
     }
 };
 
-template <detail::TransferSequence TSeq>
-using isochronous_transfer_sink = isochronous_transfer_complete_io<TSeq, endpoint_direction::out>;
-template <detail::TransferSequence TSeq>
-using isochronous_transfer_source = isochronous_transfer_complete_io<TSeq, endpoint_direction::in>;
-
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
-struct bulk_stream_transfer_complete_io
-    : detail::direction_transfer_complete_io_base<TSeq, EpDirection>
+struct bulk_stream_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
-    explicit bulk_stream_transfer_complete_io (
+    explicit bulk_stream_complete_io (
         boost::capy::executor_ref exec, TSeq const &tfer_seq, endpoint<EpDirection> endpoint,
         uint32_t stream_id, size_t single_transfer_limit,
         std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0},
         std::pmr::memory_resource *memres = std::pmr::get_default_resource())
-        : detail::direction_transfer_complete_io_base<TSeq, EpDirection>(
-              exec, tfer_seq, single_transfer_limit, memres)
+        : detail::direction_complete_io_base<TSeq, EpDirection>(exec, tfer_seq,
+                                                                single_transfer_limit, memres)
     {
         prefill_bulk_stream_transfer(tfer_seq, endpoint, stream_id, timeout_ms);
     }
 };
 
 template <detail::TransferSequence TSeq>
-using bulk_stream_transfer_sink = bulk_stream_transfer_complete_io<TSeq, endpoint_direction::out>;
+using control_sink = control_complete_io<TSeq, endpoint_direction::out>;
 template <detail::TransferSequence TSeq>
-using bulk_stream_transfer_source = bulk_stream_transfer_complete_io<TSeq, endpoint_direction::in>;
+using control_source = control_complete_io<TSeq, endpoint_direction::in>;
 
-} // namespace co_usb
+template <detail::TransferSequence TSeq>
+using bulk_sink = bulk_complete_io<TSeq, endpoint_direction::out>;
+template <detail::TransferSequence TSeq>
+using bulk_source = bulk_complete_io<TSeq, endpoint_direction::in>;
+
+template <detail::TransferSequence TSeq>
+using interrupt_sink = interrupt_complete_io<TSeq, endpoint_direction::out>;
+template <detail::TransferSequence TSeq>
+using interrupt_source = interrupt_complete_io<TSeq, endpoint_direction::in>;
+
+template <detail::TransferSequence TSeq>
+using isochronous_sink = isochronous_complete_io<TSeq, endpoint_direction::out>;
+template <detail::TransferSequence TSeq>
+using isochronous_source = isochronous_complete_io<TSeq, endpoint_direction::in>;
+
+template <detail::TransferSequence TSeq>
+using bulk_stream_sink = bulk_stream_complete_io<TSeq, endpoint_direction::out>;
+template <detail::TransferSequence TSeq>
+using bulk_stream_source = bulk_stream_complete_io<TSeq, endpoint_direction::in>;
+
+} // namespace co_usb::transfer

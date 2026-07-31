@@ -1,8 +1,9 @@
 #pragma once
 
-#include "co_usb/transfer/detail/device_handle_source.hpp"
 #include "co_usb/usb_error.hpp"
+#include "co_usb/wrapper/detail/device_handle_source.hpp"
 #include "co_usb/wrapper/detail/error_protocol.hpp"
+#include "co_usb/wrapper/error_protocol.hpp"
 #include <libusb.h>
 #include <system_error>
 
@@ -21,7 +22,7 @@ struct interface
         }
     }
 
-    interface(interface const &)            = delete;
+    interface(interface const &) = delete;
     interface &operator=(interface const &) = delete;
 
     interface (interface &&other) noexcept
@@ -42,9 +43,9 @@ struct interface
         {
             throw std::system_error{ec};
         }
-        m_devh          = other.m_devh;
+        m_devh = other.m_devh;
         m_interface_num = other.m_interface_num;
-        other.m_devh    = nullptr;
+        other.m_devh = nullptr;
         return *this;
     }
 
@@ -85,7 +86,8 @@ static_assert(detail::DeviceHandleSource<interface>, "Not a proper device handle
 
 template <detail::ErrorProtocol<interface> ErrTy>
 auto claim_interface (detail::DeviceHandleSource auto const &devh_src, int interface_num,
-                      ErrTy &&errp) noexcept -> typename ErrTy::template return_type<interface>
+                      ErrTy &&errp = as_exception()) noexcept ->
+    typename ErrTy::template return_type<interface>
 {
     try
     {

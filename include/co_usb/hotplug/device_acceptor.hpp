@@ -30,7 +30,7 @@ namespace co_usb
 {
 
 /**
- * @ingroup Hotplug
+ * @ingroup hotplug
  *
  * @brief Asio/Corosio-like acceptor for devices via hotplug API.
  *
@@ -109,7 +109,7 @@ struct device_acceptor
                     self.m_arrived_devices.emplace_back(device_ref{dev});
                     return 0;
                 }
-                resumption_t *r    = self.m_resumptions.front();
+                resumption_t *r = self.m_resumptions.front();
                 r->op_res->dev_ref = device_ref{dev};
                 r->env->executor.post(r->cont);
                 self.m_resumptions.erase(self.m_resumptions.begin());
@@ -136,8 +136,8 @@ struct device_acceptor
 
     auto accept () -> boost::capy::io_task<device_ref>
     {
-        auto exec  = co_await boost::capy::this_coro::executor;
-        auto stop  = co_await boost::capy::this_coro::stop_token;
+        auto exec = co_await boost::capy::this_coro::executor;
+        auto stop = co_await boost::capy::this_coro::stop_token;
         auto alloc = co_await boost::capy::this_coro::frame_allocator;
         op_result op_res{};
         resumption_t res{};
@@ -164,10 +164,10 @@ struct device_acceptor
         co_return co_await awaitable(this, &op_res, &res);
     }
 
-    device_acceptor(const device_acceptor &)            = delete;
+    device_acceptor(const device_acceptor &) = delete;
     device_acceptor &operator=(const device_acceptor &) = delete;
-    device_acceptor(device_acceptor &&)                 = delete;
-    device_acceptor &operator=(device_acceptor &&)      = delete;
+    device_acceptor(device_acceptor &&) = delete;
+    device_acceptor &operator=(device_acceptor &&) = delete;
 
   private:
     struct op_result

@@ -2,7 +2,7 @@
 
 #include "co_usb/transfer/detail/transfer_sequence.hpp"
 #include <memory>
-namespace co_usb::detail
+namespace co_usb::transfer::detail
 {
 
 constexpr struct
@@ -54,4 +54,4 @@ constexpr struct
 
 } transfer_end{};
 
-} // namespace co_usb::detail
+} // namespace co_usb::transfer::detail

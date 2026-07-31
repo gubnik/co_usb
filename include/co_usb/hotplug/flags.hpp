@@ -11,14 +11,14 @@ namespace co_usb
 {
 
 /**
- * @ingroup Hotplug
+ * @ingroup hotplug
  *
  * @brief enum type for libusb_hotplug_event
  */
 using hotplug_event = detail::flag_type<libusb_hotplug_event, struct hotplug_event_t>;
 
 /**
- * @ingroup Hotplug
+ * @ingroup hotplug
  *
  * @brief enum type for libusb_hotplug_flag
  */

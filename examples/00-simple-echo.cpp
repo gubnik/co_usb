@@ -30,9 +30,9 @@ boost::capy::task<> echo (const co_usb::interface &iface)
     // direction. This ensures that you cannot read from an out endpoint and write into the read
     // one. Of course, control_transfer supports both read and write operation, as per specification
     // for control endpoint, and does not take endpoint parameter at all.
-    co_usb::transfer_resource tfers[2];
-    co_usb::bulk_transfer_read_stream in_tfer{exec, tfers[0], co_usb::endpoint_in(0x81, iface)};
-    co_usb::bulk_transfer_write_stream out_tfer{exec, tfers[1], co_usb::endpoint_out(0x02, iface)};
+    co_usb::transfer::resource tfers[2];
+    co_usb::transfer::bulk_in in_tfer{exec, tfers[0], co_usb::transfer::ep_in(0x81, iface)};
+    co_usb::transfer::bulk_out out_tfer{exec, tfers[1], co_usb::transfer::ep_out(0x02, iface)};
     while (!stop.stop_requested())
     {
         // partial read from an endpoint. Transfer types are qualified ReadStream/WriteStream and

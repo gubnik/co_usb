@@ -52,9 +52,9 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
 
     // allocate and pre-fill the transfer
     // libusb doesn't have allocator API so we can't propagate frame allocator
-    std::vector<co_usb::transfer_resource> tfers;
+    std::vector<co_usb::transfer::resource> tfers;
     tfers.resize(4);
-    co_usb::bulk_transfer_read_stream in_tfer{exec, tfers, co_usb::endpoint_in(0x01, iface), 50ms};
+    co_usb::transfer::bulk_in in_tfer{exec, tfers, co_usb::transfer::ep_in(0x01, iface), 50ms};
 
     // create and fill a lot of large buffers
     constexpr size_t bufsz = 1 << 18;

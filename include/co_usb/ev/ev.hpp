@@ -1,3 +1,7 @@
+/**
+ * @defgroup event_handler Event handler logic
+ */
+
 #pragma once
 
 #include "co_usb/ev/any_event_handler.hpp"

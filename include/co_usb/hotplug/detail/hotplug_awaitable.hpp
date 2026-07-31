@@ -13,7 +13,7 @@ namespace co_usb::detail
 {
 
 /**
- * @ingroup Hotplug
+ * @ingroup hotplug
  *
  * @brief Low-level awaitable primitive for strapping hotplug callbacks to a coroutine ecosystem.
  *
@@ -75,17 +75,17 @@ struct hotplug_awaitable
             op_res->ec = std::make_error_code(std::errc::operation_canceled);
             return h;
         }
-        res->cont   = {h};
+        res->cont = {h};
         res->io_env = env;
         res->op_res = op_res;
-        auto r      = libusb_hotplug_register_callback(
+        auto r = libusb_hotplug_register_callback(
             ctx, events, flags, vid, pid, dev_class,
             [] (libusb_context *ctx, libusb_device *dev, libusb_hotplug_event ev,
                 void *user_data) -> int
             {
-                resumption_t *res  = (resumption_t *)user_data;
+                resumption_t *res = (resumption_t *)user_data;
                 res->op_res->event = hotplug_event(ev);
-                res->op_res->dev   = device_ref{dev};
+                res->op_res->dev = device_ref{dev};
                 res->io_env->executor.post(res->cont);
                 return 1;
             },

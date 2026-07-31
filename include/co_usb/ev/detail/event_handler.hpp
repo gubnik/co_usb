@@ -16,6 +16,8 @@ namespace co_usb::detail
 {
 
 /**
+ * @ingroup event_handler
+ *
  * @concept EventHandler
  * @tparam Ty Type satisfying the EventHandler contract.
  *

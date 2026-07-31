@@ -25,6 +25,8 @@ namespace co_usb::detail
 {
 
 /**
+ * @ingroup event_handler
+ *
  * @brief Execution context service that owns a libusb context and an event handler.
  *
  * @details Since co_usb is bound to Capy and as such its task could get rather scattered across

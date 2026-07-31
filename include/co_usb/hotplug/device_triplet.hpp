@@ -6,7 +6,7 @@ namespace co_usb
 {
 
 /**
- * @ingroup Hotplug
+ * @ingroup hotplug
  *
  * @brief An aggregate struct to pass to functions requiring device information.
  *
@@ -14,8 +14,8 @@ namespace co_usb
  */
 struct device_triplet
 {
-    int vid       = LIBUSB_HOTPLUG_MATCH_ANY;
-    int pid       = LIBUSB_HOTPLUG_MATCH_ANY;
+    int vid = LIBUSB_HOTPLUG_MATCH_ANY;
+    int pid = LIBUSB_HOTPLUG_MATCH_ANY;
     int dev_class = LIBUSB_HOTPLUG_MATCH_ANY;
 
     constexpr bool operator==(device_triplet const &other) const noexcept

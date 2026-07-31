@@ -18,7 +18,7 @@
 #include <unordered_map>
 #include <utility>
 
-namespace co_usb::detail
+namespace co_usb::transfer::detail
 {
 
 template <detail::TransferSequence TSeq, AnyBufferSequence BuffersTy>
@@ -91,7 +91,7 @@ struct complete_sequence_awaitable
                     {
                         std::unique_lock lock{self.await_state->mutex};
                         self.await_state->ec = make_transfer_status(
-                            static_cast<transfer_status>(tfer->iso_packet_desc[i].status));
+                            static_cast<status>(tfer->iso_packet_desc[i].status));
                     }
                     resume_on_zero();
                     return;
@@ -107,8 +107,7 @@ struct complete_sequence_awaitable
         {
             {
                 std::unique_lock lock{self.await_state->mutex};
-                self.await_state->ec =
-                    make_transfer_status(static_cast<transfer_status>(tfer->status));
+                self.await_state->ec = make_transfer_status(static_cast<status>(tfer->status));
             }
             resume_on_zero();
             return;
@@ -172,7 +171,7 @@ struct complete_sequence_awaitable
     {
         if (io_env->stop_token.stop_requested())
         {
-            await_state->ec = make_transfer_status(transfer_status::cancelled);
+            await_state->ec = make_transfer_status(status::cancelled);
             return h;
         }
         await_state->io_env = io_env;
@@ -200,7 +199,7 @@ struct complete_sequence_awaitable
             if (r != LIBUSB_SUCCESS) [[unlikely]]
             {
                 std::unique_lock lock{await_state->mutex};
-                await_state->ec = make_transfer_status(static_cast<transfer_status>(r));
+                await_state->ec = make_transfer_status(static_cast<status>(r));
                 lock.unlock();
                 break;
             }
@@ -235,4 +234,4 @@ static_assert(boost::capy::IoAwaitable<complete_sequence_awaitable<std::vector<l
                                                                    boost::capy::const_buffer>>,
               "Not a proper IoAwaitable");
 
-} // namespace co_usb::detail
+} // namespace co_usb::transfer::detail

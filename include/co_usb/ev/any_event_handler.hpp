@@ -11,6 +11,8 @@ namespace co_usb
 struct event_handler_ref;
 
 /**
+ * @ingroup event_handler
+ *
  * @brief Owning type-erased wrapper for @ref EventHandler.
  *
  * @details This wrapper cannot type-erase objects of its own type and @ref event_handler_ref.
@@ -50,9 +52,9 @@ struct any_event_handler
     auto emplace (std::pmr::memory_resource *memres, Args &&...args)
     {
         destroy();
-        m_memres  = memres;
+        m_memres = memres;
         m_storage = construct_storage<HandlerTy>(m_memres, std::forward<Args>(args)...);
-        m_vtable  = make_vtable<HandlerTy>();
+        m_vtable = make_vtable<HandlerTy>();
     }
 
     template <detail::EventHandler HandlerTy, typename... Args>
@@ -64,7 +66,7 @@ struct any_event_handler
         emplace<HandlerTy>(m_memres, std::forward<Args>(args)...);
     }
 
-    any_event_handler(any_event_handler const &other)            = delete;
+    any_event_handler(any_event_handler const &other) = delete;
     any_event_handler &operator=(any_event_handler const &other) = delete;
 
     any_event_handler (any_event_handler &&other) noexcept
@@ -80,9 +82,9 @@ struct any_event_handler
             return *this;
         }
         destroy();
-        m_vtable        = other.m_vtable;
-        m_memres        = other.m_memres;
-        m_storage       = other.m_storage;
+        m_vtable = other.m_vtable;
+        m_memres = other.m_memres;
+        m_storage = other.m_storage;
         other.m_storage = nullptr;
         return *this;
     }
@@ -137,10 +139,10 @@ struct any_event_handler
     struct vtable
     {
         using start_fn_t = auto (*)(void *, libusb_context *, std::stop_token) -> bool;
-        using ref_fn_t   = auto (*)(void *) noexcept -> void;
+        using ref_fn_t = auto (*)(void *) noexcept -> void;
         using unref_fn_t = auto (*)(void *) noexcept -> void;
-        using stop_fn_t  = auto (*)(void *) -> void;
-        using dtor_fn_t  = auto (*)(void *) -> void;
+        using stop_fn_t = auto (*)(void *) -> void;
+        using dtor_fn_t = auto (*)(void *) -> void;
 
         start_fn_t start_fn{nullptr};
         ref_fn_t ref_fn{nullptr};
@@ -154,10 +156,10 @@ struct any_event_handler
     template <detail::EventHandler HandlerTy, typename... Args>
     auto construct_storage (std::pmr::memory_resource *memres, Args &&...args) -> void *
     {
-        using handler_t  = std::remove_cvref_t<HandlerTy>;
-        const auto size  = sizeof(handler_t);
+        using handler_t = std::remove_cvref_t<HandlerTy>;
+        const auto size = sizeof(handler_t);
         const auto align = alignof(handler_t);
-        void *const ptr  = memres->allocate(size, align);
+        void *const ptr = memres->allocate(size, align);
         try
         {
             new (ptr) handler_t(std::forward<Args>(args)...);
@@ -182,7 +184,7 @@ struct any_event_handler
             .stop_fn = +[] (void *orig) -> void { return static_cast<HandlerTy *>(orig)->stop(); },
             .dtor_fn = +[] (void *orig) -> void
             { return static_cast<HandlerTy *>(orig)->~HandlerTy(); },
-            .size  = sizeof(HandlerTy),
+            .size = sizeof(HandlerTy),
             .align = alignof(HandlerTy),
         };
     }

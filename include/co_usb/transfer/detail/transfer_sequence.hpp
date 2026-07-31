@@ -4,7 +4,7 @@
 #include <ranges>
 #include <type_traits>
 
-namespace co_usb::detail
+namespace co_usb::transfer::detail
 {
 
 template <typename Ty>
@@ -31,4 +31,4 @@ concept TransferSequence =
     TransferResource<Ty> ||
     (std::ranges::bidirectional_range<Ty> && TransferResource<std::ranges::range_value_t<Ty>>);
 
-} // namespace co_usb::detail
+} // namespace co_usb::transfer::detail

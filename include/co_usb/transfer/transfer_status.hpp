@@ -2,9 +2,8 @@
 
 #include <libusb.h>
 #include <system_error>
-#include <type_traits>
 
-namespace co_usb
+namespace co_usb::transfer
 {
 
 /**
@@ -14,7 +13,7 @@ namespace co_usb
  *
  * @note Can be casted from @ref libusb_transfer_status
  */
-enum class transfer_status
+enum class status
 {
     completed = LIBUSB_TRANSFER_COMPLETED,
 
@@ -47,9 +46,9 @@ struct transfer_status_category_t : public std::error_category
 
     std::string message (int v) const override
     {
-        switch (static_cast<transfer_status>(v))
+        switch (static_cast<status>(v))
         {
-            using enum transfer_status;
+            using enum status;
         case completed: return "completed";
         case error: return "error";
         case cancelled: return "cancelled";
@@ -67,7 +66,7 @@ inline const std::error_category &transfer_status_category ()
     return instance;
 }
 
-inline std::error_code make_transfer_status (transfer_status e) noexcept
+inline std::error_code make_transfer_status (status e) noexcept
 {
     return {static_cast<int>(e), transfer_status_category()};
 }
@@ -77,12 +76,12 @@ inline std::error_code make_transfer_status (libusb_transfer_status e) noexcept
     return {static_cast<int>(e), transfer_status_category()};
 }
 
-} // namespace co_usb
+} // namespace co_usb::transfer
 
 namespace std
 {
 
-template <> struct is_error_code_enum<co_usb::transfer_status> : ::std::true_type
+template <> struct is_error_code_enum<co_usb::transfer::status> : ::std::true_type
 {
 };
 

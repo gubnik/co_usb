@@ -18,49 +18,75 @@ static devh_provider iface{};
 
 TEST_CASE("ep-safe", "[endpoint]")
 {
-    REQUIRE(co_usb::endpoint<co_usb::endpoint_direction::in>::make_safe(0x81, iface).addr() ==
-            0x81);
-    REQUIRE(co_usb::endpoint<co_usb::endpoint_direction::in>::make_safe(0x01, iface).addr() ==
-            0x81);
-    REQUIRE(co_usb::endpoint<co_usb::endpoint_direction::in>::make_safe(0x00, iface).addr() ==
-            0x80);
-    REQUIRE(co_usb::endpoint<co_usb::endpoint_direction::in>::make_safe(0x80, iface).addr() ==
-            0x80);
+    REQUIRE(
+        co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::in>::make_safe(0x81, iface)
+            .addr() == 0x81);
+    REQUIRE(
+        co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::in>::make_safe(0x01, iface)
+            .addr() == 0x81);
+    REQUIRE(
+        co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::in>::make_safe(0x00, iface)
+            .addr() == 0x80);
+    REQUIRE(
+        co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::in>::make_safe(0x80, iface)
+            .addr() == 0x80);
 
-    REQUIRE(co_usb::endpoint<co_usb::endpoint_direction::out>::make_safe(0x81, iface).addr() ==
-            0x01);
-    REQUIRE(co_usb::endpoint<co_usb::endpoint_direction::out>::make_safe(0x01, iface).addr() ==
-            0x01);
-    REQUIRE(co_usb::endpoint<co_usb::endpoint_direction::out>::make_safe(0x00, iface).addr() ==
-            0x00);
-    REQUIRE(co_usb::endpoint<co_usb::endpoint_direction::out>::make_safe(0x80, iface).addr() ==
-            0x00);
+    REQUIRE(co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::out>::make_safe(0x81,
+                                                                                             iface)
+                .addr() == 0x01);
+    REQUIRE(co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::out>::make_safe(0x01,
+                                                                                             iface)
+                .addr() == 0x01);
+    REQUIRE(co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::out>::make_safe(0x00,
+                                                                                             iface)
+                .addr() == 0x00);
+    REQUIRE(co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::out>::make_safe(0x80,
+                                                                                             iface)
+                .addr() == 0x00);
 }
 
 TEST_CASE("ep-throwing", "[endpoint]")
 {
     libusb_device_handle *ndevh = nullptr;
-    REQUIRE_NOTHROW(co_usb::endpoint<co_usb::endpoint_direction::in>::make_throwing(0x80, ndevh));
-    REQUIRE_NOTHROW(co_usb::endpoint<co_usb::endpoint_direction::in>::make_throwing(0x81, ndevh));
-    REQUIRE_THROWS_AS(co_usb::endpoint<co_usb::endpoint_direction::in>::make_throwing(0x00, ndevh),
-                      std::invalid_argument);
-    REQUIRE_THROWS_AS(co_usb::endpoint<co_usb::endpoint_direction::in>::make_throwing(0x01, ndevh),
-                      std::invalid_argument);
+    REQUIRE_NOTHROW(
+        co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::in>::make_throwing(0x80,
+                                                                                            ndevh));
+    REQUIRE_NOTHROW(
+        co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::in>::make_throwing(0x81,
+                                                                                            ndevh));
+    REQUIRE_THROWS_AS(
+        co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::in>::make_throwing(0x00,
+                                                                                            ndevh),
+        std::invalid_argument);
+    REQUIRE_THROWS_AS(
+        co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::in>::make_throwing(0x01,
+                                                                                            ndevh),
+        std::invalid_argument);
 
-    REQUIRE_NOTHROW(co_usb::endpoint<co_usb::endpoint_direction::out>::make_throwing(0x00, ndevh));
-    REQUIRE_NOTHROW(co_usb::endpoint<co_usb::endpoint_direction::out>::make_throwing(0x01, ndevh));
-    REQUIRE_THROWS_AS(co_usb::endpoint<co_usb::endpoint_direction::out>::make_throwing(0x80, ndevh),
-                      std::invalid_argument);
-    REQUIRE_THROWS_AS(co_usb::endpoint<co_usb::endpoint_direction::out>::make_throwing(0x81, ndevh),
-                      std::invalid_argument);
+    REQUIRE_NOTHROW(
+        co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::out>::make_throwing(
+            0x00, ndevh));
+    REQUIRE_NOTHROW(
+        co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::out>::make_throwing(
+            0x01, ndevh));
+    REQUIRE_THROWS_AS(
+        co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::out>::make_throwing(0x80,
+                                                                                             ndevh),
+        std::invalid_argument);
+    REQUIRE_THROWS_AS(
+        co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::out>::make_throwing(0x81,
+                                                                                             ndevh),
+        std::invalid_argument);
 }
 
 TEST_CASE("ep-conversion", "[endpoint]")
 {
-    REQUIRE(co_usb::endpoint_any(0x81, iface).as<co_usb::endpoint_direction::in>() != std::nullopt);
-    REQUIRE(co_usb::endpoint_any(0x01, iface).as<co_usb::endpoint_direction::in>() == std::nullopt);
-    REQUIRE(co_usb::endpoint_any(0x01, iface).as<co_usb::endpoint_direction::out>() !=
+    REQUIRE(co_usb::transfer::ep_any(0x81, iface).as<co_usb::transfer::endpoint_direction::in>() !=
             std::nullopt);
-    REQUIRE(co_usb::endpoint_any(0x80, iface).as<co_usb::endpoint_direction::out>() ==
+    REQUIRE(co_usb::transfer::ep_any(0x01, iface).as<co_usb::transfer::endpoint_direction::in>() ==
+            std::nullopt);
+    REQUIRE(co_usb::transfer::ep_any(0x01, iface).as<co_usb::transfer::endpoint_direction::out>() !=
+            std::nullopt);
+    REQUIRE(co_usb::transfer::ep_any(0x80, iface).as<co_usb::transfer::endpoint_direction::out>() ==
             std::nullopt);
 }
