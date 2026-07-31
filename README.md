@@ -25,7 +25,7 @@ Capy based coroutine ecosystem and `libusb` asynchronous code.
 - Iteration over device list
 - Generally, everything that does not relate to asynchronous operations
 
-## Why not Asio??
+## Why not Asio?
 
 Not all USB code needs a whole networking library. Using Capy allows the user to choose not to use
 networking code. If networking is needed the user is free to use `co_usb` with [Corosio](https://github.com/cppalliance/corosio),
@@ -81,8 +81,10 @@ For unit tests, see `./tests`. For QEMU device code, see `./qemu`. I will gladly
 
 ## License
 
-Distributed under the Boost Software License, Version 1.0.
+Source code of the library is distributed under the Boost Software License, Version 1.0.
 (See accompanying file [LICENSE.md](LICENSE.md) or copy at
 https://www.boost.org/LICENSE_1_0.txt)
 
-QEMU devices code at `qemu/` is distributed under GNU General Public License v3
+QEMU devices code at `qemu/` is distributed under GNU General Public License v3.
+(See accompanying file [qemu/LICENSE.md](qemu/LICENSE.md) or copy at
+https://www.gnu.org/licenses/gpl-3.0.md)
