@@ -8,15 +8,6 @@
 namespace co_usb::transfer
 {
 
-enum class endpoint_type : uint8_t
-{
-    control = 0,
-    bulk,
-    interrupt,
-    isochronous,
-    bulk_stream,
-};
-
 enum class endpoint_direction
 {
     out = 0x00,
