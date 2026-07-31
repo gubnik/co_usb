@@ -122,7 +122,7 @@ TEST_CASE("transfer-sequence-view", "[transfer]")
         [] () -> bool
         {
             co_usb::transfer::resource tfer;
-            co_usb::transfer::transfer_sequence_view pool_1{tfer};
+            co_usb::transfer::sequence_view pool_1{tfer};
             if (pool_1.size() != 1)
             {
                 return false;
@@ -134,7 +134,7 @@ TEST_CASE("transfer-sequence-view", "[transfer]")
         {
             std::vector<co_usb::transfer::resource> tfers;
             tfers.resize(16);
-            co_usb::transfer::transfer_sequence_view pool_1{tfers};
+            co_usb::transfer::sequence_view pool_1{tfers};
             if (pool_1.size() != 16)
             {
                 return false;

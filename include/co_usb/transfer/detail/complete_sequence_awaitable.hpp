@@ -2,8 +2,8 @@
 
 #include "co_usb/transfer/detail/any_buffer_sequence.hpp"
 #include "co_usb/transfer/detail/transfer_sequence.hpp"
-#include "co_usb/transfer/transfer_sequence_view.hpp"
-#include "co_usb/transfer/transfer_status.hpp"
+#include "co_usb/transfer/sequence_view.hpp"
+#include "co_usb/transfer/status.hpp"
 #include "co_usb/usb_error.hpp"
 #include <boost/capy/buffers.hpp>
 #include <boost/capy/concept/io_awaitable.hpp>
@@ -24,7 +24,7 @@ namespace co_usb::transfer::detail
 template <detail::TransferSequence TSeq, AnyBufferSequence BuffersTy>
 struct complete_sequence_awaitable
 {
-    using tfer_iter_t = transfer_sequence_view<TSeq>::iterator_type;
+    using tfer_iter_t = sequence_view<TSeq>::iterator_type;
     using buf_iter_t = decltype(boost::capy::begin(std::declval<BuffersTy const &>()));
     using buffer_t = boost::capy::buffer_type<BuffersTy>;
 
@@ -146,7 +146,7 @@ struct complete_sequence_awaitable
     }
 
     explicit inline complete_sequence_awaitable (await_state_t *await_state,
-                                                 transfer_sequence_view<TSeq> *seq_view,
+                                                 sequence_view<TSeq> *seq_view,
                                                  BuffersTy const &buffers, size_t submission_size,
                                                  size_t single_transfer_limit)
         : await_state(await_state), view(seq_view), buf_current(boost::capy::begin(buffers)),
@@ -176,7 +176,7 @@ struct complete_sequence_awaitable
         }
         await_state->io_env = io_env;
         await_state->cont = {h};
-        transfer_sequence_view<TSeq> &v = *view;
+        sequence_view<TSeq> &v = *view;
         const tfer_iter_t end = v.end() + submission_size;
         for (tfer_iter_t iter = v.begin(); iter != end; iter++)
         {
@@ -218,7 +218,7 @@ struct complete_sequence_awaitable
     }
 
     await_state_t *await_state;
-    transfer_sequence_view<TSeq> *view;
+    sequence_view<TSeq> *view;
 
     buf_iter_t buf_current;
     buf_iter_t buf_end;

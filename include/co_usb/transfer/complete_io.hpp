@@ -4,8 +4,8 @@
 #include "co_usb/transfer/detail/complete_sequence_awaitable.hpp"
 #include "co_usb/transfer/detail/transfer_sequence.hpp"
 #include "co_usb/transfer/endpoint.hpp"
+#include "co_usb/transfer/operations.hpp"
 #include "co_usb/transfer/stream.hpp"
-#include "co_usb/transfer/transfer_operations.hpp"
 #include <boost/capy/io_task.hpp>
 #include <memory_resource>
 

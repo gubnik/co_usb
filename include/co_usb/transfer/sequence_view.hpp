@@ -19,22 +19,21 @@ namespace co_usb::transfer
  *
  * @note Cannot bind to a temporary view.
  */
-template <detail::TransferSequence Seq> struct transfer_sequence_view
+template <detail::TransferSequence Seq> struct sequence_view
 {
     using iterator_type = decltype(detail::transfer_begin(std::declval<Seq const &>()));
 
-    transfer_sequence_view (Seq const &seq) noexcept
+    sequence_view (Seq const &seq) noexcept
         : m_begin(detail::transfer_begin(seq)), m_end(detail::transfer_end(seq))
     {
     }
 
-    transfer_sequence_view (iterator_type begin, iterator_type end) noexcept
-        : m_begin(begin), m_end(end)
+    sequence_view (iterator_type begin, iterator_type end) noexcept : m_begin(begin), m_end(end)
     {
     }
 
     // disallow bind to temporary view
-    transfer_sequence_view(Seq const &&) = delete;
+    sequence_view(Seq const &&) = delete;
 
     auto size () const noexcept -> size_t
     {
@@ -56,10 +55,10 @@ template <detail::TransferSequence Seq> struct transfer_sequence_view
     iterator_type m_end;
 };
 
-template <class Seq> transfer_sequence_view(Seq &) -> transfer_sequence_view<Seq>;
-static_assert(detail::TransferSequence<transfer_sequence_view<libusb_transfer *>>,
+template <class Seq> sequence_view(Seq &) -> sequence_view<Seq>;
+static_assert(detail::TransferSequence<sequence_view<libusb_transfer *>>,
               "Not a proper transfer sequence");
-static_assert(detail::TransferSequence<transfer_sequence_view<std::vector<libusb_transfer *>>>,
+static_assert(detail::TransferSequence<sequence_view<std::vector<libusb_transfer *>>>,
               "Not a proper transfer sequence");
 
 } // namespace co_usb::transfer

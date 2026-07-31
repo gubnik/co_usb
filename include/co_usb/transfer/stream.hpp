@@ -6,8 +6,8 @@
 #include "co_usb/transfer/detail/sequence_awaitable.hpp"
 #include "co_usb/transfer/detail/transfer_sequence.hpp"
 #include "co_usb/transfer/endpoint.hpp"
-#include "co_usb/transfer/transfer_operations.hpp"
-#include "co_usb/transfer/transfer_sequence_view.hpp"
+#include "co_usb/transfer/operations.hpp"
+#include "co_usb/transfer/sequence_view.hpp"
 #include <boost/capy/buffers.hpp>
 #include <boost/capy/ex/executor_ref.hpp>
 #include <boost/capy/ex/this_coro.hpp>
@@ -88,7 +88,7 @@ template <detail::TransferSequence TSeq> struct partial_io_base
 
   protected:
     event_handler_ref m_ev_ref;
-    transfer_sequence_view<TSeq> m_view;
+    sequence_view<TSeq> m_view;
 };
 
 /**
