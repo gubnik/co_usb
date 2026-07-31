@@ -1,11 +1,10 @@
 /**
- * @file 05-stream.cpp
+ * @file 03-complete-io.cpp
  * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  *
- * An example program demonstrating proper transfer cancellation logic via a relatively simple
- * "Hello, world!"-type program.
+ * An example program demonstrating complete I/O principles.
  *
- * It will likely not work for a random device :-)
+ * It is a derivative of example 02.
  */
 
 #include <array>
@@ -31,13 +30,7 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
 
     std::error_code ec;
     // open the device
-    auto maybe_devh = dev.valid() ? co_usb::open_device(dev, co_usb::as_optional(ec))
-                                  : co_usb::open_device(exec,
-                                                        {
-                                                            .vid = dev_vid,
-                                                            .pid = dev_pid,
-                                                        },
-                                                        co_usb::as_optional(ec));
+    auto maybe_devh = co_usb::open_device(dev, co_usb::as_optional(ec));
     if (ec)
     {
         std::println(stderr, "Error during device opening: {}", ec.message());
@@ -46,6 +39,7 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
     auto devh = std::move(*maybe_devh);
 
     // guard to detach and reattach kernel driver
+    // we can ignore the expected's actual result
     auto maybe_guard = co_usb::detach_driver(devh, dev_iface_num, co_usb::as_expected());
 
     // claim the interface
@@ -57,33 +51,25 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
     }
     auto iface = std::move(*maybe_iface);
 
+    size_t total_bytes{0};
+
+    // prepare a large buffer
+    constexpr size_t bufsz = 1 << 18;
+    char buf[16 * bufsz];
+
+    // prepare transfer resource
     std::vector<co_usb::transfer_resource> transfers_in;
     transfers_in.resize(6);
 
-    /*
-    co_usb::prefill_bulk_transfer(transfers_in, co_usb::endpoint_in(0x01, iface), 50ms);
-    co_usb::raw_transfer_stream in_stream{transfers_in};
-    */
-
     const auto ep_in = co_usb::endpoint_in(0x01, iface);
-    // co_usb::bulk_transfer_stream bulk_in_stream{exec, transfers_in, ep_in, 50ms};
+    // create a buffer source
+    // last parameter (bufsz) is a size limit for a single transfer, otherwise we'd attempt
+    // a read with a buffer size that the kernel may disallow
+    co_usb::bulk_transfer_source complete_io{exec, transfers_in, ep_in, bufsz};
 
-    co_usb::bulk_transfer_source complete_io{exec, transfers_in, ep_in};
-
-    size_t total_bytes{0};
-
-    constexpr size_t bufsz = 1 << 18;
-    char buf[16][bufsz];
-    std::array<boost::capy::mutable_buffer, 16> bufs_in;
-    for (size_t i = 0; i < bufs_in.size(); i++)
+    while (stop.stop_requested())
     {
-        bufs_in[i] = boost::capy::mutable_buffer{buf[i], bufsz};
-    }
-    while (1) //! stop.stop_requested())
-    {
-        // auto [rec, rn] = co_await bulk_in_stream.read_some(bufs_in);
-        auto [rec, rn] =
-            co_await complete_io.read_all(boost::capy::mutable_buffer{buf, 16 * bufsz}, bufsz);
+        auto [rec, rn] = co_await complete_io.read(boost::capy::mutable_buffer{buf, sizeof(buf)});
         total_bytes += rn;
         if (!rec)
         {

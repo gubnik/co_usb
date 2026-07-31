@@ -1,5 +1,5 @@
 /**
- * @file 04-cancellation.cpp
+ * @file 02-hotplug-integration.cpp
  * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  *
  * An example program demonstrating proper transfer cancellation logic via a relatively simple
@@ -12,7 +12,6 @@
 #include <boost/capy.hpp>
 #include <chrono>
 #include <co_usb/co_usb.hpp>
-#include <csignal>
 #include <libusb.h>
 #include <print>
 #include <ranges>
@@ -116,8 +115,6 @@ boost::capy::task<> accept_hotplug ()
     }
     acceptor.shutdown();
 }
-
-volatile sig_atomic_t g_sigint = 0;
 
 int main (int argc, char **argv)
 {
