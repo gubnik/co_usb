@@ -118,9 +118,9 @@ struct device_acceptor
                 if (ev == LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT)
                 {
                     std::unique_lock lock{self.m_mutex};
-                    auto it =
-                        std::ranges::find_if(self.m_arrived_devices, [&] (dev_info_t const &info)
-                                             { return info.triplet == triplet; });
+                    auto it = std::ranges::find_if(
+                        self.m_arrived_devices, [&] (dev_info_t const &info)
+                        { return wildcard_triplet_comparator()(info.triplet, triplet); });
                     if (it != self.m_arrived_devices.end())
                     {
                         self.m_arrived_devices.erase(it);

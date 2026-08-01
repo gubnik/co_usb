@@ -25,7 +25,7 @@ struct device_triplet
     }
 };
 
-struct triplet_comparator
+struct wildcard_triplet_comparator
 {
     constexpr bool operator()(const device_triplet &lhs, const device_triplet &rhs) const
     {
