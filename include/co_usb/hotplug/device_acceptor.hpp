@@ -34,9 +34,18 @@ namespace co_usb::hotplug
  *
  * @brief Asio/Corosio-like acceptor for devices via hotplug API.
  *
- * @details Use this class to create a structured accept loop for your application.
- * The acceptor allows for foregoing suspension entirely if the device arrived before `acccept` was
- * called.
+ * @details Provides a common interface for waiting on hotplug arrive events.
+ * The acceptor operates with a single hotplug callback with target set to a device triplet
+ * values provided via `bind` method.
+ *
+ * @par Device detachment
+ * If the device was connected and then detached while no `accept` was active, it will be removed
+ * from the internal list and will have to be reconnected to be accepted again.
+ *
+ * @par Symmetric transfer
+ * Any device that arrives after the `listen` was called will
+ * be collected into acceptor's storage, thus allowing to avoid a suspension on `accept` if the
+ * device is already connected.
  */
 struct device_acceptor
 {
@@ -96,23 +105,40 @@ struct device_acceptor
         }
         libusb_hotplug_callback_handle handle;
         auto r = libusb_hotplug_register_callback(
-            m_usb_ctx, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED, LIBUSB_HOTPLUG_ENUMERATE, m_filter.vid,
-            m_filter.pid, m_filter.dev_class,
+            m_usb_ctx, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED | LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT,
+            LIBUSB_HOTPLUG_ENUMERATE, m_filter.vid, m_filter.pid, m_filter.dev_class,
             [] (libusb_context *ctx, libusb_device *dev, libusb_hotplug_event ev,
                 void *user_data) -> int
             {
+                libusb_device_descriptor dev_desc;
+                libusb_get_device_descriptor(dev, &dev_desc);
+                device_triplet const triplet = triplet_from_descriptor(dev_desc);
                 device_ref dev_ref{dev};
                 device_acceptor &self = *static_cast<device_acceptor *>(user_data);
-                std::unique_lock lock{self.m_mutex};
-                if (self.m_resumptions.empty())
+                if (ev == LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT)
                 {
-                    self.m_arrived_devices.emplace_back(device_ref{dev});
-                    return 0;
+                    std::unique_lock lock{self.m_mutex};
+                    auto it =
+                        std::ranges::find_if(self.m_arrived_devices, [&] (dev_info_t const &info)
+                                             { return info.triplet == triplet; });
+                    if (it != self.m_arrived_devices.end())
+                    {
+                        self.m_arrived_devices.erase(it);
+                    }
                 }
-                resumption_t *r = self.m_resumptions.front();
-                r->op_res->dev_ref = device_ref{dev};
-                r->env->executor.post(r->cont);
-                self.m_resumptions.erase(self.m_resumptions.begin());
+                else
+                {
+                    std::unique_lock lock{self.m_mutex};
+                    if (self.m_resumptions.empty())
+                    {
+                        self.m_arrived_devices.emplace_back(triplet, device_ref{dev});
+                        return 0;
+                    }
+                    resumption_t *r = self.m_resumptions.front();
+                    r->op_res->dev_ref = device_ref{dev};
+                    r->env->executor.post(r->cont);
+                    self.m_resumptions.erase(self.m_resumptions.begin());
+                }
                 return 0;
             },
             this, &handle);
@@ -183,20 +209,26 @@ struct device_acceptor
         op_result *op_res{nullptr};
     };
 
+    struct dev_info_t
+    {
+        device_triplet triplet;
+        device_ref dev_ref;
+    };
+
     struct awaitable
     {
         explicit awaitable (device_acceptor *acceptor, op_result *state, resumption_t *res)
-            : acceptor(acceptor), op_res(state), res(res)
+            : acceptor_ptr(acceptor), op_res(state), res(res)
         {
         }
 
         inline bool await_ready ()
         {
-            std::unique_lock lock{acceptor->m_mutex};
-            if (!acceptor->m_arrived_devices.empty())
+            std::unique_lock lock{acceptor_ptr->m_mutex};
+            if (!acceptor_ptr->m_arrived_devices.empty())
             {
-                op_res->dev_ref = acceptor->m_arrived_devices.back();
-                acceptor->m_arrived_devices.pop_back();
+                op_res->dev_ref = acceptor_ptr->m_arrived_devices.back().dev_ref;
+                acceptor_ptr->m_arrived_devices.pop_back();
                 return true;
             }
             return false;
@@ -207,27 +239,27 @@ struct device_acceptor
         {
             if (env->stop_token.stop_requested())
             {
-                std::unique_lock lock{acceptor->m_mutex};
+                std::unique_lock lock{acceptor_ptr->m_mutex};
                 op_res->ec = std::make_error_code(std::errc::operation_canceled);
                 return h;
             }
 
-            std::unique_lock lock{acceptor->m_mutex};
-            if (!acceptor->m_arrived_devices.empty())
+            std::unique_lock lock{acceptor_ptr->m_mutex};
+            if (!acceptor_ptr->m_arrived_devices.empty())
             {
-                op_res->dev_ref = acceptor->m_arrived_devices.back();
-                acceptor->m_arrived_devices.pop_back();
+                op_res->dev_ref = acceptor_ptr->m_arrived_devices.back().dev_ref;
+                acceptor_ptr->m_arrived_devices.pop_back();
                 return h;
             }
 
             *res = resumption_t{env, boost::capy::continuation{h}, op_res};
-            acceptor->m_resumptions.emplace_back(res);
+            acceptor_ptr->m_resumptions.emplace_back(res);
             return std::noop_coroutine();
         }
 
         inline boost::capy::io_result<device_ref> await_resume ()
         {
-            std::unique_lock lock{acceptor->m_mutex};
+            std::unique_lock lock{acceptor_ptr->m_mutex};
             if (op_res->ec)
             {
                 return {op_res->ec, device_ref{}};
@@ -235,7 +267,7 @@ struct device_acceptor
             return {std::error_code{}, op_res->dev_ref};
         }
 
-        device_acceptor *acceptor;
+        device_acceptor *acceptor_ptr;
         op_result *op_res;
         resumption_t *res;
     };
@@ -245,7 +277,7 @@ struct device_acceptor
     std::pmr::memory_resource *m_memres;
 
     std::pmr::list<resumption_t *> m_resumptions{};
-    std::pmr::list<device_ref> m_arrived_devices{};
+    std::pmr::list<dev_info_t> m_arrived_devices{};
 
     device_triplet m_filter{};
     libusb_context *m_usb_ctx;

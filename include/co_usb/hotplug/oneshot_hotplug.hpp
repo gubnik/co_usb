@@ -24,8 +24,8 @@ namespace co_usb::hotplug
  * @details It may be more beneficial than @ref device_accepto for simpler applications
  * due to noticably less performance overhead and ease-of-use.
  */
-inline auto oneshot_hotplug (event events, flag flags, device_triplet triplet)
-    -> boost::capy::io_task<event, device_ref>
+inline auto oneshot_hotplug (event_type events, flag_type flags, device_triplet triplet)
+    -> boost::capy::io_task<event_type, device_ref>
 {
     auto exec = co_await boost::capy::this_coro::executor;
     auto stop = co_await boost::capy::this_coro::stop_token;

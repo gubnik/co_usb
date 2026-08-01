@@ -1,3 +1,8 @@
+/**
+ * @file handlers.hpp
+ * @brief Collection of types implementing @ref co_usb::ev::detail::EventHandler.
+ */
+
 #pragma once
 
 #include "co_usb/ev/detail/event_handler.hpp"

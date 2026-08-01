@@ -1,3 +1,8 @@
+/**
+ * @file context.hpp
+ * @brief Factory for obtaining a co_usb context.
+ */
+
 #pragma once
 
 #include "co_usb/ev/detail/handler_service.hpp"
@@ -8,6 +13,7 @@ namespace ev
 {
 struct context;
 }
+
 /**
  * @brief Factory for obtaining a co_usb context.
  */
@@ -16,11 +22,15 @@ inline auto make_context(boost::capy::executor_ref exec, Args &&...args,
                          std::pmr::memory_resource *memres = std::pmr::get_default_resource())
     -> ev::context;
 } // namespace co_usb
+
 namespace co_usb::ev
 {
 
 /**
  * @brief A co_usb context referencing event handler service.
+ *
+ * @details This type acts as a handle to a service without exposing the service itself
+ * to the user.
  */
 struct context
 {

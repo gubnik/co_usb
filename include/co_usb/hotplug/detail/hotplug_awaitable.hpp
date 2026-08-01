@@ -31,7 +31,7 @@ struct hotplug_awaitable
     struct op_result
     {
         std::error_code ec;
-        event event;
+        event_type event;
         device_ref dev;
     };
 
@@ -84,7 +84,7 @@ struct hotplug_awaitable
                 void *user_data) -> int
             {
                 resumption_t *res = (resumption_t *)user_data;
-                res->op_res->event = event(ev);
+                res->op_res->event = event_type(ev);
                 res->op_res->dev = device_ref{dev};
                 res->io_env->executor.post(res->cont);
                 return 1;
@@ -98,7 +98,7 @@ struct hotplug_awaitable
         return std::noop_coroutine();
     }
 
-    boost::capy::io_result<event, device_ref> await_resume ()
+    boost::capy::io_result<event_type, device_ref> await_resume ()
     {
         if (op_res->ec)
         {

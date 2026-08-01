@@ -1,3 +1,8 @@
+/**
+ * @file event_handler_ref.hpp
+ * @brief Type-erased reference to any event handler.
+ */
+
 #pragma once
 
 #include "co_usb/ev/any_event_handler.hpp"
@@ -8,30 +13,29 @@ namespace co_usb::ev
 {
 
 /**
- * @brief Type-erased reference to any event handler
+ * @brief Type-erased reference to any event handler.
  *
- * Performs RAII reference counting via handler's given functions and exposes
- * explicit ref()/unref() latches.
+ * @details The purpose of this type is to be held by an object within the lifetime of which
+ * the event handler cannot be let to shutdown. An example of a situation where this would be
+ * ill-formed is if a transfer is in flight, cancellation is requested, @ref
+ * co_usb::transfer::cancel_transfer is called on it but the event loop has already finished its
+ * shutdown and the transfer would never be cancelled nor is it completion callback would ever be
+ * called.
+ *
+ * @note This type is copy constructible, copy assignable, move constructible and move assignable.
+ * Use move to avoid refcount increment/decrement.
+ *
+ * @see any_event_handler
  */
 struct event_handler_ref
 {
-    explicit event_handler_ref () noexcept
+    explicit inline event_handler_ref () noexcept
     {
     }
 
     template <detail::EventHandler HandlerTy>
         requires(!std::same_as<HandlerTy, event_handler_ref>)
-    event_handler_ref(HandlerTy &handler)
-        : m_original(&handler),
-          m_vtable(vtable{
-              .start_fn = +[] (void *orig, libusb_context *ctx, std::stop_token stop) -> bool
-              { return static_cast<HandlerTy *>(orig)->start(ctx, stop); },
-              .ref_fn = +[] (void *orig) -> void { return static_cast<HandlerTy *>(orig)->ref(); },
-              .unref_fn = +[] (void *orig) -> void
-              { return static_cast<HandlerTy *>(orig)->unref(); },
-              .stop_fn = +[] (void *orig) -> void
-              { return static_cast<HandlerTy *>(orig)->stop(); },
-          })
+    event_handler_ref(HandlerTy &handler) : m_original(&handler), m_vtable(make_vtable(handler))
     {
         ref();
     }
@@ -43,14 +47,7 @@ struct event_handler_ref
         if (m_original == &handler)
             return *this;
         m_original = &handler;
-        m_vtable = vtable{
-            .start_fn = +[] (void *orig, libusb_context *ctx, std::stop_token stop) -> bool
-            { return static_cast<HandlerTy *>(orig)->start(ctx, stop); },
-            .ref_fn = +[] (void *orig) -> void { return static_cast<HandlerTy *>(orig)->ref(); },
-            .unref_fn = +[] (void *orig) -> void
-            { return static_cast<HandlerTy *>(orig)->unref(); },
-            .stop_fn = +[] (void *orig) -> void { return static_cast<HandlerTy *>(orig)->stop(); },
-        };
+        m_vtable = make_vtable(handler);
         ref();
         return *this;
     }
@@ -95,16 +92,12 @@ struct event_handler_ref
 
     ~event_handler_ref ()
     {
-        if (!m_original)
-        {
-            return;
-        }
         unref();
     }
 
-    auto valid () const noexcept -> bool
+    inline auto valid () const noexcept -> bool
     {
-        return m_original;
+        return m_original != nullptr;
     }
 
     auto start (libusb_context *usb_ctx, std::stop_token stop) -> bool
@@ -156,6 +149,22 @@ struct event_handler_ref
         unref_fn_t unref_fn{nullptr};
         stop_fn_t stop_fn{nullptr};
     };
+
+    template <detail::EventHandler HandlerTy>
+        requires(!std::same_as<HandlerTy, event_handler_ref>)
+    auto make_vtable (HandlerTy &handler) -> vtable
+    {
+        return vtable{
+            .start_fn = +[] (void *orig, libusb_context *ctx, std::stop_token stop) -> bool
+            { return static_cast<HandlerTy *>(orig)->start(ctx, stop); },
+            .ref_fn = +[] (void *orig) -> void { return static_cast<HandlerTy *>(orig)->ref(); },
+            .unref_fn = +[] (void *orig) -> void
+            { return static_cast<HandlerTy *>(orig)->unref(); },
+            .stop_fn = +[] (void *orig) -> void { return static_cast<HandlerTy *>(orig)->stop(); },
+        };
+    }
+
+  private:
     void *m_original{nullptr};
     vtable m_vtable;
 };

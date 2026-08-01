@@ -1,3 +1,8 @@
+/**
+ * @file interface.hpp
+ * @brief RAII wrapper for an interface.
+ */
+
 #pragma once
 
 #include "co_usb/usb_error.hpp"
@@ -10,8 +15,28 @@
 namespace co_usb
 {
 
+/**
+ * @ingroup wrapper
+ *
+ * @brief RAII wrapper for an interface.
+ *
+ * @details This type assumes the interface is already claimed
+ * at the point of construction. The destructor will attempt to release the interface and may throw
+ * if the release operation fails.
+ *
+ * @note Satisfies @ref detail::DeviceHandleSource.
+ *
+ * @see co_usb::claim_interface
+ */
 struct interface
 {
+    /**
+     * @brief Releases the interface.
+     *
+     * @throws std::system_error if release fails.
+     *
+     * @details Use @ref release to avoid throwing.
+     */
     ~interface () noexcept(false)
     {
         std::error_code ec;
@@ -49,6 +74,11 @@ struct interface
         return *this;
     }
 
+    /**
+     * @brief Releases the interface.
+     *
+     * @details Sets the error code if the release operation fails.
+     */
     auto release (std::error_code &ec) noexcept -> void
     {
         if (!m_devh)
@@ -84,6 +114,15 @@ struct interface
 };
 static_assert(detail::DeviceHandleSource<interface>, "Not a proper device handle source");
 
+/**
+ * @ingroup wrapper
+ *
+ * @brief Claims the interface and returns a @ref interface or error.
+ *
+ * @note Guarantees exception safety.
+ *
+ * @tparam ErrorTy @ref detail::ErrorProtocol
+ */
 template <detail::ErrorProtocol<interface> ErrTy>
 auto claim_interface (detail::DeviceHandleSource auto const &devh_src, int interface_num,
                       ErrTy &&errp = as_exception()) noexcept ->

@@ -1,3 +1,8 @@
+/**
+ * @file device_handle.hpp
+ * @brief RAII wrapper around libusb_device_handle*
+ */
+
 #pragma once
 
 #include "co_usb/ev/detail/handler_service.hpp"
@@ -23,6 +28,8 @@ namespace co_usb
  *
  * @details Wraps device handle and ensures its lifetime via internal unique pointer.
  * Destructor closes the device.
+ *
+ * @see co_usb::open_device
  */
 struct device_handle
 {

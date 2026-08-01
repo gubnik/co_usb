@@ -1,3 +1,8 @@
+/**
+ * @file any_event_handler.hpp
+ * @brief Owning type-erased wrapper for @ref EventHandler.
+ */
+
 #pragma once
 
 #include "co_usb/ev/detail/event_handler.hpp"
@@ -15,7 +20,11 @@ struct event_handler_ref;
  *
  * @brief Owning type-erased wrapper for @ref EventHandler.
  *
- * @details This wrapper cannot type-erase objects of its own type and @ref event_handler_ref.
+ * @details This type is used to uniformly store objects of any type that conform to
+ * @ref co_usb::ev::detail::EventHandler concept. It allocates the space for the buffer using a
+ * given pointer to a memory resource and will preserve this pointer inside of itself.
+ *
+ * @see event_handler_ref
  */
 struct any_event_handler
 {
