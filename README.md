@@ -1,10 +1,9 @@
 # co_usb
-> v2.0.0
+> Version v2.0.0
 
-Asynchronous USB library using C++20 coroutines and [Capy](https://github.com/cppalliance/capy) to
-create a lightweight interface for [libusb-1.0](https://libusb.info/). It provides minimal necessary abstractions
-over base libusb to enable efficient and clean concurrent I/O using Capy's common interfaces
-for seamless interoperability with wider coroutine ecosystem.
+`co_usb` is an asynchronous USB library using C++20 coroutines and [Capy](https://github.com/cppalliance/capy) to
+create a high-level interface for [libusb](https://libusb.info/). It provides lightweight and feature-rich
+adaptors around `libusb` API to enable easy integration into the coroutine ecosystem.
 
 ## Rationale
 
@@ -17,7 +16,7 @@ Capy based coroutine ecosystem and `libusb` asynchronous code.
 - Asynchronous transfer submission for partial and complete I/O in a form of light adaptor types
 - Hotplug API for dynamically connecting devices with an Asio style acceptor loop
 - Wrappers around core `libusb` entities such as devices for smooth initialization of the library
-- Robust event handler system for easy extension and safe shutdown
+- Event handler system for easy extension and safe shutdown
 
 ### What co_usb does not do
 
@@ -28,24 +27,31 @@ Capy based coroutine ecosystem and `libusb` asynchronous code.
 ## Why not Asio?
 
 Not all USB code needs a whole networking library. Using Capy allows the user to choose not to use
-networking code. If networking is needed the user is free to use `co_usb` with [Corosio](https://github.com/cppalliance/corosio),
-since both operate on shared Capy concepts the code is easily made interoperable!
+networking code and just keep the coroutines.
+
+If you need to use networking I advise use `co_usb` with [Corosio](https://github.com/cppalliance/corosio),
+since both operate on shared Capy concepts the code is easily made interoperable.
 
 ## Getting started
 
-This project uses `vcpkg` as a package manager.
+### vcpkg
+
 To use it in your `vcpkg`-based projects, do the following:
+
 1. Add [portfile](`./portfile.cmake`) and [vcpkg.json](./vcpkg.json) to your `ports` directory
-2. Copy `./res/ports/boost-capy/` and `./res/ports/libusb/` to your `ports` directory
-3. Provide them as overlay to the `vcpkg`
-4. Add the following to your `CMakeLists.txt`:
+2. Copy [Capy port](`./res/ports/boost-capy/`) to your `ports` directory and provide it as an overlay
+3. Add `co_usb` as a dependency to your `vcpkg.json` as `cousb`
+
+The library will be available in CMake as the following:
 ```cmake
 find_package(co_usb CONFIG REQUIRED)
 target_link_libraries(my_app PRIVATE co_usb::co_usb)
 ```
 
+### FetchContent
+
 For non-`vcpkg` projects, you will have to use CMake's `FetchContent` module and provide
-Capy and libusb on your own. This is method of consuming `co_usb` is not endorsed and may not work.
+Capy and libusb on your own. This is method of consuming `co_usb` is *not endorsed* and may not work.
 ```cmake
 include(FetchContent)
 FetchContent_Declare(co_usb
@@ -61,15 +67,22 @@ target_link_libraries(my_app co_usb::co_usb)
 
 To build from source:
 ```
-git clone https://github.com/gubnik/co_usb.git
-cd co_usb
-./setup.sh x64-static Debug # or x64-dyn instead of x64-static, or Release instead of Debug
+cmake --preset="$PRESET" 
+cmake --build "build/$PRESET" --config "$BUILD_TYPE"
 ```
 
-To fully rebuild:
-```
-./setup.sh ${PRESET} ${BUILD_TYPE} reset
-```
+### Presets
+
+Available presets are:
+- `x64-linux`
+- `x64-linux-static` (`udev` is disabled in port for static builds)
+- `no-vcpkg` (used by docs CI)
+
+Native Windows builds are coming soon.
+
+### Build types
+
+Available build types are: `Release`, `Debug`
 
 ## Documentation
 
@@ -77,7 +90,9 @@ See [docs](https://gubnik.github.io/co_usb) for generated docs
 
 ## Tests
 
-For unit tests, see `./tests`. For QEMU device code, see `./qemu`. I will gladly accept contributions to the testing suite.
+For unit tests, see `./tests`. For QEMU device code, see `./qemu`.
+
+I will gladly accept contributions to the testing suite.
 
 ## License
 
