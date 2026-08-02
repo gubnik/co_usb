@@ -15,7 +15,15 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y doxygen graphviz
 
       - name: Run Doxygen
-        run: sh docs.sh
+        run: |
+          ROOT=$(pwd)
+          PRESET=no-vcpkg
+          rm -rf build/$PRESET
+          cmake --preset $PRESET -DCOUSB_ONLY_BUILD_DOCS=ON
+          cmake --build build/$PRESET --target docs 1>/dev/null
+          mkdir -p docs/html
+          cp $ROOT/build/$PRESET/docs/html/* $ROOT/docs/html -r
+          echo "Finished building docs"
 
       - name: Prepare nojekyll
         run: touch docs/html/.nojekyll
