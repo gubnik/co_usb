@@ -8,12 +8,15 @@
 #include "co_usb/ev/any_event_handler.hpp"
 #include "co_usb/ev/detail/event_handler.hpp"
 #include "co_usb/ev/event_handler_ref.hpp"
+#include "co_usb/usb_error.hpp"
 #include <boost/capy/ex/execution_context.hpp>
 #include <boost/capy/ex/executor_ref.hpp>
 #include <concepts>
 #include <libusb.h>
+#include <span>
 #include <stdexcept>
 #include <stop_token>
+#include <system_error>
 #include <utility>
 
 namespace co_usb
@@ -72,20 +75,12 @@ struct handler_service : public boost::capy::execution_context::service
     friend struct co_usb::context;
 
     /**
-     * @brief Construct the handler service and initialize libusb.
+     * @brief Construct the handler service.
      * @param exec_ctx Execution context to attach the service to.
-     * @throws std::runtime_error if `libusb_init` fails.
      */
     explicit handler_service (boost::capy::execution_context &exec_ctx)
         : boost::capy::execution_context::service{}, m_handler{}
     {
-        libusb_context *ctx;
-        auto r = libusb_init(&ctx);
-        if (r != LIBUSB_SUCCESS)
-        {
-            throw std::runtime_error{"Cannot initialize libusb"};
-        }
-        m_usb_ctx = ctx;
     }
 
     /**
@@ -97,6 +92,48 @@ struct handler_service : public boost::capy::execution_context::service
     {
         shutdown();
         libusb_exit(m_usb_ctx);
+    }
+
+    /**
+     * @brief Initializes libusb context without options
+     *
+     * @returns std::error_code result of the init operation
+     */
+    auto init_context () noexcept -> std::error_code
+    {
+        libusb_context *ctx;
+        auto r = libusb_init(&ctx);
+        if (r != LIBUSB_SUCCESS)
+        {
+            return make_usb_error_code(static_cast<usb_error>(r));
+        }
+        if (m_usb_ctx)
+        {
+            libusb_exit(m_usb_ctx);
+        }
+        m_usb_ctx = ctx;
+        return {};
+    }
+
+    /**
+     * @brief Initializes libusb context with given options
+     *
+     * @returns std::error_code result of the init operation
+     */
+    auto init_context (std::span<const libusb_init_option> options) noexcept -> std::error_code
+    {
+        libusb_context *ctx;
+        auto r = libusb_init_context(&ctx, options.data(), options.size());
+        if (r != LIBUSB_SUCCESS)
+        {
+            return make_usb_error_code(static_cast<usb_error>(r));
+        }
+        if (m_usb_ctx)
+        {
+            libusb_exit(m_usb_ctx);
+        }
+        m_usb_ctx = ctx;
+        return {};
     }
 
     /**
@@ -198,7 +235,7 @@ struct handler_service : public boost::capy::execution_context::service
   private:
     any_event_handler m_handler;
     std::stop_source m_stop;
-    libusb_context *m_usb_ctx;
+    libusb_context *m_usb_ctx{nullptr};
 };
 
 /**

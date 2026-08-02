@@ -6,21 +6,26 @@
 #pragma once
 
 #include "co_usb/ev/detail/handler_service.hpp"
+#include "co_usb/wrapper/detail/error_protocol.hpp"
+#include "co_usb/wrapper/error_protocol.hpp"
+#include <libusb.h>
 #include <memory_resource>
+#include <system_error>
+
 namespace co_usb
 {
+
 namespace ev
 {
 struct context;
 }
 
-/**
- * @brief Factory for obtaining a co_usb context.
- */
-template <ev::detail::EventHandler HandlerTy, typename... Args>
-inline auto make_context(boost::capy::executor_ref exec, Args &&...args,
-                         std::pmr::memory_resource *memres = std::pmr::get_default_resource())
-    -> ev::context;
+namespace detail
+{
+auto raw_context(::co_usb::ev::detail::handler_service *srv);
+
+}
+
 } // namespace co_usb
 
 namespace co_usb::ev
@@ -55,9 +60,7 @@ struct context
     }
 
   private:
-    template <detail::EventHandler HandlerTy, typename... Args>
-    friend inline auto ::co_usb::make_context(boost::capy::executor_ref exec, Args &&...args,
-                                              std::pmr::memory_resource *memres) -> context;
+    friend auto ::co_usb::detail::raw_context(::co_usb::ev::detail::handler_service *srv);
 
     explicit context (detail::handler_service *srv_ptr) noexcept : m_srv_ptr(srv_ptr)
     {
@@ -71,16 +74,107 @@ struct context
 namespace co_usb
 {
 
-template <ev::detail::EventHandler HandlerTy, typename... Args>
-inline auto make_context (boost::capy::executor_ref exec, Args &&...args,
-                          std::pmr::memory_resource *memres) -> ev::context
+namespace detail
+{
+
+inline auto raw_context (::co_usb::ev::detail::handler_service *srv)
+{
+    return ev::context{srv};
+}
+
+} // namespace detail
+
+template <ev::detail::EventHandler HandlerTy, ::co_usb::detail::ErrorProtocol<ev::context> ErrorTy,
+          typename... Args>
+inline auto make_context (boost::capy::executor_ref exec, std::pmr::memory_resource *memres,
+                          ErrorTy &&errp, Args &&...args) -> ev::context
 {
     boost::capy::execution_context &exec_ctx = exec.context();
 
     auto &srv = exec_ctx.use_service<ev::detail::handler_service>();
+    std::error_code ec = srv.init_context();
+    if (ec)
+    {
+        return errp.template with_error<ev::context>(ec);
+    }
     srv.emplace_handler<HandlerTy>(std::forward<Args>(args)..., memres);
     srv.start();
-    return ev::context{&srv};
+    return errp.template with_success<ev::context>(detail::raw_context(&srv));
+}
+
+template <ev::detail::EventHandler HandlerTy, typename... Args>
+inline auto make_context (boost::capy::executor_ref exec, std::pmr::memory_resource *memres,
+                          Args &&...args) -> ev::context
+{
+    return make_context<HandlerTy, detail::as_exception_t, Args...>(exec, memres, as_exception(),
+                                                                    std::forward<Args>(args)...);
+}
+
+template <ev::detail::EventHandler HandlerTy, ::co_usb::detail::ErrorProtocol<ev::context> ErrorTy,
+          typename... Args>
+inline auto make_context (boost::capy::executor_ref exec, ErrorTy &&errp, Args &&...args)
+    -> ev::context
+{
+    return make_context<HandlerTy, ErrorTy, Args...>(exec, std::pmr::get_default_resource(),
+                                                     std::forward<ErrorTy>(errp),
+                                                     std::forward<Args>(args)...);
+}
+
+template <ev::detail::EventHandler HandlerTy, typename... Args>
+inline auto make_context (boost::capy::executor_ref exec, Args &&...args) -> ev::context
+{
+    return make_context<HandlerTy, detail::as_exception_t, Args...>(
+        exec, std::pmr::get_default_resource(), as_exception(), std::forward<Args>(args)...);
+}
+
+template <ev::detail::EventHandler HandlerTy, ::co_usb::detail::ErrorProtocol<ev::context> ErrorTy,
+          typename... Args>
+inline auto make_context_with_options (boost::capy::executor_ref exec,
+                                       std::span<const libusb_init_option> options,
+                                       std::pmr::memory_resource *memres, ErrorTy &&errp,
+                                       Args &&...args) -> ev::context
+{
+    boost::capy::execution_context &exec_ctx = exec.context();
+
+    auto &srv = exec_ctx.use_service<ev::detail::handler_service>();
+    std::error_code ec = srv.init_context(options);
+    if (ec)
+    {
+        return errp.template with_error<ev::context>(ec);
+    }
+    srv.emplace_handler<HandlerTy>(std::forward<Args>(args)..., memres);
+    srv.start();
+    return errp.template with_success<ev::context>(detail::raw_context(&srv));
+}
+
+template <ev::detail::EventHandler HandlerTy, typename... Args>
+inline auto make_context (boost::capy::executor_ref exec,
+                          std::span<const libusb_init_option> options,
+                          std::pmr::memory_resource *memres, Args &&...args) -> ev::context
+{
+    return make_context_with_options<HandlerTy, detail::as_exception_t, Args...>(
+        exec, options, memres, as_exception(), std::forward<Args>(args)...);
+}
+
+template <ev::detail::EventHandler HandlerTy, ::co_usb::detail::ErrorProtocol<ev::context> ErrorTy,
+          typename... Args>
+inline auto make_context (boost::capy::executor_ref exec,
+                          std::span<const libusb_init_option> options, ErrorTy &&errp,
+                          Args &&...args) -> ev::context
+{
+    return make_context_with_options<HandlerTy, ErrorTy, Args...>(
+        exec, options, std::pmr::get_default_resource(), std::forward<ErrorTy>(errp),
+        std::forward<Args>(args)...);
+}
+
+template <ev::detail::EventHandler HandlerTy, typename... Args>
+inline auto make_context (boost::capy::executor_ref exec,
+                          std::span<const libusb_init_option> options, Args &&...args)
+    -> ev::context
+{
+    return make_context_with_options<HandlerTy, detail::as_exception_t, Args...>(
+        exec, options, std::pmr::get_default_resource(), as_exception(),
+        std::forward<Args>(args)...);
 }
 
 } // namespace co_usb

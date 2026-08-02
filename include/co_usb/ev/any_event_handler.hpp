@@ -181,7 +181,7 @@ struct any_event_handler
         return ptr;
     }
 
-    template <detail::EventHandler HandlerTy> auto make_vtable () -> vtable
+    template <detail::EventHandler HandlerTy> static auto make_vtable () -> vtable
     {
         return vtable{
             .start_fn = +[] (void *orig, libusb_context *ctx, std::stop_token stop) -> bool
