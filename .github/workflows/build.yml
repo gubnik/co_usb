@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y git gcc autoconf autoconf-archive automake libtool udev
+        run: sudo apt-get update && sudo apt-get install -y git gcc autoconf autoconf-archive automake libtool libudev-dev
 
       - name: Install vcpkg
         run: |
