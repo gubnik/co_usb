@@ -18,7 +18,7 @@ jobs:
         run: git clone https://github.com/microsoft/vcpkg && ./vcpkg/bootstrap-vcpkg.sh
 
       - name: Run cmake
-        run: PATH=$(pwd)/vcpkg:$PATH VCPKG_ROOT=$(pwd)/vcpkg ./ci_setup.sh x64-linux-static Debug
+        run: VCPKG_FORCE_DOWNLOADED_BINARIES="ON" PATH=$(pwd)/vcpkg:$PATH VCPKG_ROOT=$(pwd)/vcpkg ./ci_setup.sh x64-linux-static Debug
 
       - name: Run test
         run: cd build/x64-linux-static && mkdir -p test_reports && ctest -V -R .
