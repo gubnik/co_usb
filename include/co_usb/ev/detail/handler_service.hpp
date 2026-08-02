@@ -29,20 +29,43 @@ namespace co_usb::ev::detail
  *
  * @brief Execution context service that owns a libusb context and an event handler.
  *
- * @details Since co_usb is bound to Capy and as such its task could get rather scattered across
- * executor threads, there must be a uniform way to access co_usb's `libusb_context` and the running
- * event handler. Thankfuly, Capy provides just the needed facilities in form of executor services.
+ * @details A service to run an @ref co_usb::ev::details::EventHandler responsible for
+ * storing libusb context, the handler itself and the stop source for the service.
  *
- * To create this service, refer to @ref co_usb::context
+ * @par Why not an executor?
+ *
+ * An executor at its essence is a driver for executing ready coroutines. A libusb event handler
+ * is just about handling libusb-specific events not necesserily bound to a coroutine. Making the
+ * event handler logic bound to a specific library-provided executor would lock the executor choice
+ * on a single one which may not be the most effecient one. A separate service on the other hand
+ * provides flexibility in executor choice and does not limit the user in the choice of a specific
+ * handler.
+ *
+ * @par Creating the service
+ * Unlike in `usb_asio` library, the service will not be automatically created with
+ * the creation of any object that may require it. This is because `co_usb` does not
+ * have a default event handler, on purpose. Choice of a handler is fully placed on the
+ * user of the library via @ref co_usb::ev::context and @ref co_usb::make_context.
  *
  * @code
  * int main (int argc, char **argv)
  * {
+ *     // pick any executor
  *     boost::capy::thread_pool;
  *     // this creates handler service with handler_type event handler
- *     co_usb::context usb_ctx = co_usb::make_context<handler_type>(...);
+ *     co_usb::ev::context usb_ctx = co_usb::make_context<handler_type>(...);
  * }
  * @endcode
+ *
+ * Attempts to use any of `co_usb` features that require a handler or a context will result in
+ * immedeate std::runtime_error exception.
+ *
+ * @par Switching the event handler
+ *
+ * Switching the handler is allowed via `emplace_handler` method and is well-defined.
+ * Doing so will request stop for the currently active handler and block until it is stopped.
+ * The stop source will be reset and the new handler will not start until `start` is called again.
+ *
  */
 struct handler_service : public boost::capy::execution_context::service
 {
@@ -79,13 +102,20 @@ struct handler_service : public boost::capy::execution_context::service
     /**
      * @brief Emplace a concrete event handler and return a reference wrapper.
      *
-     * This requires `HandlerTy` to satisfy `detail::EventHandler` and be neither
+     * @details This requires `HandlerTy` to satisfy `detail::EventHandler` and be neither
      * `any_event_handler` nor `event_handler_ref`.
+     *
+     * @par Side effects
+     *
+     * Calling this while a handler is already running will request stop for the currently active
+     * handler and block until it is stopped. The stop source will be reset and the new handler will
+     * not start until `start` is called again.
      *
      * @tparam HandlerTy Concrete event handler type.
      * @tparam Args Constructor argument types for `HandlerTy`.
      * @param args Constructor arguments for the event handler.
      * @param memres Memory resource used by the internal handler storage.
+     *
      * @return `event_handler_ref` referencing the stored handler.
      */
     template <detail::EventHandler HandlerTy, typename... Args>
@@ -96,6 +126,12 @@ struct handler_service : public boost::capy::execution_context::service
                           std::pmr::memory_resource *memres = std::pmr::get_default_resource())
         -> event_handler_ref
     {
+        if (m_handler.valid())
+        {
+            m_stop.request_stop();
+            m_handler.stop();
+            m_stop = std::stop_source{};
+        }
         m_handler.emplace<HandlerTy>(memres, std::forward<Args>(args)...);
         return m_handler;
     }
