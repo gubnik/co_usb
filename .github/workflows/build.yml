@@ -1,10 +1,10 @@
-name: Build and run tests
+name: Build project
 
 on:
   push:
 
 jobs:
-  tests:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
