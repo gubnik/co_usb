@@ -1,5 +1,7 @@
 /**
  * @defgroup hotplug Async hotplug adapters
+ *
+ * @brief Coroutine adapters for `libusb` hotplug API.
  */
 #pragma once
 

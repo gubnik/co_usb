@@ -1,5 +1,7 @@
 /**
  * @defgroup event_handler Event handler logic
+ *
+ * @brief Event handler abstractions and the context management.
  */
 
 #pragma once
