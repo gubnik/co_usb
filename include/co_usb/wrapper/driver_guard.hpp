@@ -61,6 +61,11 @@ struct driver_guard
         return *this;
     }
 
+    /**
+     * @brief Reattaches the detached kernel driver.
+     *
+     * @details Sets the error code if the release operation fails.
+     */
     auto attach (std::error_code &ec) noexcept -> void
     {
         if (!m_devh)
