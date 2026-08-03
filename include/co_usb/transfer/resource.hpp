@@ -1,3 +1,8 @@
+/**
+ * @file resource.hpp
+ * @brief RAII wrapper over a transfer allocation.
+ */
+
 #pragma once
 
 #include "co_usb/transfer/detail/transfer_sequence.hpp"
@@ -10,7 +15,9 @@ namespace co_usb::transfer
 /**
  * @ingroup transfer
  *
- * @brief Generic RAII wrapper over a transfer allocation.
+ * @brief RAII wrapper over a transfer allocation.
+ *
+ * @note Satisfies @ref co_usb::transfer::detail::TransferResource.
  */
 struct resource
 {

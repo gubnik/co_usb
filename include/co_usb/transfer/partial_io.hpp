@@ -1,3 +1,8 @@
+/**
+ * @file partial_io.hpp
+ * @brief Partial I/O adapters for transfer sequences.
+ */
+
 #pragma once
 
 #include "co_usb/ev/detail/handler_service.hpp"

@@ -1,3 +1,8 @@
+/**
+ * @file endpoint.hpp
+ * @brief USB endpoint aggregate templated on its direction.
+ */
+
 #pragma once
 
 #include "co_usb/wrapper/detail/device_handle_source.hpp"
@@ -18,10 +23,10 @@ enum class endpoint_direction
 /**
  * @ingroup transfer
  *
- * @brief USB endpoint templated on its direction
+ * @brief USB endpoint aggregate templated on its direction.
  *
  * @details Must be used with transfer types to provide directional information.
- * Prefer @ref make_safe function to construct a valid endpoint
+ * Prefer @ref make_safe function to construct a valid endpoint.
  *
  * @tparam Direction direction of an endpoint. Value co_usb::ep_direction::any is semantically
  * equal to an unknown endpoint direction and as such only allows casts to either in or out

@@ -1,3 +1,8 @@
+/**
+ * @file complete_io.hpp
+ * @brief Complete I/O adapters for transfer sequences.
+ */
+
 #pragma once
 
 #include "co_usb/transfer/detail/any_buffer_sequence.hpp"

@@ -1,3 +1,8 @@
+/**
+ * @file driver_guard.hpp
+ * @brief RAII wrapper for detaching and reattaching kernel driver.
+ */
+
 #pragma once
 
 #include "co_usb/usb_error.hpp"

@@ -1,3 +1,8 @@
+/**
+ * @file sequence_view.hpp
+ * @brief View of a certain transfer sequence. Provides a uniform range interface.
+ */
+
 #pragma once
 
 #include "co_usb/transfer/detail/iterator.hpp"

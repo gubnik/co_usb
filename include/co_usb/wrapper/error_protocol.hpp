@@ -1,3 +1,8 @@
+/**
+ * @file error_protocol.hpp
+ * @brief Utilities for creating error protocols.
+ */
+
 #pragma once
 
 #include "co_usb/wrapper/detail/error_protocol.hpp"

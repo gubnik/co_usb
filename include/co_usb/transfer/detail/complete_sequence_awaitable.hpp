@@ -1,3 +1,8 @@
+/**
+ * @file complete_sequence_awaitable.hpp
+ * @brief Implementation detail for @ref co_usb::transfer::detail::complete_io_base
+ */
+
 #pragma once
 
 #include "co_usb/transfer/detail/any_buffer_sequence.hpp"

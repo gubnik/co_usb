@@ -1,3 +1,8 @@
+/**
+ * @file oneshot_hotplug.hpp
+ * @brief Oneshot coroutine to get a one-time hotplug accept.
+ */
+
 #pragma once
 
 #include "co_usb/ev/detail/handler_service.hpp"

@@ -1,5 +1,6 @@
 /**
- * @file Strongly typed wrappers libusb hotplug flag types (flags & events).
+ * @file flags.hpp
+ * @brief Strongly typed wrappers libusb hotplug flag types (flags & events).
  */
 
 #pragma once
@@ -24,12 +25,22 @@ using event_type = detail::flag_type<libusb_hotplug_event, struct hotplug_event_
  */
 using flag_type = detail::flag_type<libusb_hotplug_flag, struct hotplug_flag_t>;
 
+/**
+ * @ingroup hotplug
+ *
+ * @brief Concrete values of hotplug events.
+ */
 namespace events
 {
 constexpr event_type arrived{LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED};
 constexpr event_type left{LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT};
 } // namespace events
 
+/**
+ * @ingroup hotplug
+ *
+ * @brief Concrete values of hotplug flags.
+ */
 namespace flags
 {
 constexpr flag_type none{LIBUSB_HOTPLUG_NO_FLAGS};

@@ -1,3 +1,8 @@
+/**
+ * @file device_triplet.hpp
+ * @brief An aggregate struct to pass to functions requiring device information.
+ */
+
 #pragma once
 
 #include <libusb.h>

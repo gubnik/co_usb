@@ -1,3 +1,8 @@
+/**
+ * @file usb_error.hpp
+ * @brief USB error enumeration.
+ */
+
 #pragma once
 
 #include <libusb.h>
@@ -6,6 +11,11 @@
 namespace co_usb
 {
 
+/**
+ * @brief USB error enumeration.
+ *
+ * @details Copies `libusb_error` one to one.
+ */
 enum class usb_error : int
 {
     success = LIBUSB_SUCCESS,

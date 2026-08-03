@@ -1,3 +1,8 @@
+/**
+ * @file transfer_sequence.hpp
+ * @brief Transfer resource and transfer sequence concepts.
+ */
+
 #pragma once
 
 #include <libusb.h>

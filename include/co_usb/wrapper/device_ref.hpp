@@ -1,3 +1,9 @@
+/**
+ * @file device_ref.hpp
+ * @brief Wrapper for nullable libusb_device that increments ref count on ctor and decrements
+ * on dtor.
+ */
+
 #pragma once
 
 #include <libusb.h>

@@ -1,3 +1,8 @@
+/**
+ * @file status.hpp
+ * @brief Status codes for transfers
+ */
+
 #pragma once
 
 #include <libusb.h>

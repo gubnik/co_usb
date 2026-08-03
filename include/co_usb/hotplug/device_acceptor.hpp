@@ -1,3 +1,8 @@
+/**
+ * @file device_acceptor.hpp
+ * @brief Asio/Corosio-like acceptor for devices via hotplug API.
+ */
+
 #pragma once
 
 #include "co_usb/ev/detail/handler_service.hpp"

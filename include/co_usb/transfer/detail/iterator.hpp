@@ -1,3 +1,8 @@
+/**
+ * @file iterator.hpp
+ * @brief Iterator helpers for processing transfer sequences.
+ */
+
 #pragma once
 
 #include "co_usb/transfer/detail/transfer_sequence.hpp"

@@ -1,3 +1,8 @@
+/**
+ * @file hotplug_awaitable.hpp
+ * @brief Low-level awaitable primitive for strapping hotplug callbacks to a coroutine ecosystem.
+ */
+
 #pragma once
 
 #include "boost/capy/concept/io_awaitable.hpp"
