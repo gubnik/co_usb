@@ -1,6 +1,5 @@
 #pragma once
 
-#include <co_usb.hpp>
 #include <type_traits>
 
 /**
