@@ -104,6 +104,11 @@ struct direction_partial_io_base
     {
     }
 
+    /**
+     * @brief Performs partial read to a buffer sequence.
+     *
+     * @details May read less than the buffer size.
+     */
     template <boost::capy::MutableBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::in)
     inline auto read_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
@@ -111,6 +116,11 @@ struct direction_partial_io_base
         return m_stream.submit(buffers);
     }
 
+    /**
+     * @brief Performs partial read to a buffer sequence.
+     *
+     * @details May write less than the buffer size.
+     */
     template <boost::capy::ConstBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::out)
     inline auto write_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
@@ -123,6 +133,14 @@ struct direction_partial_io_base
 };
 } // namespace detail
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Prefills the transfer sequence as control transfers and provides
+ * partial I/O operations.
+ *
+ * @note Control transfers are only valid for endpoints 0x00 (OUT) and 0x80 (IN).
+ */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct control_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
 {
@@ -134,6 +152,13 @@ struct control_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
         prefill_control_transfer(tfer_seq, endpoint, timeout_ms);
     }
 };
+
+/**
+ * @ingroup transfer
+ *
+ * @brief Prefills the transfer sequence as bulk transfers and provides
+ * partial I/O operations.
+ */
 
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct bulk_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
@@ -147,6 +172,12 @@ struct bulk_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
     }
 };
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Prefills the transfer sequence as interrupt transfers and provides
+ * partial I/O operations.
+ */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct interrupt_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
 {
@@ -158,6 +189,16 @@ struct interrupt_partial_io : detail::direction_partial_io_base<TSeq, EpDirectio
         prefill_interrupt_transfer(tfer_seq, endpoint, timeout_ms);
     }
 };
+
+/**
+ * @ingroup transfer
+ *
+ * @brief Prefills the transfer sequence as isochronous transfers and provides
+ * partial I/O operations.
+ *
+ * @note Requires all transfers in a transfer sequence to be allocated with the
+ * number of iso packets valid for a given `iso_packets` value.
+ */
 
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct isochronous_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
@@ -171,6 +212,14 @@ struct isochronous_partial_io : detail::direction_partial_io_base<TSeq, EpDirect
     }
 };
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Prefills the transfer sequence as bulk stream transfers and provides
+ * partial I/O operations.
+ *
+ * @note Requires `libusb_alloc_streams` to be called for a given `stream_id`.
+ */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct bulk_stream_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
 {
@@ -183,28 +232,83 @@ struct bulk_stream_partial_io : detail::direction_partial_io_base<TSeq, EpDirect
     }
 };
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Write specialization of @ref co_usb::transfer::control_partial_io.
+ */
 template <detail::TransferSequence TSeq>
 using control_out = control_partial_io<TSeq, endpoint_direction::out>;
+
+/**
+ * @ingroup transfer
+ *
+ * @brief Read specialization of @ref co_usb::transfer::control_partial_io.
+ */
 template <detail::TransferSequence TSeq>
 using control_in = control_partial_io<TSeq, endpoint_direction::in>;
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Write specialization of @ref co_usb::transfer::bulk_partial_io.
+ */
 template <detail::TransferSequence TSeq>
 using bulk_out = bulk_partial_io<TSeq, endpoint_direction::out>;
+
+/**
+ * @ingroup transfer
+ *
+ * @brief Read specialization of @ref co_usb::transfer::bulk_partial_io.
+ */
 template <detail::TransferSequence TSeq>
 using bulk_in = bulk_partial_io<TSeq, endpoint_direction::in>;
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Write specialization of @ref co_usb::transfer::interrupt_partial_io.
+ */
 template <detail::TransferSequence TSeq>
 using interrupt_out = interrupt_partial_io<TSeq, endpoint_direction::out>;
+
+/**
+ * @ingroup transfer
+ *
+ * @brief Read specialization of @ref co_usb::transfer::interrupt_partial_io.
+ */
 template <detail::TransferSequence TSeq>
 using interrupt_in = interrupt_partial_io<TSeq, endpoint_direction::in>;
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Write specialization of @ref co_usb::transfer::isochronous_partial_io.
+ */
 template <detail::TransferSequence TSeq>
 using isochronous_out = isochronous_partial_io<TSeq, endpoint_direction::out>;
+
+/**
+ * @ingroup transfer
+ *
+ * @brief Read specialization of @ref co_usb::transfer::isochronous_partial_io.
+ */
 template <detail::TransferSequence TSeq>
 using isochronous_in = isochronous_partial_io<TSeq, endpoint_direction::in>;
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Write specialization of @ref co_usb::transfer::bulk_stream_partial_io.
+ */
 template <detail::TransferSequence TSeq>
 using bulk_stream_out = bulk_stream_partial_io<TSeq, endpoint_direction::out>;
+
+/**
+ * @ingroup transfer
+ *
+ * @brief Read specialization of @ref co_usb::transfer::bulk_stream_partial_io.
+ */
 template <detail::TransferSequence TSeq>
 using bulk_stream_in = bulk_stream_partial_io<TSeq, endpoint_direction::in>;
 

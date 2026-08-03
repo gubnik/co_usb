@@ -5,7 +5,7 @@
 #include "co_usb/transfer/detail/transfer_sequence.hpp"
 #include "co_usb/transfer/endpoint.hpp"
 #include "co_usb/transfer/operations.hpp"
-#include "co_usb/transfer/stream.hpp"
+#include "co_usb/transfer/partial_io.hpp"
 #include <boost/capy/io_task.hpp>
 #include <memory_resource>
 
@@ -25,7 +25,7 @@ namespace detail
  * until each buffer is fully processed. This operation is transfer-affine, meaning that a single
  * transfer will not jump to another buffer until it has finished filling the current one it holds.
  *
- * @par Transfer sequence guarantee
+ * @par Transfer sequence lifetime guarantee
  *
  * Transfer sequence is expected to outlive an instance of this type which uses it.
  * Deallocating, modifying and replacing transfers while an asynchronous operation is
@@ -43,11 +43,8 @@ namespace detail
  *
  * @par Event handler guarantee
  *
- * Submission also creates a proper cancellation callback based on a stop token propagated through
- * Capy's io_env protocol. The cancellation ONLY signals cancellation via `libusb_cancel_transfer`
- * for each transfer in a sequence. Actual handling of this signal is entirely dependent on the
- * event handler consuming it. To prevent the event handler from shutting down prematurely the event
- * handler ref is held during the submission operation.
+ * To prevent event handler from prematurely shutting down on stop request an @ref event_handler_ref
+ * is held for the entire lifetime of an object of this type.
  *
  * @see transfer::raw_transfer_stream
  * @see ev::event_handler_ref
@@ -110,6 +107,11 @@ template <TransferSequence TSeq, endpoint_direction EpDirection> struct directio
     {
     }
 
+    /**
+     * @brief Performs partial read to a buffer sequence.
+     *
+     * @details May read less than the buffer size.
+     */
     template <boost::capy::MutableBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::in)
     inline auto read_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
@@ -117,6 +119,12 @@ template <TransferSequence TSeq, endpoint_direction EpDirection> struct directio
         return m_raw.submit(buffers);
     }
 
+    /**
+     * @brief Performs complete read to a buffer sequence.
+     *
+     * @details Will attempt to completely fill the given buffer sequence.
+     * Reading less is always coupled with an error.
+     */
     template <boost::capy::MutableBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::in)
     inline auto read (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
@@ -131,6 +139,12 @@ template <TransferSequence TSeq, endpoint_direction EpDirection> struct directio
         return m_raw.submit(buffers);
     }
 
+    /**
+     * @brief Performs complete write from a buffer sequence.
+     *
+     * @details Will attempt to write all data from the given buffer sequence.
+     * Writing less is always coupled with an error.
+     */
     template <boost::capy::ConstBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::out)
     inline auto write (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
@@ -138,6 +152,14 @@ template <TransferSequence TSeq, endpoint_direction EpDirection> struct directio
         return m_raw.complete_submit(buffers);
     }
 
+    /**
+     * @brief Performs complete write from a buffer sequence.
+     *
+     * @details Will attempt to write all data from the given buffer sequence.
+     * Writing less is always coupled with an error.
+     *
+     * @note EOF is a no-op.
+     */
     template <boost::capy::ConstBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::out)
     inline auto write_eof (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
@@ -145,6 +167,11 @@ template <TransferSequence TSeq, endpoint_direction EpDirection> struct directio
         return m_raw.complete_submit(buffers);
     }
 
+    /**
+     * @brief Indicates EOF and closes the sink.
+     *
+     * @note EOF is a no-op.
+     */
     template <boost::capy::ConstBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::out)
     inline auto write_eof () -> boost::capy::io_task<>
@@ -158,6 +185,14 @@ template <TransferSequence TSeq, endpoint_direction EpDirection> struct directio
 
 } // namespace detail
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Prefills the transfer sequence as control transfers and provides
+ * complete I/O operations.
+ *
+ * @note Control transfers are only valid for endpoints 0x00 (OUT) and 0x80 (IN).
+ */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct control_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
@@ -173,6 +208,12 @@ struct control_complete_io : detail::direction_complete_io_base<TSeq, EpDirectio
     }
 };
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Prefills the transfer sequence as bulk transfers and provides
+ * complete I/O operations.
+ */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct bulk_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
@@ -187,6 +228,12 @@ struct bulk_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
     }
 };
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Prefills the transfer sequence as interrupt transfers and provides
+ * complete I/O operations.
+ */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct interrupt_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
@@ -202,6 +249,15 @@ struct interrupt_complete_io : detail::direction_complete_io_base<TSeq, EpDirect
     }
 };
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Prefills the transfer sequence as isochronous transfers and provides
+ * complete I/O operations.
+ *
+ * @note Requires all transfers in a transfer sequence to be allocated with the
+ * number of iso packets valid for a given `iso_packets` value.
+ */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct isochronous_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
@@ -217,6 +273,14 @@ struct isochronous_complete_io : detail::direction_complete_io_base<TSeq, EpDire
     }
 };
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Prefills the transfer sequence as bulk stream transfers and provides
+ * complete I/O operations.
+ *
+ * @note Requires `libusb_alloc_streams` to be called for a given `stream_id`.
+ */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 struct bulk_stream_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
@@ -232,28 +296,83 @@ struct bulk_stream_complete_io : detail::direction_complete_io_base<TSeq, EpDire
     }
 };
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Write specialization of @ref co_usb::transfer::control_complete_io.
+ */
 template <detail::TransferSequence TSeq>
 using control_sink = control_complete_io<TSeq, endpoint_direction::out>;
+
+/**
+ * @ingroup transfer
+ *
+ * @brief Read specialization of @ref co_usb::transfer::control_complete_io.
+ */
 template <detail::TransferSequence TSeq>
 using control_source = control_complete_io<TSeq, endpoint_direction::in>;
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Write specialization of @ref co_usb::transfer::bulk_complete_io.
+ */
 template <detail::TransferSequence TSeq>
 using bulk_sink = bulk_complete_io<TSeq, endpoint_direction::out>;
+
+/**
+ * @ingroup transfer
+ *
+ * @brief Read specialization of @ref co_usb::transfer::bulk_complete_io.
+ */
 template <detail::TransferSequence TSeq>
 using bulk_source = bulk_complete_io<TSeq, endpoint_direction::in>;
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Write specialization of @ref co_usb::transfer::interrupt_complete_io.
+ */
 template <detail::TransferSequence TSeq>
 using interrupt_sink = interrupt_complete_io<TSeq, endpoint_direction::out>;
+
+/**
+ * @ingroup transfer
+ *
+ * @brief Read specialization of @ref co_usb::transfer::interrupt_complete_io.
+ */
 template <detail::TransferSequence TSeq>
 using interrupt_source = interrupt_complete_io<TSeq, endpoint_direction::in>;
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Write specialization of @ref co_usb::transfer::isochronous_complete_io.
+ */
 template <detail::TransferSequence TSeq>
 using isochronous_sink = isochronous_complete_io<TSeq, endpoint_direction::out>;
+
+/**
+ * @ingroup transfer
+ *
+ * @brief Read specialization of @ref co_usb::transfer::isochronous_complete_io.
+ */
 template <detail::TransferSequence TSeq>
 using isochronous_source = isochronous_complete_io<TSeq, endpoint_direction::in>;
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Write specialization of @ref co_usb::transfer::bulk_stream_complete_io.
+ */
 template <detail::TransferSequence TSeq>
 using bulk_stream_sink = bulk_stream_complete_io<TSeq, endpoint_direction::out>;
+
+/**
+ * @ingroup transfer
+ *
+ * @brief Read specialization of @ref co_usb::transfer::bulk_stream_complete_io.
+ */
 template <detail::TransferSequence TSeq>
 using bulk_stream_source = bulk_stream_complete_io<TSeq, endpoint_direction::in>;
 

@@ -12,7 +12,7 @@
 #include "co_usb/transfer/detail/transfer_sequence.hpp"
 #include "co_usb/transfer/endpoint.hpp"
 #include "co_usb/transfer/operations.hpp"
+#include "co_usb/transfer/partial_io.hpp"
 #include "co_usb/transfer/resource.hpp"
 #include "co_usb/transfer/sequence_view.hpp"
 #include "co_usb/transfer/status.hpp"
-#include "co_usb/transfer/stream.hpp"
