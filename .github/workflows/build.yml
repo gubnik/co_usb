@@ -1,0 +1,40 @@
+name: Build project
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y git gcc autoconf autoconf-archive automake libtool libudev-dev
+
+      - name: Install vcpkg
+        run: |
+          git clone https://github.com/microsoft/vcpkg
+          ./vcpkg/bootstrap-vcpkg.sh
+
+      - name: Run cmake
+        run: |
+          export VCPKG_FORCE_DOWNLOADED_BINARIES="ON"
+          export PATH="$(pwd)/vcpkg:$PATH"
+          export VCPKG_ROOT="$(pwd)/vcpkg"
+          mkdir -p build
+          cmake --preset=x64-linux-static -DCOUSB_BUILD_DOCS=OFF -DCOUSB_BUILD_EXAMPLES=OFF -DCOUSB_BUILD_TESTS=OFF
+          cmake --build "build/x64-linux-static" --config "Release"
+          cmake --preset=x64-linux -DCOUSB_BUILD_DOCS=OFF -DCOUSB_BUILD_EXAMPLES=OFF -DCOUSB_BUILD_TESTS=OFF
+          cmake --build "build/x64-linux" --config "Release"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            build/x64-linux-static/lib/Release
+            build/x64-linux/lib/Release
+

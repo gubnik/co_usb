@@ -1,21 +1,9 @@
 #pragma once
 
-#include <co_usb/detail/service.hpp>
+#include "co_usb/ev.hpp"
+#include "co_usb/hotplug.hpp"
+#include "co_usb/transfer.hpp"
+#include "co_usb/wrapper.hpp"
 
-#include <co_usb/context.hpp>
-#include <co_usb/device_ref.hpp>
-#include <co_usb/error.hpp>
-#include <co_usb/interface.hpp>
-#include <co_usb/kernel_driver_guard.hpp>
-#include <co_usb/raii.hpp>
-
-// Transfers
-#include <co_usb/transfer/endpoint.hpp>
-#include <co_usb/transfer/transfer_awaitable.hpp>
-#include <co_usb/transfer/transfer_status.hpp>
-#include <co_usb/transfer/transfer_types.hpp>
-
-// Hotplug
-#include <co_usb/hotplug/device_acceptor.hpp>
-#include <co_usb/hotplug/hotplug.hpp>
-#include <co_usb/hotplug/hotplug_awaitable.hpp>
+#include "co_usb/detail/assert.hpp"
+#include "co_usb/detail/flag_type.hpp"

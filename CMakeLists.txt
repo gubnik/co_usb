@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13...3.31)
 
 project(
   co_usb
-  VERSION 1.0.0
+  VERSION 2.0.0
   LANGUAGES CXX)
 
 option(COUSB_BUILD_TESTS "co_usb tests" ON)
@@ -13,7 +13,6 @@ option(COUSB_ONLY_BUILD_DOCS "co_usb only docs" OFF)
 if(COUSB_ONLY_BUILD_DOCS)
   include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CousbDoxygen.cmake)
 else()
-  # libusb-1.0
   find_package(PkgConfig REQUIRED)
   pkg_check_modules(LIBUSB REQUIRED IMPORTED_TARGET libusb-1.0)
 
@@ -33,7 +32,7 @@ else()
   target_compile_definitions(${PROJECT_NAME} INTERFACE)
 
   if(COUSB_BUILD_EXAMPLES)
-    add_subdirectory(examples)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CousbExamples.cmake)
   endif()
 
   if(COUSB_BUILD_DOCS)

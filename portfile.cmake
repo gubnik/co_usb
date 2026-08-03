@@ -8,8 +8,14 @@ vcpkg_from_github(
   SHA512
   0)
 
-vcpkg_configure_cmake(SOURCE_PATH ${SOURCE_PATH} PREFER_NINJA OPTIONS
-                      -DCOUSB_BUILD_EXAMPLES=OFF -DCOUSB_BUILD_TESTS=OFF)
+vcpkg_configure_cmake(
+  SOURCE_PATH
+  ${SOURCE_PATH}
+  PREFER_NINJA
+  OPTIONS
+  -DCOUSB_BUILD_EXAMPLES=OFF
+  -DCOUSB_BUILD_TESTS=OFF
+  -DCOUSB_BUILD_DOCS=OFF)
 
 vcpkg_install_cmake()
 
