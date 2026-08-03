@@ -36,8 +36,7 @@ namespace co_usb::ev::detail
  *
  * @note As stated before, though non-trivial, it would indeed be possible to integrate libusb fds
  * with an existing event loop such as Corosio's. Since I do not intend on making Corosio a
- * dependency, I also abstein from including such mechanism, so the idea is left as an exercise for
- * the reader :-). Feel free to submit a PR.
+ * dependency such handler is not included. Feel free to submit a PR.
  */
 template <typename Ty>
 concept EventHandler = requires(Ty handler) {

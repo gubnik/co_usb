@@ -13,6 +13,8 @@
 namespace co_usb::ev
 {
 /**
+ * @ingroup event_handler
+ *
  * @brief Trivial single-threaded libusb event handler.
  *
  * This handler starts a background loop that repeatedly calls
@@ -92,6 +94,8 @@ static_assert(detail::EventHandler<trivial_event_handler>, "Not a proper usb eve
 static_assert(detail::EventHandler<trivial_event_handler>, "Not a proper usb event handler");
 
 /**
+ * @ingroup event_handler
+ *
  * @brief libusb event handler with simple internal reference counting.
  *
  * This implementation runs a background loop calling

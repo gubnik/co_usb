@@ -13,6 +13,8 @@ namespace co_usb::ev
 {
 
 /**
+ * @ingroup event_handler
+ *
  * @brief Type-erased reference to any event handler.
  *
  * @details The purpose of this type is to be held by an object within the lifetime of which
