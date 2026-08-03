@@ -10,6 +10,18 @@
 namespace co_usb
 {
 
+/**
+ * @ingroup wrapper
+ *
+ * @brief RAII wrapper for detaching and reattaching kernel driver.
+ *
+ * @details This type assumes the driver is already detached at the point of construction. The
+ * destructor will attempt to release the interface and may throw if the attach operation fails.
+ *
+ * @note Satisfies @ref detail::DeviceHandleSource.
+ *
+ * @see co_usb::detach_driver
+ */
 struct driver_guard
 {
     ~driver_guard () noexcept(false)
@@ -84,6 +96,15 @@ struct driver_guard
 };
 static_assert(detail::DeviceHandleSource<driver_guard>, "Not a proper device handle source");
 
+/**
+ * @ingroup wrapper
+ *
+ * @brief Detaches the kernel driver and returns a @ref driver_guard or error.
+ *
+ * @note Guarantees exception safety.
+ *
+ * @tparam ErrorTy @ref detail::ErrorProtocol
+ */
 template <detail::ErrorProtocol<driver_guard> ErrTy>
 auto detach_driver (detail::DeviceHandleSource auto const &devh_src, int interface_num,
                     ErrTy &&errp = as_exception()) noexcept ->

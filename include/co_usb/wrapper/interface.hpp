@@ -20,9 +20,8 @@ namespace co_usb
  *
  * @brief RAII wrapper for an interface.
  *
- * @details This type assumes the interface is already claimed
- * at the point of construction. The destructor will attempt to release the interface and may throw
- * if the release operation fails.
+ * @details This type assumes the interface is already claimed at the point of construction. The
+ * destructor will attempt to release the interface and may throw if the release operation fails.
  *
  * @note Satisfies @ref detail::DeviceHandleSource.
  *
