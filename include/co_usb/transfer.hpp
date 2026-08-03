@@ -1,5 +1,5 @@
 /**
- * @defgroup transfer Async transfer adaptors
+ * @defgroup transfer Async transfer adapters
  */
 
 #pragma once

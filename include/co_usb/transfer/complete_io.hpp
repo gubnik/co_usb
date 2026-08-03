@@ -17,7 +17,7 @@ namespace detail
 /**
  * @ingroup transfer
  *
- * @brief Complete I/O adaptor for transfer sequences.
+ * @brief Complete I/O adapter for transfer sequences.
  *
  * @note Handles cancellation.
  *
@@ -46,8 +46,8 @@ namespace detail
  * To prevent event handler from prematurely shutting down on stop request an @ref event_handler_ref
  * is held for the entire lifetime of an object of this type.
  *
- * @see transfer::raw_transfer_stream
- * @see ev::event_handler_ref
+ * @see co_usb::transfer::raw_transfer_stream
+ * @see co_usb::ev::event_handler_ref
  */
 template <detail::TransferSequence TSeq> struct complete_io_base : public partial_io_base<TSeq>
 {

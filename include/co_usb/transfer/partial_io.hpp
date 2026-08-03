@@ -21,7 +21,7 @@ namespace detail
 /**
  * @ingroup transfer
  *
- * @brief Zero-allocation wrapper around a transfer sequence enabling the use of asynchronous
+ * @brief Zero-allocation adapter around a transfer sequence enabling the use of asynchronous
  * partial I/O operations on a given transfer sequence.
  *
  * @note Handles cancellation.
@@ -50,8 +50,8 @@ namespace detail
  * To prevent event handler from prematurely shutting down on stop request an @ref event_handler_ref
  * is held for the entire lifetime of an object of this type.
  *
- * @see ev::event_handler_ref
- * @see ev::detail::handler_service
+ * @see co_usb::ev::event_handler_ref
+ * @see co_usb::ev::detail::handler_service
  */
 template <detail::TransferSequence TSeq> struct partial_io_base
 {
