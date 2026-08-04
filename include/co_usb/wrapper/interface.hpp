@@ -116,33 +116,38 @@ static_assert(detail::DeviceHandleSource<interface>, "Not a proper device handle
 /**
  * @ingroup wrapper
  *
- * @brief Claims the interface and returns a @ref interface or error.
- *
- * @note Guarantees exception safety.
+ * @brief Claims the interface and returns a @ref interface or reports an error per error protocol
+ * implementation.
  *
  * @tparam ErrorTy @ref detail::ErrorProtocol
  */
 template <detail::ErrorProtocol<interface> ErrTy>
 auto claim_interface (detail::DeviceHandleSource auto const &devh_src, int interface_num,
-                      ErrTy &&errp = as_exception()) noexcept ->
+                      ErrTy &&errp = as_exception()) ->
     typename ErrTy::template return_type<interface>
 {
-    try
-    {
-        libusb_device_handle *devh = detail::device_handle_of(devh_src);
 
-        int r = libusb_claim_interface(devh, interface_num);
-        if (r != LIBUSB_SUCCESS)
-        {
-            return errp.template with_error<interface>(
-                make_usb_error_code(static_cast<usb_error>(r)));
-        }
-        return errp.template with_success<interface>(devh, interface_num);
-    }
-    catch (...)
+    libusb_device_handle *devh = detail::device_handle_of(devh_src);
+
+    int r = libusb_claim_interface(devh, interface_num);
+    if (r != LIBUSB_SUCCESS)
     {
-        return errp.template with_error<interface>(make_usb_error_code(usb_error::unknown));
+        return errp.template with_error<interface>(make_usb_error_code(static_cast<usb_error>(r)));
     }
+    return errp.template with_success<interface>(devh, interface_num);
+}
+
+/**
+ * @ingroup wrapper
+ *
+ * @brief Claims the interface and returns a @ref interface or throws an error.
+ *
+ * @throws std::system_error on operation failure.
+ */
+inline auto claim_interface (detail::DeviceHandleSource auto const &devh_src, int interface_num)
+    -> interface
+{
+    return claim_interface(devh_src, interface_num, as_exception());
 }
 
 } // namespace co_usb
