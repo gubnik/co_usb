@@ -2,9 +2,10 @@
  * @file 03-complete-io.cpp
  * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  *
- * An example program demonstrating complete I/O principles.
+ * A complete program performing continuous large reads to a buffer sequence using transfer sequence
+ * of multiple transfers. Intergrates hotplug acceptor to accept a device.
  *
- * It is a derivative of example 02.
+ * Derivative of example 02.
  */
 
 #include <array>
@@ -74,7 +75,6 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
         if (!rec)
         {
             // std::println("Got {} bytes", rn);
-            // break;
         }
         else
         {
@@ -96,11 +96,15 @@ boost::capy::task<> accept_hotplug ()
     std::error_code ec;
     co_usb::hotplug::device_acceptor acceptor{exec, alloc};
     ec = acceptor.bind({.vid = 0x9f9f, .pid = 0x9f9f});
+    if (ec)
+    {
+        std::println(stderr, "`bind` failed with error: `{}` (code={})", ec.message(), ec.value());
+    }
     ec = acceptor.listen();
     if (ec)
     {
-        std::println(stderr, "Failed to bind hotplug router with error: `{}` (code={})",
-                     ec.message(), ec.value());
+        std::println(stderr, "`listen` failed with error: `{}` (code={})", ec.message(),
+                     ec.value());
     }
 
     while (!stop.stop_requested())
@@ -109,8 +113,7 @@ boost::capy::task<> accept_hotplug ()
 
         if (ec)
         {
-            std::println("Exiting router loop with error: `{}` (code={})", ec.message(),
-                         ec.value());
+            std::println("`accept` failed with error: `{}` (code={})", ec.message(), ec.value());
             break;
         }
 
@@ -138,7 +141,7 @@ int main (int argc, char **argv)
             // not bloat the example I will allow myself such dirty hack.
             std::this_thread::sleep_for(std::chrono::seconds{working_seconds});
 
-            // old remove API
+            // old removed API
             // auto [ec] = co_await boost::capy::delay(std::chrono::seconds{1});
 
             ctx.request_stop();
