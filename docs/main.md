@@ -40,3 +40,12 @@ https://www.boost.org/LICENSE_1_0.txt)
 QEMU devices code at `qemu/` is distributed under GNU General Public License v3.
 (See accompanying file [qemu/LICENSE.md](qemu/LICENSE.md) or copy at
 https://www.gnu.org/licenses/gpl-3.0.md)
+
+## Contributing
+
+`co_usb` is open for contributions to:
+- documentation
+- test suite
+- bug fixes
+
+New features can be submitted are subject to thorough review process.

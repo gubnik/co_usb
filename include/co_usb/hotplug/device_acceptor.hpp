@@ -98,6 +98,10 @@ struct device_acceptor
 
     [[nodiscard]] auto bind (device_triplet triplet) -> std::error_code
     {
+        if (m_handle != 0)
+        {
+            return std::make_error_code(std::errc::operation_in_progress);
+        }
         m_filter = triplet;
         return {};
     }
