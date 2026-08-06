@@ -154,7 +154,7 @@ struct control_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
         std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
         : detail::direction_partial_io_base<TSeq, EpDirection>(exec, tfer_seq)
     {
-        prefill_control_transfer(tfer_seq, endpoint, timeout_ms);
+        prefill_control(tfer_seq, endpoint, timeout_ms);
     }
 };
 
@@ -173,7 +173,7 @@ struct bulk_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
                               std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
         : detail::direction_partial_io_base<TSeq, EpDirection>(exec, tfer_seq)
     {
-        prefill_bulk_transfer(tfer_seq, endpoint, timeout_ms);
+        prefill_bulk(tfer_seq, endpoint, timeout_ms);
     }
 };
 
@@ -213,7 +213,7 @@ struct isochronous_partial_io : detail::direction_partial_io_base<TSeq, EpDirect
         int iso_packets, std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
         : detail::direction_partial_io_base<TSeq, EpDirection>(exec, tfer_seq)
     {
-        prefill_iso_transfer(tfer_seq, endpoint, iso_packets, timeout_ms);
+        prefill_isochronous(tfer_seq, endpoint, iso_packets, timeout_ms);
     }
 };
 
@@ -233,7 +233,7 @@ struct bulk_stream_partial_io : detail::direction_partial_io_base<TSeq, EpDirect
         uint32_t stream_id, std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
         : detail::direction_partial_io_base<TSeq, EpDirection>(exec, tfer_seq)
     {
-        prefill_bulk_stream_transfer(tfer_seq, endpoint, stream_id, timeout_ms);
+        prefill_bulk_stream(tfer_seq, endpoint, stream_id, timeout_ms);
     }
 };
 

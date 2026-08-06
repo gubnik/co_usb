@@ -81,7 +81,7 @@ TEST_CASE("transfer-operations", "[transfer]")
                 co_usb::transfer::endpoint<co_usb::transfer::endpoint_direction::out>::make_unsafe(
                     0x01, ndevh);
             co_usb::transfer::resource tfer;
-            co_usb::transfer::prefill_bulk_transfer(tfer, ep_out);
+            co_usb::transfer::prefill_bulk(tfer, ep_out);
             return tfer.get()->endpoint == 0x01 &&
                    tfer.get()->type == LIBUSB_ENDPOINT_TRANSFER_TYPE_BULK;
         }());
@@ -96,7 +96,7 @@ TEST_CASE("transfer-operations", "[transfer]")
                     0x02, ndevh);
             std::vector<co_usb::transfer::resource> tfers;
             tfers.resize(16);
-            co_usb::transfer::prefill_bulk_transfer(tfers, ep_out_1);
+            co_usb::transfer::prefill_bulk(tfers, ep_out_1);
             for (auto const &tfer_res : tfers)
             {
                 if (tfer_res.get()->endpoint == 0x01 &&
