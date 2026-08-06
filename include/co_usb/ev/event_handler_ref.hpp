@@ -8,6 +8,7 @@
 #include "co_usb/ev/any_event_handler.hpp"
 #include "co_usb/ev/detail/event_handler.hpp"
 #include <concepts>
+#include <utility>
 
 namespace co_usb::ev
 {
@@ -72,13 +73,13 @@ struct event_handler_ref
         return *this;
     }
 
-    event_handler_ref (event_handler_ref &&other)
+    event_handler_ref (event_handler_ref &&other) noexcept
         : m_original(other.m_original), m_vtable(other.m_vtable)
     {
         other.m_original = nullptr;
     }
 
-    event_handler_ref &operator=(event_handler_ref &&other)
+    event_handler_ref &operator=(event_handler_ref &&other) noexcept
     {
         if (this == &other)
         {
@@ -108,7 +109,7 @@ struct event_handler_ref
         {
             return false;
         }
-        return m_vtable.start_fn(m_original, usb_ctx, stop);
+        return m_vtable.start_fn(m_original, usb_ctx, std::move(stop));
     }
 
     auto ref () noexcept -> void
@@ -156,6 +157,7 @@ struct event_handler_ref
         requires(!std::same_as<HandlerTy, event_handler_ref>)
     auto make_vtable (HandlerTy &handler) -> vtable
     {
+        (void)handler; // used for type deduction
         return vtable{
             .start_fn = +[] (void *orig, libusb_context *ctx, std::stop_token stop) -> bool
             { return static_cast<HandlerTy *>(orig)->start(ctx, stop); },

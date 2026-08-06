@@ -2,9 +2,9 @@
  * 01-multiple-transfers.cpp
  * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  *
- * Example of multiple asynchronous transfers running on a thread pool
+ * Example of multiple asynchronous transfers running on a thread pool.
  *
- * Demonstrates cancellation semantics and classic read loop.
+ * Demonstrates cancellation semantics.
  *
  * WARNING: there is a real chance your device or libusb backend is not built
  * for this kind of parallel transfers and will err or break spontaneously.
@@ -15,7 +15,6 @@
 #include <co_usb.hpp>
 #include <csignal>
 #include <print>
-#include <system_error>
 #include <utility>
 
 constexpr uint16_t dev_vid = 0x9f9f;
@@ -51,25 +50,20 @@ boost::capy::task<void> process_transfer (const co_usb::interface &iface)
 int main (int argc, char **argv)
 {
     boost::capy::thread_pool tp{total};
-    std::error_code ec;
 
-    // create a context that references a newly create service with a specific event handler bound
-    // to execution service this allows to not depend on a single type of executor and interop with
-    // any Capy-based library
     static auto ctx = co_usb::make_context<co_usb::ev::refcounted_event_handler>(tp.get_executor());
 
-    // throw std::system_error on error, we expect the device to exist and don't care for errors!
-    auto devh = co_usb::open_device(tp.get_executor(), {dev_vid, dev_pid}, co_usb::as_exception());
-    // error is irrelevant, we can check it but we are unbothered either way
+    auto devh = co_usb::open_device(tp.get_executor(), {dev_vid, dev_pid});
     auto maybe_guard = co_usb::detach_driver(devh, dev_iface_num, co_usb::as_expected());
-    // once again, just throw and hope
-    auto iface = co_usb::claim_interface(devh, dev_iface_num, co_usb::as_exception());
+    auto iface = co_usb::claim_interface(devh, dev_iface_num);
+
     for (uint8_t i = 0; i < total; i++)
     {
         boost::capy::run_async(tp.get_executor(), ctx.get_token())(process_transfer(iface));
     }
 
-    // rough cancellation example, do not do that in production
+    // very rough cancellation example, do not do that in production.
+    // `request_stop` is not async signal safe and WILL cause errors.
     std::signal(SIGINT, [] (int) { ctx.request_stop(); });
     tp.join();
 }

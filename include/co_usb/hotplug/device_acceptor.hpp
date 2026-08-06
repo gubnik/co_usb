@@ -24,7 +24,6 @@
 #include <boost/capy/task.hpp>
 #include <coroutine>
 #include <libusb.h>
-#include <list>
 #include <memory_resource>
 #include <mutex>
 #include <stop_token>
@@ -98,6 +97,10 @@ struct device_acceptor
 
     [[nodiscard]] auto bind (device_triplet triplet) -> std::error_code
     {
+        if (m_handle != 0)
+        {
+            return std::make_error_code(std::errc::operation_in_progress);
+        }
         m_filter = triplet;
         return {};
     }
@@ -112,7 +115,7 @@ struct device_acceptor
         auto r = libusb_hotplug_register_callback(
             m_usb_ctx, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED | LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT,
             LIBUSB_HOTPLUG_ENUMERATE, m_filter.vid, m_filter.pid, m_filter.dev_class,
-            [] (libusb_context *ctx, libusb_device *dev, libusb_hotplug_event ev,
+            [] ([[maybe_unused]] libusb_context *ctx, libusb_device *dev, libusb_hotplug_event ev,
                 void *user_data) -> int
             {
                 libusb_device_descriptor dev_desc;
@@ -281,8 +284,8 @@ struct device_acceptor
     std::mutex m_mutex;
     std::pmr::memory_resource *m_memres;
 
-    std::pmr::list<resumption_t *> m_resumptions{};
-    std::pmr::list<dev_info_t> m_arrived_devices{};
+    std::pmr::vector<resumption_t *> m_resumptions{};
+    std::pmr::vector<dev_info_t> m_arrived_devices{};
 
     device_triplet m_filter{};
     libusb_context *m_usb_ctx;

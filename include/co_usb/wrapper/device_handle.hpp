@@ -70,61 +70,69 @@ struct device_handle
 /**
  * @ingroup wrapper
  *
- * @brief Opens a device by triplet and returns a @ref device_handle or error.
- *
- * @note Guarantees exception safety.
+ * @brief Opens a device by triplet and returns a @ref device_handle or reports an error per error
+ * protocol implementation.
  *
  * @tparam ErrorTy @ref detail::ErrorProtocol
  */
 template <detail::ErrorProtocol<device_handle> ErrTy>
-auto open_device (boost::capy::executor_ref exec, device_triplet triplet,
-                  ErrTy &&errp = as_exception()) noexcept ->
+auto open_device (boost::capy::executor_ref exec, device_triplet triplet, ErrTy &&errp) ->
     typename ErrTy::template return_type<device_handle>
 {
-    try
-    {
-        libusb_context *ctx = ::co_usb::ev::detail::get_handler_service(exec).usb_context();
-        libusb_device_handle *devh = libusb_open_device_with_vid_pid(ctx, triplet.vid, triplet.pid);
-        if (!devh)
-        {
-            return errp.template with_error<device_handle>(make_usb_error_code(usb_error::unknown));
-        }
-        return errp.template with_success<device_handle>(devh);
-    }
-    catch (...)
+    libusb_context *ctx = ::co_usb::ev::detail::get_handler_service(exec).usb_context();
+    libusb_device_handle *devh = libusb_open_device_with_vid_pid(ctx, triplet.vid, triplet.pid);
+    if (!devh)
     {
         return errp.template with_error<device_handle>(make_usb_error_code(usb_error::unknown));
     }
+    return errp.template with_success<device_handle>(devh);
 }
 
 /**
  * @ingroup wrapper
  *
- * @brief Opens a device from a @ref device_ref and returns a @ref device_handle or error.
+ * @brief Opens a device from a @ref device_ref and returns a @ref device_handle or throws an error.
  *
- * @note Guarantees exception safety.
+ * @throws std::system_error on operation failure.
+ */
+
+inline auto open_device (boost::capy::executor_ref exec, device_triplet triplet)
+{
+    return open_device(exec, triplet, as_exception());
+}
+
+/**
+ * @ingroup wrapper
+ *
+ * @brief Opens a device from a @ref device_ref and returns a @ref device_handle or reports an error
+ * per error protocol implementation.
  *
  * @tparam ErrorTy @ref detail::ErrorProtocol
  */
 template <detail::ErrorProtocol<device_handle> ErrTy>
-auto open_device (device_ref dev_ref, ErrTy &&errp = as_exception()) noexcept ->
+auto open_device (device_ref dev_ref, ErrTy &&errp) ->
     typename ErrTy::template return_type<device_handle>
 {
-    try
+    libusb_device_handle *devh;
+    int r = libusb_open(dev_ref.get(), &devh);
+    if (r != LIBUSB_SUCCESS)
     {
-        libusb_device_handle *devh;
-        int r = libusb_open(dev_ref.get(), &devh);
-        if (r != LIBUSB_SUCCESS)
-        {
-            return errp.template with_error<device_handle>(
-                make_usb_error_code(static_cast<usb_error>(r)));
-        }
-        return errp.template with_success<device_handle>(devh);
+        return errp.template with_error<device_handle>(
+            make_usb_error_code(static_cast<usb_error>(r)));
     }
-    catch (...)
-    {
-        return errp.template with_error<device_handle>(make_usb_error_code(usb_error::unknown));
-    }
+    return errp.template with_success<device_handle>(devh);
+}
+
+/**
+ * @ingroup wrapper
+ *
+ * @brief Opens a device from a @ref device_ref and returns a @ref device_handle or throws an error.
+ *
+ * @throws std::system_error on operation failure.
+ */
+inline auto open_device (device_ref dev_ref)
+{
+    return open_device(dev_ref, as_exception());
 }
 
 } // namespace co_usb

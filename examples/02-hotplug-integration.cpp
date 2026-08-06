@@ -2,10 +2,9 @@
  * @file 02-hotplug-integration.cpp
  * Copyright (c) 2026 Nikolay Gubankov. Boost Software License 1.0.
  *
- * An example program demonstrating proper transfer cancellation logic via a relatively simple
- * "Hello, world!"-type program.
+ * A complete program performing continuous large reads to a buffer sequence using transfer sequence
+ * of multiple transfers. Intergrates hotplug acceptor to accept a device.
  *
- * It will likely not work for a random device :-)
  */
 
 #include <array>
@@ -50,16 +49,18 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
     }
     auto iface = std::move(*maybe_iface);
 
-    // allocate and pre-fill the transfer
-    // libusb doesn't have allocator API so we can't propagate frame allocator
+    // allocate and pre-fill the transfers.
     std::vector<co_usb::transfer::resource> tfers;
     tfers.resize(4);
+
+    // use our vector of transfers as a transfer sequence.
     co_usb::transfer::bulk_in in_tfer{exec, tfers, co_usb::transfer::ep_in(0x01, iface), 50ms};
 
     // create and fill a lot of large buffers
     constexpr size_t bufsz = 1 << 18;
     char buf[16][bufsz];
     std::array<boost::capy::mutable_buffer, 16> bufs_in;
+
     for (size_t i = 0; i < bufs_in.size(); i++)
     {
         bufs_in[i] = boost::capy::mutable_buffer{buf[i], bufsz};
@@ -76,7 +77,6 @@ boost::capy::task<> dev_loop (co_usb::device_ref dev = {})
                          rec.message(), rec.value());
             break;
         }
-        std::println("Got {} bytes", rn);
     }
     std::println("Coro exit, total bytes transfered: {}", total_bytes);
     auto gbit = total_bytes * 8 * 1e-9;
@@ -91,11 +91,15 @@ boost::capy::task<> accept_hotplug ()
     std::error_code ec;
     co_usb::hotplug::device_acceptor acceptor{exec, alloc};
     ec = acceptor.bind({.vid = 0x9f9f, .pid = 0x9f9f});
+    if (ec)
+    {
+        std::println(stderr, "`bind` failed with error: `{}` (code={})", ec.message(), ec.value());
+    }
     ec = acceptor.listen();
     if (ec)
     {
-        std::println(stderr, "Failed to bind hotplug router with error: `{}` (code={})",
-                     ec.message(), ec.value());
+        std::println(stderr, "`listen` failed with error: `{}` (code={})", ec.message(),
+                     ec.value());
     }
 
     while (!stop.stop_requested())
@@ -104,8 +108,7 @@ boost::capy::task<> accept_hotplug ()
 
         if (ec)
         {
-            std::println("Exiting router loop with error: `{}` (code={})", ec.message(),
-                         ec.value());
+            std::println("`accept` failed with error: `{}` (code={})", ec.message(), ec.value());
             break;
         }
 
@@ -133,7 +136,7 @@ int main (int argc, char **argv)
             // not bloat the example I will allow myself such dirty hack.
             std::this_thread::sleep_for(std::chrono::seconds{working_seconds});
 
-            // old remove API
+            // old removed API
             // auto [ec] = co_await boost::capy::delay(std::chrono::seconds{1});
 
             ctx.request_stop();

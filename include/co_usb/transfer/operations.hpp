@@ -44,9 +44,8 @@ template <detail::TransferSequence TSeq> constexpr auto cancel_transfer (TSeq co
  * @note Control transfers are only valid for endpoints 0x00 (OUT) and 0x80 (IN).
  */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
-constexpr auto
-prefill_control_transfer (TSeq const &tfer_seq, endpoint<EpDirection> ep,
-                          std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
+constexpr auto prefill_control (TSeq const &tfer_seq, endpoint<EpDirection> ep,
+                                std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
 {
 
     COUSB_ASSERT((ep.addr() == 0x00) && (EpDirection == endpoint_direction::out) &&
@@ -69,9 +68,8 @@ prefill_control_transfer (TSeq const &tfer_seq, endpoint<EpDirection> ep,
  * @tparam TSeq Transfer sequence type.
  */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
-constexpr auto
-prefill_bulk_transfer (TSeq const &tfer_seq, endpoint<EpDirection> ep,
-                       std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
+constexpr auto prefill_bulk (TSeq const &tfer_seq, endpoint<EpDirection> ep,
+                             std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
 {
     auto it = detail::transfer_begin(tfer_seq);
     for (; it != detail::transfer_end(tfer_seq); it++)
@@ -113,8 +111,8 @@ prefill_interrupt_transfer (TSeq const &tfer_seq, endpoint<EpDirection> ep,
  */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 constexpr auto
-prefill_iso_transfer (TSeq const &tfer_seq, endpoint<EpDirection> ep, int iso_packets,
-                      std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
+prefill_isochronous (TSeq const &tfer_seq, endpoint<EpDirection> ep, int iso_packets,
+                     std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
 {
     auto it = detail::transfer_begin(tfer_seq);
     for (; it != detail::transfer_end(tfer_seq); it++)
@@ -135,8 +133,8 @@ prefill_iso_transfer (TSeq const &tfer_seq, endpoint<EpDirection> ep, int iso_pa
  */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 constexpr auto
-prefill_bulk_stream_transfer (TSeq const &tfer_seq, endpoint<EpDirection> ep, uint32_t stream_id,
-                              std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
+prefill_bulk_stream (TSeq const &tfer_seq, endpoint<EpDirection> ep, uint32_t stream_id,
+                     std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
 {
     auto it = detail::transfer_begin(tfer_seq);
     for (; it != detail::transfer_end(tfer_seq); it++)

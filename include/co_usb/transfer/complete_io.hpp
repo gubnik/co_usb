@@ -209,7 +209,7 @@ struct control_complete_io : detail::direction_complete_io_base<TSeq, EpDirectio
         : detail::direction_complete_io_base<TSeq, EpDirection>(exec, tfer_seq,
                                                                 single_transfer_limit, memres)
     {
-        prefill_control_transfer(tfer_seq, endpoint, timeout_ms);
+        prefill_control(tfer_seq, endpoint, timeout_ms);
     }
 };
 
@@ -229,7 +229,7 @@ struct bulk_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
         : detail::direction_complete_io_base<TSeq, EpDirection>(exec, tfer_seq,
                                                                 single_transfer_limit, memres)
     {
-        prefill_bulk_transfer(tfer_seq, endpoint, timeout_ms);
+        prefill_bulk(tfer_seq, endpoint, timeout_ms);
     }
 };
 
@@ -274,7 +274,7 @@ struct isochronous_complete_io : detail::direction_complete_io_base<TSeq, EpDire
         : detail::direction_complete_io_base<TSeq, EpDirection>(exec, tfer_seq,
                                                                 single_transfer_limit, memres)
     {
-        prefill_iso_transfer(tfer_seq, endpoint, iso_packets, timeout_ms);
+        prefill_isochronous(tfer_seq, endpoint, iso_packets, timeout_ms);
     }
 };
 
@@ -297,7 +297,7 @@ struct bulk_stream_complete_io : detail::direction_complete_io_base<TSeq, EpDire
         : detail::direction_complete_io_base<TSeq, EpDirection>(exec, tfer_seq,
                                                                 single_transfer_limit, memres)
     {
-        prefill_bulk_stream_transfer(tfer_seq, endpoint, stream_id, timeout_ms);
+        prefill_bulk_stream(tfer_seq, endpoint, stream_id, timeout_ms);
     }
 };
 

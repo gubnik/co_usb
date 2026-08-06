@@ -109,33 +109,38 @@ static_assert(detail::DeviceHandleSource<driver_guard>, "Not a proper device han
 /**
  * @ingroup wrapper
  *
- * @brief Detaches the kernel driver and returns a @ref driver_guard or error.
- *
- * @note Guarantees exception safety.
+ * @brief Detaches the kernel driver and returns a @ref driver_guard or reports an error per error
+ * protocol implementation.
  *
  * @tparam ErrorTy @ref detail::ErrorProtocol
  */
 template <detail::ErrorProtocol<driver_guard> ErrTy>
 auto detach_driver (detail::DeviceHandleSource auto const &devh_src, int interface_num,
-                    ErrTy &&errp = as_exception()) noexcept ->
+                    ErrTy &&errp = as_exception()) ->
     typename ErrTy::template return_type<driver_guard>
 {
-    try
-    {
-        libusb_device_handle *devh = detail::device_handle_of(devh_src);
+    libusb_device_handle *devh = detail::device_handle_of(devh_src);
 
-        int r = libusb_detach_kernel_driver(devh, interface_num);
-        if (r != LIBUSB_SUCCESS)
-        {
-            return errp.template with_error<driver_guard>(
-                make_usb_error_code(static_cast<usb_error>(r)));
-        }
-        return errp.template with_success<driver_guard>(devh, interface_num);
-    }
-    catch (...)
+    int r = libusb_detach_kernel_driver(devh, interface_num);
+    if (r != LIBUSB_SUCCESS)
     {
-        return errp.template with_error<driver_guard>(make_usb_error_code(usb_error::unknown));
+        return errp.template with_error<driver_guard>(
+            make_usb_error_code(static_cast<usb_error>(r)));
     }
+    return errp.template with_success<driver_guard>(devh, interface_num);
+}
+
+/**
+ * @ingroup wrapper
+ *
+ * @brief Detaches the kernel driver and returns a @ref driver_guard or throws an error.
+ *
+ * @throws std::system_error on operation failure.
+ */
+inline auto detach_driver (detail::DeviceHandleSource auto const &devh_src, int interface_num)
+    -> driver_guard
+{
+    return detach_driver(devh_src, interface_num, as_exception());
 }
 
 } // namespace co_usb

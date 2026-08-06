@@ -1,7 +1,7 @@
 /**
  * @defgroup transfer Async transfer adapters
  *
- * @brief Coroutine adapters for `libusb` async transfer API.
+ * @brief Coroutine adapters for async transfer API.
  */
 
 #pragma once
