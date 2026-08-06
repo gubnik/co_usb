@@ -104,12 +104,13 @@ template <endpoint_direction Direction = endpoint_direction::any> struct endpoin
     }
 
     /**
-     * @brief Safe cast from an endpoint with an unknown direction to an endpoint
-     * with a concrete direction
+     * @brief Cast an `any` endpoint to a concrete direction.
      *
-     * @returns std::nullopt when the endpoint value does not match expected direction or is equal
-     * to control endpoint (0x80)
-     * @returns Properly typed endpoint if conversion is possible
+     * @details Cast is performed on the basis of endpoint address containing LIBUSB_ENDPOINT_IN bit
+     * set to 1.
+     *
+     * @returns std::nullopt if the cast cannot be performed.
+     * @returns Optional value containing a properly typed endpoint if cast succeeded.
      */
     template <endpoint_direction ToDirection>
     std::optional<endpoint<ToDirection>> as () const noexcept
