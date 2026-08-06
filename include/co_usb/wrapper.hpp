@@ -1,7 +1,7 @@
 /**
  * @defgroup wrapper Wrapper utilities
  *
- * @brief Type-safe wrappers and utilities for `libusb`.
+ * @brief Some type-safe wrappers and utilities.
  */
 
 #pragma once
