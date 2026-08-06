@@ -115,7 +115,7 @@ struct any_event_handler
         {
             return false;
         }
-        return m_vtable.start_fn(m_storage, usb_ctx, stop);
+        return m_vtable.start_fn(m_storage, usb_ctx, std::move(stop));
     }
 
     auto ref () noexcept -> void
