@@ -13,11 +13,16 @@
 namespace co_usb::transfer
 {
 
+/**
+ * @ingroup transfer
+ *
+ * @brief Direction of an endpoint.
+ */
 enum class endpoint_direction
 {
-    out = 0x00,
-    in = 0x80,
-    any = 0xFF,
+    out = 0x00, //< OUT endpoint (0x80 is not set)
+    in = 0x80,  //< IN endpoint (0x80 is set)
+    any = 0xFF, //< any/unknown direction
 };
 
 /**
