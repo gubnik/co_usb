@@ -20,9 +20,12 @@ namespace co_usb::transfer
  */
 enum class endpoint_direction
 {
-    out = 0x00, //< OUT endpoint (0x80 is not set)
-    in = 0x80,  //< IN endpoint (0x80 is set)
-    any = 0xFF, //< any/unknown direction
+    /** OUT endpoint (0x80 is not set) */
+    out = 0x00,
+    /** IN endpoint (0x80 is set) */
+    in = 0x80,
+    /** any/unknown direction */
+    any = 0xFF,
 };
 
 /**
