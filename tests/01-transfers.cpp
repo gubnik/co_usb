@@ -104,7 +104,7 @@ TEST_CASE("transfer-operations", "[transfer]")
                     continue;
                 return false;
             }
-            co_usb::transfer::prefill_interrupt_transfer(tfers, ep_out_2);
+            co_usb::transfer::prefill_interrupt(tfers, ep_out_2);
             for (auto const &tfer_res : tfers)
             {
                 if (tfer_res.get()->endpoint == 0x02 &&

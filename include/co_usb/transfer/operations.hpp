@@ -88,8 +88,8 @@ constexpr auto prefill_bulk (TSeq const &tfer_seq, endpoint<EpDirection> ep,
  */
 template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
 constexpr auto
-prefill_interrupt_transfer (TSeq const &tfer_seq, endpoint<EpDirection> ep,
-                            std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
+prefill_interrupt (TSeq const &tfer_seq, endpoint<EpDirection> ep,
+                   std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
 {
     auto it = detail::transfer_begin(tfer_seq);
     for (; it != detail::transfer_end(tfer_seq); it++)
