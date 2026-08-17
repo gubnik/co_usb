@@ -191,7 +191,7 @@ struct interrupt_partial_io : detail::direction_partial_io_base<TSeq, EpDirectio
         std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{0})
         : detail::direction_partial_io_base<TSeq, EpDirection>(exec, tfer_seq)
     {
-        prefill_interrupt_transfer(tfer_seq, endpoint, timeout_ms);
+        prefill_interrupt(tfer_seq, endpoint, timeout_ms);
     }
 };
 

@@ -250,7 +250,7 @@ struct interrupt_complete_io : detail::direction_complete_io_base<TSeq, EpDirect
         : detail::direction_complete_io_base<TSeq, EpDirection>(exec, tfer_seq,
                                                                 single_transfer_limit, memres)
     {
-        prefill_interrupt_transfer(tfer_seq, endpoint, timeout_ms);
+        prefill_interrupt(tfer_seq, endpoint, timeout_ms);
     }
 };
 
