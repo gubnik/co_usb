@@ -1,0 +1,14 @@
+var searchData=
+[
+  ['what_20co_5fusb_20does_0',['What co_usb does',['../index.html#autotoc_md2',1,'']]],
+  ['what_20co_5fusb_20does_20not_20do_1',['What co_usb does not do',['../index.html#autotoc_md3',1,'']]],
+  ['why_20not_20asio_2',['Why not Asio?',['../index.html#autotoc_md4',1,'']]],
+  ['wildcard_5ftriplet_5fcomparator_3',['wildcard_triplet_comparator',['../structco__usb_1_1wildcard__triplet__comparator.html',1,'co_usb']]],
+  ['with_5ferror_4',['with_error',['../structco__usb_1_1detail_1_1as__exception__t.html#ababaafa2ba7dc14d01d06b3fa6e1054d',1,'co_usb::detail::as_exception_t::with_error()'],['../structco__usb_1_1detail_1_1as__optional__t.html#a473abd4e36a5b529e7575f97f2e933aa',1,'co_usb::detail::as_optional_t::with_error()'],['../structco__usb_1_1detail_1_1as__io__result__t.html#a3f0ff0b61b2d054369b2af4370f11f63',1,'co_usb::detail::as_io_result_t::with_error()'],['../structco__usb_1_1detail_1_1as__io__task__t.html#a74555f5f954145ee7cc90ad669317c22',1,'co_usb::detail::as_io_task_t::with_error(std::error_code ec) noexcept -&gt; return_type&lt; U &gt;']]],
+  ['with_5fsuccess_5',['with_success',['../structco__usb_1_1detail_1_1as__io__task__t.html#ae12c07a757d6fb434f9ad104c068056c',1,'co_usb::detail::as_io_task_t::with_success()'],['../structco__usb_1_1detail_1_1as__io__result__t.html#ae7b2ece07e051c4bca96ee7eb46a0949',1,'co_usb::detail::as_io_result_t::with_success()'],['../structco__usb_1_1detail_1_1as__optional__t.html#a1890b6a9dc05feade14d36f0810c80cf',1,'co_usb::detail::as_optional_t::with_success()'],['../structco__usb_1_1detail_1_1as__exception__t.html#a213465755b34b858b0d5f40d5b3b0a4a',1,'co_usb::detail::as_exception_t::with_success()']]],
+  ['wrapper_20utilities_6',['Wrapper utilities',['../group__wrapper.html',1,'']]],
+  ['wrapper_2ehpp_7',['wrapper.hpp',['../wrapper_8hpp.html',1,'']]],
+  ['write_8',['write',['../structco__usb_1_1transfer_1_1detail_1_1direction__complete__io__base.html#a9d7d3e0c426c80bb57c9c162a25ecac8',1,'co_usb::transfer::detail::direction_complete_io_base']]],
+  ['write_5feof_9',['write_eof',['../structco__usb_1_1transfer_1_1detail_1_1direction__complete__io__base.html#a9f660a8d69d16ed8400fb6b9a53d3712',1,'co_usb::transfer::detail::direction_complete_io_base::write_eof(BuffersTy const &amp;buffers) -&gt; boost::capy::io_task&lt; size_t &gt;'],['../structco__usb_1_1transfer_1_1detail_1_1direction__complete__io__base.html#a84e0612cf84526af3c4f726f6159c054',1,'co_usb::transfer::detail::direction_complete_io_base::write_eof() -&gt; boost::capy::io_task&lt;&gt;']]],
+  ['write_5fsome_10',['write_some',['../structco__usb_1_1transfer_1_1detail_1_1direction__complete__io__base.html#ad7d3a2ab5766b2dd85f0e550a6afe94b',1,'co_usb::transfer::detail::direction_complete_io_base::write_some()'],['../structco__usb_1_1transfer_1_1detail_1_1direction__partial__io__base.html#a348ba3eb62f1a944e3b7e5d4ac607719',1,'co_usb::transfer::detail::direction_partial_io_base::write_some()']]]
+];

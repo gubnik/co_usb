@@ -1,0 +1,7 @@
+<map id="co_usb::transfer::detail::partial_io_base&lt; TSeq &gt;" name="co_usb::transfer::detail::partial_io_base&lt; TSeq &gt;">
+<area shape="rect" id="Node000001" title="Zero&#45;allocation adapter around a transfer sequence enabling the use of asynchronous partial I/O opera..." alt="" coords="133,108,323,148"/>
+<area shape="rect" id="Node000002" href="$structco__usb_1_1ev_1_1event__handler__ref.html" title="Type&#45;erased reference to any event handler." alt="" coords="5,13,221,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,45,208,106,205,110,135,49"/>
+<area shape="rect" id="Node000003" href="$structco__usb_1_1transfer_1_1sequence__view.html" title=" " alt="" coords="246,5,442,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="314,56,251,110,248,106,310,52"/>
+</map>

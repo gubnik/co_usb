@@ -1,0 +1,14 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/transfer/resource.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/transfer/resource.hpp">
+<area shape="rect" id="Node000001" title="RAII wrapper over a transfer allocation." alt="" coords="55,5,250,60"/>
+<area shape="rect" id="Node000002" href="$transfer__sequence_8hpp.html" title="Transfer resource and transfer sequence concepts." alt="" coords="65,108,240,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,60,155,94,150,94,150,60"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,196,79,221"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="103,62,76,83,55,109,48,127,43,146,42,182,37,182,38,145,42,125,50,107,72,79,99,58"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="265,115,342,141"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="196,58,275,106,272,111,194,62"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,150,71,190,68,186,124,146"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="111,196,178,221"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="153,148,150,182,145,182,148,148"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="203,196,295,221"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="178,146,226,185,222,189,174,150"/>
+</map>

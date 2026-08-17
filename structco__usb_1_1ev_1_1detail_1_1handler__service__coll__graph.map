@@ -1,0 +1,5 @@
+<map id="co_usb::ev::detail::handler_service" name="co_usb::ev::detail::handler_service">
+<area shape="rect" id="Node000001" title="Execution context service that owns a libusb context and an event handler." alt="" coords="21,93,156,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,172,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,59,91,93,86,93,86,59"/>
+</map>

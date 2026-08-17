@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['in_5fflight_0',['in_flight',['../structco__usb_1_1transfer_1_1detail_1_1complete__sequence__awaitable_1_1await__state__t.html#a4e4b3191f61d2d7952bbcb1324765353',1,'co_usb::transfer::detail::complete_sequence_awaitable::await_state_t::in_flight'],['../structco__usb_1_1transfer_1_1detail_1_1sequence__awaitable_1_1await__state__t.html#ae88a9309bd7141ddeea6e7d9711f413f',1,'co_usb::transfer::detail::sequence_awaitable::await_state_t::in_flight']]],
+  ['io_5fenv_1',['io_env',['../structco__usb_1_1hotplug_1_1detail_1_1hotplug__awaitable_1_1resumption__t.html#a613e1555bf930f35489e4408c23cd5c5',1,'co_usb::hotplug::detail::hotplug_awaitable::resumption_t::io_env'],['../structco__usb_1_1transfer_1_1detail_1_1complete__sequence__awaitable_1_1await__state__t.html#ac84a6078cf379650b085661f91cfdfc0',1,'co_usb::transfer::detail::complete_sequence_awaitable::await_state_t::io_env'],['../structco__usb_1_1transfer_1_1detail_1_1sequence__awaitable_1_1await__state__t.html#a7977bf347096f03f41f4c932c83373c4',1,'co_usb::transfer::detail::sequence_awaitable::await_state_t::io_env']]]
+];

@@ -1,0 +1,12 @@
+<map id="co_usb::hotplug::detail::hotplug_awaitable" name="co_usb::hotplug::detail::hotplug_awaitable">
+<area shape="rect" id="Node000001" title="Low&#45;level awaitable primitive for strapping hotplug callbacks to a coroutine ecosystem." alt="" coords="851,56,1020,96"/>
+<area shape="rect" id="Node000002" href="$structco__usb_1_1hotplug_1_1detail_1_1hotplug__awaitable_1_1op__result.html" title=" " alt="" coords="263,49,437,103"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="451,66,461,65,644,62,827,67,850,68,850,73,827,72,644,67,461,71,451,71"/>
+<area shape="rect" id="Node000005" href="$structco__usb_1_1hotplug_1_1detail_1_1hotplug__awaitable_1_1resumption__t.html" title=" " alt="" coords="533,91,777,131"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="451,85,533,94,533,99,451,90"/>
+<area shape="rect" id="Node000003" href="$structco__usb_1_1detail_1_1flag__type.html" title=" " alt="" coords="5,5,173,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="187,51,263,61,262,67,186,56"/>
+<area shape="rect" id="Node000004" href="$structco__usb_1_1device__ref.html" title="Wrapper for nullable libusb_device that increments ref count on ctor and decrements on dtor." alt="" coords="18,99,161,125"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="174,98,262,85,263,91,175,103"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="791,91,850,84,851,89,791,97"/>
+</map>

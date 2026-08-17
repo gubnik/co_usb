@@ -1,0 +1,10 @@
+var searchData=
+[
+  ['init_5fcontext_0',['init_context',['../structco__usb_1_1ev_1_1detail_1_1handler__service.html#a0093f8b8d881fbcc4e830b2e9eab28be',1,'co_usb::ev::detail::handler_service::init_context() noexcept -&gt; std::error_code'],['../structco__usb_1_1ev_1_1detail_1_1handler__service.html#a587628b608a4699bca296c0f2919419d',1,'co_usb::ev::detail::handler_service::init_context(std::span&lt; const libusb_init_option &gt; options) noexcept -&gt; std::error_code']]],
+  ['interface_1',['interface',['../structco__usb_1_1interface.html#ace219f2c946e30bd0c49c8c43a34ff04',1,'co_usb::interface::interface(interface const &amp;)=delete'],['../structco__usb_1_1interface.html#a68c66c3e751629da1cd03b815a307c92',1,'co_usb::interface::interface(interface &amp;&amp;other) noexcept'],['../structco__usb_1_1interface.html#ab88c4ec5384723a6dbef518bbcd7518a',1,'co_usb::interface::interface(detail::DeviceHandleSource auto const &amp;devh_src, int interface_num)']]],
+  ['interface_5fnum_2',['interface_num',['../structco__usb_1_1driver__guard.html#a7d7f3b0e89dfa414b7377dbb7fe4db61',1,'co_usb::driver_guard::interface_num()'],['../structco__usb_1_1interface.html#adfb4f2ead2780c852328a00667872159',1,'co_usb::interface::interface_num()']]],
+  ['interrupt_5fcomplete_5fio_3',['interrupt_complete_io',['../structco__usb_1_1transfer_1_1interrupt__complete__io.html#a77920a150e505af3436b6f743ecfa30b',1,'co_usb::transfer::interrupt_complete_io']]],
+  ['interrupt_5fpartial_5fio_4',['interrupt_partial_io',['../structco__usb_1_1transfer_1_1interrupt__partial__io.html#a7dde18337c19f2bda714dcef491bd80b',1,'co_usb::transfer::interrupt_partial_io']]],
+  ['isochronous_5fcomplete_5fio_5',['isochronous_complete_io',['../structco__usb_1_1transfer_1_1isochronous__complete__io.html#a260f157d61747e0071eac03bd08bd3c3',1,'co_usb::transfer::isochronous_complete_io']]],
+  ['isochronous_5fpartial_5fio_6',['isochronous_partial_io',['../structco__usb_1_1transfer_1_1isochronous__partial__io.html#a5f8517d9c5af024dad1c053916c0a892',1,'co_usb::transfer::isochronous_partial_io']]]
+];

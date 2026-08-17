@@ -1,0 +1,9 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/hotplug/flags.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/hotplug/flags.hpp">
+<area shape="rect" id="Node000001" title="Strongly typed wrappers libusb hotplug flag types (flags &amp; events)." alt="" coords="52,5,223,60"/>
+<area shape="rect" id="Node000002" href="$flag__type_8hpp.html" title=" " alt="" coords="5,108,141,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,62,96,98,92,95,117,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="166,115,239,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="158,59,189,102,184,105,154,62"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="27,196,119,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="76,148,76,182,71,182,71,148"/>
+</map>

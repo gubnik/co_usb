@@ -1,0 +1,24 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/wrapper/device_ref.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/wrapper/device_ref.hpp">
+<area shape="rect" id="Node000001" title="Wrapper for nullable libusb_device that increments ref count on ctor and decrements on dtor." alt="" coords="314,5,522,60"/>
+<area shape="rect" id="Node000002" href="$hotplug__awaitable_8hpp.html" title="Low&#45;level awaitable primitive for strapping hotplug callbacks to a coroutine ecosystem." alt="" coords="51,108,250,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="341,68,235,110,233,105,339,63"/>
+<area shape="rect" id="Node000006" href="$oneshot__hotplug_8hpp.html" title="Oneshot coroutine to get a one&#45;time hotplug accept." alt="" coords="28,225,273,280"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="384,72,328,124,262,179,194,227,191,223,259,175,324,120,380,68"/>
+<area shape="rect" id="Node000007" href="$device__acceptor_8hpp.html" title="Asio/Corosio&#45;like acceptor for devices via hotplug API." alt="" coords="297,225,540,280"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="421,74,421,225,416,225,416,74"/>
+<area shape="rect" id="Node000008" href="$wrapper_8hpp.html" title=" " alt="" coords="564,225,734,280"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="439,71,471,124,491,151,515,175,550,202,587,223,585,228,547,206,511,179,487,154,466,127,434,74"/>
+<area shape="rect" id="Node000009" href="$device__handle_8hpp.html" title="RAII wrapper around libusb_device_handle*." alt="" coords="525,115,760,170"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="486,64,589,113,586,118,484,69"/>
+<area shape="rect" id="Node000003" href="$hotplug_8hpp.html" title=" " alt="" coords="198,328,369,383"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="55,187,34,205,18,227,8,254,10,265,17,278,45,298,90,315,199,339,198,344,88,320,42,303,14,282,5,267,3,253,13,224,30,201,52,183"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="153,191,153,225,148,225,148,191"/>
+<area shape="rect" id="Node000004" href="$co__usb_8hpp.html" title=" " alt="" coords="260,431,430,485"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="309,393,331,429,327,432,304,396"/>
+<area shape="rect" id="Node000005" href="$co__usb_8cpp.html" title=" " alt="" coords="245,533,445,573"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="348,499,348,533,342,533,342,499"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="197,286,250,326,247,330,194,290"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="374,290,320,330,317,326,370,286"/>
+<area shape="poly" id="edge11_Node000008_Node000004" title=" " alt="" coords="600,290,386,433,383,428,597,285"/>
+<area shape="poly" id="edge13_Node000009_Node000008" title=" " alt="" coords="647,184,650,225,645,225,642,184"/>
+</map>

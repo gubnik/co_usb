@@ -1,0 +1,13 @@
+<map id="co_usb::transfer::detail::direction_complete_io_base&lt; TSeq, EpDirection &gt;" name="co_usb::transfer::detail::direction_complete_io_base&lt; TSeq, EpDirection &gt;">
+<area shape="rect" id="Node000001" title="Interface complying with Boost.Http&#39;s ReadSource and WriteSink concepts." alt="" coords="5,142,211,197"/>
+<area shape="rect" id="Node000002" href="$structco__usb_1_1transfer_1_1bulk__complete__io.html" title="Prefills the transfer sequence as bulk transfers and provides complete I/O operations." alt="" coords="259,5,513,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="147,131,198,91,257,55,288,43,290,48,260,60,201,95,150,135"/>
+<area shape="rect" id="Node000003" href="$structco__usb_1_1transfer_1_1bulk__stream__complete__io.html" title="Prefills the transfer sequence as bulk stream transfers and provides complete I/O operations." alt="" coords="279,70,493,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,137,279,122,281,127,225,142"/>
+<area shape="rect" id="Node000004" href="$structco__usb_1_1transfer_1_1control__complete__io.html" title="Prefills the transfer sequence as control transfers and provides complete I/O operations." alt="" coords="259,149,513,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="224,167,258,167,258,172,224,172"/>
+<area shape="rect" id="Node000005" href="$structco__usb_1_1transfer_1_1interrupt__complete__io.html" title="Prefills the transfer sequence as interrupt transfers and provides complete I/O operations." alt="" coords="259,213,513,253"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="225,193,299,211,298,216,223,199"/>
+<area shape="rect" id="Node000006" href="$structco__usb_1_1transfer_1_1isochronous__complete__io.html" title="Prefills the transfer sequence as isochronous transfers and provides complete I/O operations." alt="" coords="259,277,513,317"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="158,203,206,234,260,263,292,275,290,280,258,268,203,239,155,207"/>
+</map>

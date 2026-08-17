@@ -1,0 +1,19 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/detail/flag_type.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/detail/flag_type.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="13,5,198,60"/>
+<area shape="rect" id="Node000002" href="$co__usb_8hpp.html" title=" " alt="" coords="20,533,191,588"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,74,61,152,51,197,47,244,47,357,52,422,72,484,93,532,88,534,67,486,47,423,41,357,41,244,46,197,56,150,84,72"/>
+<area shape="rect" id="Node000004" href="$flags_8hpp.html" title="Strongly typed wrappers libusb hotplug flag types (flags &amp; events)." alt="" coords="113,108,284,163"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="141,69,176,106,172,110,137,72"/>
+<area shape="rect" id="Node000003" href="$co__usb_8cpp.html" title=" " alt="" coords="5,636,205,676"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="108,602,108,636,103,636,103,602"/>
+<area shape="rect" id="Node000005" href="$hotplug_8hpp.html" title=" " alt="" coords="81,431,252,485"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="151,174,135,192,122,212,114,240,111,270,112,301,118,331,135,386,154,429,150,432,130,388,112,332,107,301,105,270,108,239,118,210,130,188,147,170"/>
+<area shape="rect" id="Node000006" href="$hotplug__awaitable_8hpp.html" title="Low&#45;level awaitable primitive for strapping hotplug callbacks to a coroutine ecosystem." alt="" coords="131,211,330,280"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="213,176,223,210,218,211,208,177"/>
+<area shape="rect" id="Node000007" href="$oneshot__hotplug_8hpp.html" title="Oneshot coroutine to get a one&#45;time hotplug accept." alt="" coords="204,328,449,383"/>
+<area shape="poly" id="edge10_Node000004_Node000007" title=" " alt="" coords="298,166,324,185,345,209,356,239,356,271,350,302,341,328,336,327,345,301,351,271,350,240,340,212,320,189,295,171"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="146,499,124,535,119,532,141,496"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="209,294,195,329,181,383,172,431,167,430,175,382,189,327,204,292"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="271,288,305,326,301,330,267,292"/>
+<area shape="poly" id="edge9_Node000007_Node000005" title=" " alt="" coords="275,392,210,433,207,428,272,388"/>
+</map>

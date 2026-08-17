@@ -1,0 +1,28 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/hotplug/detail/hotplug_awaitable.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/hotplug/detail/hotplug_awaitable.hpp">
+<area shape="rect" id="Node000001" title="Low&#45;level awaitable primitive for strapping hotplug callbacks to a coroutine ecosystem." alt="" coords="712,5,911,75"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,123,153,163"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="712,54,468,81,167,125,166,120,467,76,711,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="177,130,384,155"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="712,63,355,130,354,125,711,58"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="409,130,595,155"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="713,76,551,128,550,123,711,71"/>
+<area shape="rect" id="Node000005" href="$flags_8hpp.html" title="Strongly typed wrappers libusb hotplug flag types (flags &amp; events)." alt="" coords="620,130,803,155"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="779,77,735,122,731,118,776,73"/>
+<area shape="rect" id="Node000009" href="$usb__error_8hpp.html" title="USB error enumeration." alt="" coords="1023,130,1181,155"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="909,72,1057,123,1055,128,908,77"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="1107,218,1215,243"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="911,46,993,56,1078,70,1150,92,1177,105,1196,121,1205,143,1202,166,1193,189,1181,208,1176,206,1188,186,1197,165,1200,143,1192,124,1174,110,1148,97,1077,76,993,61,911,51"/>
+<area shape="rect" id="Node000011" href="$device__ref_8hpp.html" title="Wrapper for nullable libusb_device that increments ref count on ctor and decrements on dtor." alt="" coords="827,123,998,163"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="848,73,885,111,882,114,844,77"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="1257,130,1438,155"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="911,57,1273,125,1272,130,910,63"/>
+<area shape="rect" id="Node000006" href="$flag__type_8hpp.html" title=" " alt="" coords="643,211,779,251"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="714,156,714,197,709,197,709,156"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="876,218,949,243"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="740,153,874,210,872,215,737,158"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="665,299,757,324"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="714,251,714,285,709,285,709,251"/>
+<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="1078,158,952,215,950,210,1075,153"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="1112,154,1147,205,1142,208,1108,157"/>
+<area shape="poly" id="edge12_Node000011_Node000008" title=" " alt="" coords="915,163,915,204,910,204,910,163"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/transfer/endpoint.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/transfer/endpoint.hpp">
+<area shape="rect" id="Node000001" title="USB endpoint aggregate templated on its direction." alt="" coords="305,5,501,60"/>
+<area shape="rect" id="Node000002" href="$device__handle__source_8hpp.html" title=" " alt="" coords="101,108,299,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="347,62,254,105,252,100,345,58"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="323,115,389,141"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="392,62,370,104,366,102,387,59"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="413,115,488,141"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="419,59,441,102,436,104,414,62"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="513,115,599,141"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="447,58,527,106,524,111,444,62"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,196,85,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="164,150,81,192,79,187,162,146"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="110,196,183,221"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="189,150,165,186,160,183,185,147"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="207,196,299,221"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="215,147,240,183,235,186,211,150"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="323,196,383,221"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="238,146,320,187,318,192,236,150"/>
+</map>

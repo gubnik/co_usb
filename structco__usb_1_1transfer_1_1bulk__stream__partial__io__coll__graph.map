@@ -1,0 +1,5 @@
+<map id="co_usb::transfer::bulk_stream_partial_io&lt; TSeq, EpDirection &gt;" name="co_usb::transfer::bulk_stream_partial_io&lt; TSeq, EpDirection &gt;">
+<area shape="rect" id="Node000001" title="Prefills the transfer sequence as bulk stream transfers and provides partial I/O operations." alt="" coords="11,108,205,163"/>
+<area shape="rect" id="Node000002" href="$structco__usb_1_1transfer_1_1detail_1_1direction__partial__io__base.html" title="Provides Capy ReadStream&#45;/WriteStream&#45;compliant interface for partial transfer I/O." alt="" coords="5,5,211,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,74,111,108,105,108,105,74"/>
+</map>

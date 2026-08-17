@@ -1,0 +1,7 @@
+<map id="co_usb::transfer::detail::complete_sequence_awaitable&lt; TSeq, BuffersTy &gt;" name="co_usb::transfer::detail::complete_sequence_awaitable&lt; TSeq, BuffersTy &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="383,41,613,96"/>
+<area shape="rect" id="Node000002" href="$structco__usb_1_1transfer_1_1detail_1_1complete__sequence__awaitable_1_1await__state__t.html" title=" " alt="" coords="5,5,253,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="267,43,382,55,382,60,267,49"/>
+<area shape="rect" id="Node000003" href="$structco__usb_1_1transfer_1_1sequence__view.html" title=" " alt="" coords="31,85,227,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="241,91,382,77,382,83,242,96"/>
+</map>

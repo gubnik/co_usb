@@ -1,0 +1,5 @@
+<map id="co_usb::transfer::detail::partial_io_base&lt; TSeq &gt;" name="co_usb::transfer::detail::partial_io_base&lt; TSeq &gt;">
+<area shape="rect" id="Node000001" title="Zero&#45;allocation adapter around a transfer sequence enabling the use of asynchronous partial I/O opera..." alt="" coords="15,5,206,45"/>
+<area shape="rect" id="Node000002" href="$structco__usb_1_1transfer_1_1detail_1_1complete__io__base.html" title="Complete I/O adapter for transfer sequences." alt="" coords="5,93,216,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,59,113,93,108,93,108,59"/>
+</map>

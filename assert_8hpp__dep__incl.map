@@ -1,0 +1,19 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/detail/assert.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/detail/assert.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="11,5,181,60"/>
+<area shape="rect" id="Node000002" href="$co__usb_8hpp.html" title=" " alt="" coords="20,519,191,573"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="72,73,53,109,33,171,28,237,28,342,34,392,50,440,70,483,90,517,85,520,66,486,45,442,29,393,23,342,23,237,27,170,48,107,67,70"/>
+<area shape="rect" id="Node000004" href="$operations_8hpp.html" title="Operations on transfer sequences." alt="" coords="63,108,271,163"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="125,70,150,106,146,109,120,73"/>
+<area shape="rect" id="Node000003" href="$co__usb_8cpp.html" title=" " alt="" coords="5,621,205,661"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="108,587,108,621,103,621,103,587"/>
+<area shape="rect" id="Node000005" href="$transfer_8hpp.html" title=" " alt="" coords="100,416,271,471"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="143,176,120,217,101,265,94,317,96,342,104,367,121,393,144,414,141,418,117,396,99,369,91,343,88,317,96,264,115,214,138,173"/>
+<area shape="rect" id="Node000006" href="$complete__io_8hpp.html" title="Complete I/O adapters for transfer sequences." alt="" coords="113,313,332,368"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="175,175,195,265,213,312,208,314,189,266,170,177"/>
+<area shape="rect" id="Node000007" href="$partial__io_8hpp.html" title="Partial I/O adapters for transfer sequences." alt="" coords="204,211,404,265"/>
+<area shape="poly" id="edge8_Node000004_Node000007" title=" " alt="" coords="215,168,270,208,266,213,212,173"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="158,483,128,520,124,517,154,480"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="211,382,198,417,193,415,206,380"/>
+<area shape="poly" id="edge9_Node000007_Node000005" title=" " alt="" coords="334,276,345,298,353,322,354,346,346,369,331,388,313,403,272,424,270,420,310,398,328,384,342,367,349,345,348,323,340,300,329,278"/>
+<area shape="poly" id="edge10_Node000007_Node000006" title=" " alt="" coords="276,278,246,315,242,312,272,274"/>
+</map>

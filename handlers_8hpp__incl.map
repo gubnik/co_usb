@@ -1,0 +1,20 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/ev/handlers.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/ev/handlers.hpp">
+<area shape="rect" id="Node000001" title="Collection of types implementing co_usb::ev::detail::EventHandler." alt="" coords="324,5,495,60"/>
+<area shape="rect" id="Node000002" href="$event__handler_8hpp.html" title="Specification and implementation of EventHandler concept." alt="" coords="69,108,238,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="338,63,219,106,217,101,336,58"/>
+<area shape="rect" id="Node000006" href="$usb__error_8hpp.html" title="USB error enumeration." alt="" coords="262,115,421,141"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="392,62,360,106,356,102,388,59"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="445,115,512,141"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="431,59,464,102,460,106,427,62"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="536,115,600,141"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="455,58,538,106,535,111,453,62"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="207,196,281,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="177,146,222,185,218,189,174,150"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,196,99,221"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="130,150,80,189,77,185,127,146"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="123,196,183,221"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="156,148,156,182,151,182,151,148"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="329,143,271,189,267,185,325,139"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="305,196,413,221"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="346,140,356,182,351,183,341,141"/>
+</map>

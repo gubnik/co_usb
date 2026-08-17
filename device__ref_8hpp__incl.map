@@ -1,0 +1,5 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/wrapper/device_ref.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/wrapper/device_ref.hpp">
+<area shape="rect" id="Node000001" title="Wrapper for nullable libusb_device that increments ref count on ctor and decrements on dtor." alt="" coords="5,5,213,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="73,108,146,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,60,112,94,107,94,107,60"/>
+</map>

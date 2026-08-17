@@ -1,0 +1,18 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/ev/any_event_handler.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/ev/any_event_handler.hpp">
+<area shape="rect" id="Node000001" title="Owning type&#45;erased wrapper for EventHandler." alt="" coords="231,5,458,60"/>
+<area shape="rect" id="Node000002" href="$event__handler_8hpp.html" title="Specification and implementation of EventHandler concept." alt="" coords="60,108,229,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="290,62,199,105,197,100,287,58"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="232,196,292,221"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="326,62,295,109,280,148,270,183,265,182,275,146,290,107,321,59"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="305,115,385,141"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="347,60,347,101,342,101,342,60"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="409,115,549,141"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="384,58,453,105,450,110,381,62"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="573,115,665,141"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="423,58,574,109,572,114,421,63"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,196,79,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="121,150,70,190,66,185,118,146"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="103,196,197,221"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="149,148,151,182,146,182,143,148"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="175,146,235,186,232,191,172,150"/>
+</map>

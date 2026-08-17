@@ -1,0 +1,9 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/hotplug/oneshot_hotplug.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/hotplug/oneshot_hotplug.hpp">
+<area shape="rect" id="Node000001" title="Oneshot coroutine to get a one&#45;time hotplug accept." alt="" coords="5,5,251,60"/>
+<area shape="rect" id="Node000002" href="$hotplug_8hpp.html" title=" " alt="" coords="43,108,213,163"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,74,131,108,125,108,125,74"/>
+<area shape="rect" id="Node000003" href="$co__usb_8hpp.html" title=" " alt="" coords="43,211,213,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="131,176,131,211,125,211,125,176"/>
+<area shape="rect" id="Node000004" href="$co__usb_8cpp.html" title=" " alt="" coords="28,313,228,353"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="131,279,131,313,125,313,125,279"/>
+</map>

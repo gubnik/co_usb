@@ -1,0 +1,30 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/wrapper/detail/error_protocol.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/wrapper/detail/error_protocol.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="429,5,614,75"/>
+<area shape="rect" id="Node000002" href="$context_8hpp.html" title="Factory for obtaining a co_usb context." alt="" coords="5,225,176,280"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="416,76,355,99,295,125,203,177,128,228,125,223,200,172,292,120,353,94,414,71"/>
+<area shape="rect" id="Node000006" href="$wrapper_8hpp.html" title=" " alt="" coords="428,328,599,383"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="629,55,765,84,835,105,899,131,950,161,970,177,983,196,991,215,992,236,984,259,969,282,944,301,907,316,862,328,810,338,700,350,599,355,599,350,700,345,809,333,861,323,905,311,941,296,965,278,980,256,986,236,986,216,979,198,966,181,947,165,897,135,834,110,764,90,627,60"/>
+<area shape="rect" id="Node000007" href="$device__handle_8hpp.html" title="RAII wrapper around libusb_device_handle*." alt="" coords="473,225,708,280"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="557,85,576,122,589,176,593,225,588,225,584,177,571,124,553,87"/>
+<area shape="rect" id="Node000008" href="$driver__guard_8hpp.html" title="RAII wrapper for detaching and reattaching kernel driver." alt="" coords="731,225,954,280"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="585,80,804,223,801,227,582,84"/>
+<area shape="rect" id="Node000009" href="$error__protocol_8hpp.html" title="Utilities for creating error protocols." alt="" coords="329,123,561,177"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="492,87,466,124,462,121,488,84"/>
+<area shape="rect" id="Node000010" href="$interface_8hpp.html" title="RAII wrapper for an interface." alt="" coords="201,225,399,280"/>
+<area shape="poly" id="edge18_Node000001_Node000010" title=" " alt="" coords="417,63,363,87,339,104,319,124,307,148,300,175,299,225,294,225,295,174,302,146,315,121,336,100,361,82,415,58"/>
+<area shape="rect" id="Node000003" href="$ev_8hpp.html" title=" " alt="" coords="159,328,329,383"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="144,285,205,326,202,330,141,290"/>
+<area shape="rect" id="Node000004" href="$co__usb_8hpp.html" title=" " alt="" coords="256,431,427,485"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="281,391,318,429,314,432,277,395"/>
+<area shape="rect" id="Node000005" href="$co__usb_8cpp.html" title=" " alt="" coords="241,533,441,573"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="344,499,344,533,339,533,339,499"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="458,392,388,433,385,428,456,387"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="564,293,536,330,531,326,560,289"/>
+<area shape="poly" id="edge10_Node000008_Node000006" title=" " alt="" coords="745,286,600,330,598,325,743,281"/>
+<area shape="poly" id="edge12_Node000009_Node000002" title=" " alt="" coords="341,184,177,230,176,225,339,178"/>
+<area shape="poly" id="edge13_Node000009_Node000006" title=" " alt="" coords="448,191,452,234,464,279,477,304,492,326,488,329,472,307,459,281,447,235,443,191"/>
+<area shape="poly" id="edge14_Node000009_Node000007" title=" " alt="" coords="496,183,554,223,551,227,493,187"/>
+<area shape="poly" id="edge15_Node000009_Node000008" title=" " alt="" coords="563,178,740,223,738,228,561,183"/>
+<area shape="poly" id="edge16_Node000009_Node000010" title=" " alt="" coords="398,187,340,227,337,223,395,183"/>
+<area shape="poly" id="edge17_Node000010_Node000006" title=" " alt="" coords="369,283,459,326,457,330,367,288"/>
+</map>

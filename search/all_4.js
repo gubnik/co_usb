@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['ec_0',['ec',['../structco__usb_1_1transfer_1_1detail_1_1sequence__awaitable_1_1await__state__t.html#a54135ee91bf721e62525f775f5b3cfda',1,'co_usb::transfer::detail::sequence_awaitable::await_state_t::ec'],['../structco__usb_1_1transfer_1_1detail_1_1complete__sequence__awaitable_1_1await__state__t.html#a5fee2c5d39b7e168300f0501b7848fb8',1,'co_usb::transfer::detail::complete_sequence_awaitable::await_state_t::ec'],['../structco__usb_1_1hotplug_1_1detail_1_1hotplug__awaitable_1_1op__result.html#aeba0593e9ecc108e17fa08359c251497',1,'co_usb::hotplug::detail::hotplug_awaitable::op_result::ec']]],
+  ['emplace_1',['emplace',['../structco__usb_1_1ev_1_1any__event__handler.html#a473ef5e86144e5594efb125c70e1b095',1,'co_usb::ev::any_event_handler::emplace(Args &amp;&amp;...args)'],['../structco__usb_1_1ev_1_1any__event__handler.html#a2e9c095db20ce7e188146996f8d0e366',1,'co_usb::ev::any_event_handler::emplace(std::pmr::memory_resource *memres, Args &amp;&amp;...args)']]],
+  ['emplace_5fhandler_2',['emplace_handler',['../structco__usb_1_1ev_1_1detail_1_1handler__service.html#a5e93dd2ab5b5eb6c9ea3cadb93d01312',1,'co_usb::ev::detail::handler_service']]],
+  ['end_3',['end',['../structco__usb_1_1transfer_1_1sequence__view.html#ae362743692cf0b2feb9fa28655f00e2f',1,'co_usb::transfer::sequence_view']]],
+  ['endpoint_4',['endpoint',['../structco__usb_1_1transfer_1_1endpoint.html',1,'co_usb::transfer']]],
+  ['endpoint_2ehpp_5',['endpoint.hpp',['../endpoint_8hpp.html',1,'']]],
+  ['endpoint_5fdirection_6',['endpoint_direction',['../group__transfer.html#gab8be67ac600e013afce383682a1a032c',1,'co_usb::transfer']]],
+  ['enumerate_7',['enumerate',['../namespaceco__usb_1_1hotplug_1_1flags.html#ac061312bd0d1d5750e2431d065b814e6',1,'co_usb::hotplug::flags']]],
+  ['ep_5fany_8',['ep_any',['../namespaceco__usb_1_1transfer.html#a04d8d20432300b3b43a689df9206b328',1,'co_usb::transfer']]],
+  ['ep_5fin_9',['ep_in',['../namespaceco__usb_1_1transfer.html#affa56751c2eb4b5d32c080318959fa6b',1,'co_usb::transfer']]],
+  ['ep_5fout_10',['ep_out',['../namespaceco__usb_1_1transfer.html#a0be97398067e53a4c1985a8ac63cf5f6',1,'co_usb::transfer']]],
+  ['err_5fidx_11',['err_idx',['../structco__usb_1_1transfer_1_1detail_1_1complete__sequence__awaitable_1_1await__state__t.html#a7d5f1208475ed3be60de93c14cd06fc6',1,'co_usb::transfer::detail::complete_sequence_awaitable::await_state_t']]],
+  ['error_12',['error',['../group__transfer.html#gga5a1000b63aace0bc2b8a30a90d352ebeacb5e100e5a9a3e7f6d1fd97512215282',1,'co_usb::transfer']]],
+  ['error_5fcategory_5ft_13',['error_category_t',['../structco__usb_1_1error__category__t.html',1,'co_usb']]],
+  ['error_5fprotocol_2ehpp_14',['error_protocol.hpp',['../error__protocol_8hpp.html',1,'(Global Namespace)'],['../detail_2error__protocol_8hpp.html',1,'(Global Namespace)']]],
+  ['ev_2ehpp_15',['ev.hpp',['../ev_8hpp.html',1,'']]],
+  ['event_16',['event',['../structco__usb_1_1hotplug_1_1detail_1_1hotplug__awaitable_1_1op__result.html#a1476913907bbe57126affae109a9b09e',1,'co_usb::hotplug::detail::hotplug_awaitable::op_result']]],
+  ['event_20handler_20logic_17',['Event handler logic',['../group__event__handler.html',1,'']]],
+  ['event_5fhandler_2ehpp_18',['event_handler.hpp',['../event__handler_8hpp.html',1,'']]],
+  ['event_5fhandler_5fref_19',['event_handler_ref',['../structco__usb_1_1ev_1_1any__event__handler.html#aa2948ef37af5cc6900e3b7954611cd6f',1,'co_usb::ev::any_event_handler::event_handler_ref'],['../structco__usb_1_1ev_1_1event__handler__ref.html#ad78f10a09f652b43362dd8e8149cd2ff',1,'co_usb::ev::event_handler_ref::event_handler_ref() noexcept'],['../structco__usb_1_1ev_1_1event__handler__ref.html#a741cf0d51fe744b3d33611b3de982c52',1,'co_usb::ev::event_handler_ref::event_handler_ref(HandlerTy &amp;handler)'],['../structco__usb_1_1ev_1_1event__handler__ref.html#a504a55ad016b148d44743af47513267e',1,'co_usb::ev::event_handler_ref::event_handler_ref(event_handler_ref const &amp;other)'],['../structco__usb_1_1ev_1_1event__handler__ref.html#adcb694511a4362994cc86d0b088f6297',1,'co_usb::ev::event_handler_ref::event_handler_ref(event_handler_ref &amp;&amp;other) noexcept'],['../structco__usb_1_1ev_1_1event__handler__ref.html',1,'co_usb::ev::event_handler_ref']]],
+  ['event_5fhandler_5fref_2ehpp_20',['event_handler_ref.hpp',['../event__handler__ref_8hpp.html',1,'']]],
+  ['event_5ftype_21',['event_type',['../group__hotplug.html#ga7f7bdc63d9d6f01a72b04beddb811dd6',1,'co_usb::hotplug']]],
+  ['events_22',['events',['../structco__usb_1_1hotplug_1_1detail_1_1hotplug__awaitable.html#a0ebf554004cdba30c2c39cf356991ed2',1,'co_usb::hotplug::detail::hotplug_awaitable']]],
+  ['expected_23',['expected',['../structco__usb_1_1transfer_1_1detail_1_1complete__sequence__awaitable_1_1transfer__progress__t.html#abb9879a9902950285fe612e9135c370a',1,'co_usb::transfer::detail::complete_sequence_awaitable::transfer_progress_t']]]
+];

@@ -1,0 +1,13 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$structco__usb_1_1transfer_1_1detail_1_1direction__partial__io__base.html" title="Provides Capy ReadStream&#45;/WriteStream&#45;compliant interface for partial transfer I/O." alt="" coords="5,142,211,197"/>
+<area shape="rect" id="Node000001" href="$structco__usb_1_1transfer_1_1bulk__partial__io.html" title="Prefills the transfer sequence as bulk transfers and provides partial I/O operations." alt="" coords="259,5,493,45"/>
+<area shape="poly" id="edge7_Node000000_Node000001" title=" " alt="" coords="148,131,198,91,257,55,287,43,289,48,260,60,201,95,151,135"/>
+<area shape="rect" id="Node000002" href="$structco__usb_1_1transfer_1_1bulk__stream__partial__io.html" title="Prefills the transfer sequence as bulk stream transfers and provides partial I/O operations." alt="" coords="279,70,473,125"/>
+<area shape="poly" id="edge8_Node000000_Node000002" title=" " alt="" coords="223,136,278,121,279,126,224,141"/>
+<area shape="rect" id="Node000003" href="$structco__usb_1_1transfer_1_1control__partial__io.html" title="Prefills the transfer sequence as control transfers and provides partial I/O operations." alt="" coords="259,149,493,189"/>
+<area shape="poly" id="edge9_Node000000_Node000003" title=" " alt="" coords="224,167,259,167,259,172,224,172"/>
+<area shape="rect" id="Node000004" href="$structco__usb_1_1transfer_1_1interrupt__partial__io.html" title="Prefills the transfer sequence as interrupt transfers and provides partial I/O operations." alt="" coords="259,213,493,253"/>
+<area shape="poly" id="edge10_Node000000_Node000004" title=" " alt="" coords="225,194,292,211,291,216,223,200"/>
+<area shape="rect" id="Node000005" href="$structco__usb_1_1transfer_1_1isochronous__partial__io.html" title="Prefills the transfer sequence as isochronous transfers and provides partial I/O operations." alt="" coords="259,277,493,317"/>
+<area shape="poly" id="edge11_Node000000_Node000005" title=" " alt="" coords="158,202,206,234,260,263,291,275,289,280,258,268,203,239,155,207"/>
+</map>

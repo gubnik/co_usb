@@ -1,0 +1,23 @@
+<map id="/home/runner/work/co_usb/co_usb/include/co_usb/ev/event_handler_ref.hpp" name="/home/runner/work/co_usb/co_usb/include/co_usb/ev/event_handler_ref.hpp">
+<area shape="rect" id="Node000001" title="Type&#45;erased reference to any event handler." alt="" coords="415,5,637,60"/>
+<area shape="rect" id="Node000002" href="$any__event__handler_8hpp.html" title="Owning type&#45;erased wrapper for EventHandler." alt="" coords="321,108,480,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="492,62,439,102,436,97,489,58"/>
+<area shape="rect" id="Node000003" href="$event__handler_8hpp.html" title="Specification and implementation of EventHandler concept." alt="" coords="55,196,224,236"/>
+<area shape="poly" id="edge10_Node000001_Node000003" title=" " alt="" coords="435,63,372,84,310,110,238,150,178,190,175,186,236,145,308,106,370,79,433,58"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="232,284,292,309"/>
+<area shape="poly" id="edge12_Node000001_Node000006" title=" " alt="" coords="571,58,619,94,665,139,681,164,689,189,688,214,675,238,649,257,610,271,562,282,508,289,397,297,306,299,306,293,397,292,507,284,561,276,608,266,646,252,671,234,683,212,684,189,676,166,661,142,616,98,568,62"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="581,203,661,229"/>
+<area shape="poly" id="edge11_Node000001_Node000007" title=" " alt="" coords="542,59,611,190,606,192,537,62"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="344,151,211,194,209,189,342,146"/>
+<area shape="poly" id="edge9_Node000002_Node000006" title=" " alt="" coords="352,150,318,170,289,198,279,215,273,234,266,270,261,269,267,232,275,212,285,194,315,166,350,146"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="450,146,580,196,578,201,448,151"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="300,203,440,229"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="396,149,381,191,376,189,391,147"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="464,203,556,229"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="427,146,486,192,482,197,423,150"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,284,79,309"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="117,238,69,277,65,273,114,234"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="103,284,197,309"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="145,236,149,270,144,270,139,237"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="170,234,234,274,231,279,168,238"/>
+</map>

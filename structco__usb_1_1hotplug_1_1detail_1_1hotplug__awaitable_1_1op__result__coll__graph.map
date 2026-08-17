@@ -1,0 +1,7 @@
+<map id="co_usb::hotplug::detail::hotplug_awaitable::op_result" name="co_usb::hotplug::detail::hotplug_awaitable::op_result">
+<area shape="rect" id="Node000001" title=" " alt="" coords="263,49,437,103"/>
+<area shape="rect" id="Node000002" href="$structco__usb_1_1detail_1_1flag__type.html" title=" " alt="" coords="5,5,173,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,51,263,61,262,67,186,56"/>
+<area shape="rect" id="Node000003" href="$structco__usb_1_1device__ref.html" title="Wrapper for nullable libusb_device that increments ref count on ctor and decrements on dtor." alt="" coords="18,99,161,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,98,262,85,263,91,175,103"/>
+</map>

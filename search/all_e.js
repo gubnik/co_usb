@@ -1,0 +1,18 @@
+var searchData=
+[
+  ['rationale_0',['Rationale',['../index.html#autotoc_md1',1,'']]],
+  ['raw_5fcontext_1',['raw_context',['../namespaceco__usb_1_1detail.html#a9ec438d7e723d55cf54a50b8ecde9dc0',1,'co_usb::detail']]],
+  ['read_2',['read',['../structco__usb_1_1transfer_1_1detail_1_1direction__complete__io__base.html#a0fc3ee3837775c83874fce79598ca084',1,'co_usb::transfer::detail::direction_complete_io_base']]],
+  ['read_5fsome_3',['read_some',['../structco__usb_1_1transfer_1_1detail_1_1direction__complete__io__base.html#a9e2c5ec900970d9cc8c8a651c9e18316',1,'co_usb::transfer::detail::direction_complete_io_base::read_some()'],['../structco__usb_1_1transfer_1_1detail_1_1direction__partial__io__base.html#a03a94407400e23746675c8b0fef3070e',1,'co_usb::transfer::detail::direction_partial_io_base::read_some()']]],
+  ['ref_4',['ref',['../structco__usb_1_1ev_1_1any__event__handler.html#aa922a8ca9a1b638c9ce3088e5527013e',1,'co_usb::ev::any_event_handler::ref()'],['../structco__usb_1_1ev_1_1event__handler__ref.html#a7d68f9763a41b376a705726632c7e6f7',1,'co_usb::ev::event_handler_ref::ref()'],['../structco__usb_1_1ev_1_1trivial__event__handler.html#ad9e8d6f73ec912f423e762faa4f1d3fb',1,'co_usb::ev::trivial_event_handler::ref()'],['../structco__usb_1_1ev_1_1refcounted__event__handler.html#a82c40e0bccd0e20524f0d5564ebb1914',1,'co_usb::ev::refcounted_event_handler::ref()']]],
+  ['refcounted_5fevent_5fhandler_5',['refcounted_event_handler',['../structco__usb_1_1ev_1_1refcounted__event__handler.html',1,'co_usb::ev']]],
+  ['release_6',['release',['../structco__usb_1_1interface.html#ae162426d1ba8d6c9fa0d313962bc74a8',1,'co_usb::interface::release()'],['../structco__usb_1_1device__ref.html#a42d2ddb5a963862fce61695813f3ea44',1,'co_usb::device_ref::release()'],['../structco__usb_1_1device__handle.html#a4c7ea3aa13d8990ba0dfb2e558693524',1,'co_usb::device_handle::release()']]],
+  ['request_5fstop_7',['request_stop',['../structco__usb_1_1ev_1_1context.html#aa92c4e978a7ac4a83956c3b634714239',1,'co_usb::ev::context::request_stop()'],['../structco__usb_1_1ev_1_1detail_1_1handler__service.html#abe78ddc424cf690d7012525b4821d22e',1,'co_usb::ev::detail::handler_service::request_stop()']]],
+  ['res_8',['res',['../structco__usb_1_1hotplug_1_1detail_1_1hotplug__awaitable.html#a3ee0b35563a7843ef06e7341f4405808',1,'co_usb::hotplug::detail::hotplug_awaitable']]],
+  ['reset_9',['reset',['../structco__usb_1_1device__handle.html#ac40f96df1737e7129ba62752def1109c',1,'co_usb::device_handle']]],
+  ['resource_10',['resource',['../structco__usb_1_1transfer_1_1resource.html#a9a7521241f616e3159b7d71d30e0a2a0',1,'co_usb::transfer::resource::resource()'],['../structco__usb_1_1transfer_1_1resource.html',1,'co_usb::transfer::resource']]],
+  ['resource_2ehpp_11',['resource.hpp',['../resource_8hpp.html',1,'']]],
+  ['resource_5fbusy_12',['resource_busy',['../namespaceco__usb.html#a3b9521daa5a8097db3c2162bce25a1bcab8452f93535a5ae7466e9df8fc13435c',1,'co_usb']]],
+  ['resumption_5ft_13',['resumption_t',['../structco__usb_1_1hotplug_1_1detail_1_1hotplug__awaitable_1_1resumption__t.html',1,'co_usb::hotplug::detail::hotplug_awaitable']]],
+  ['return_5ftype_14',['return_type',['../structco__usb_1_1detail_1_1as__exception__t.html#abe43fbbff8044c8c643cfa68f501d369',1,'co_usb::detail::as_exception_t::return_type'],['../structco__usb_1_1detail_1_1as__optional__t.html#aca00990fae8787ad61d1a15dd7abad20',1,'co_usb::detail::as_optional_t::return_type'],['../structco__usb_1_1detail_1_1as__io__result__t.html#a9adb3b3c91c61036ad847b08eeb1af37',1,'co_usb::detail::as_io_result_t::return_type'],['../structco__usb_1_1detail_1_1as__io__task__t.html#a9090fd9cbd600422145458c55106313c',1,'co_usb::detail::as_io_task_t::return_type']]]
+];

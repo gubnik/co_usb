@@ -1,0 +1,5 @@
+<map id="co_usb::transfer::bulk_complete_io&lt; TSeq, EpDirection &gt;" name="co_usb::transfer::bulk_complete_io&lt; TSeq, EpDirection &gt;">
+<area shape="rect" id="Node000001" title="Prefills the transfer sequence as bulk transfers and provides complete I/O operations." alt="" coords="5,108,260,148"/>
+<area shape="rect" id="Node000002" href="$structco__usb_1_1transfer_1_1detail_1_1direction__complete__io__base.html" title="Interface complying with Boost.Http&#39;s ReadSource and WriteSink concepts." alt="" coords="30,5,235,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,74,135,108,130,108,130,74"/>
+</map>
