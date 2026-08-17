@@ -148,7 +148,7 @@ struct refcounted_event_handler
      */
     auto ref () noexcept
     {
-        m_counter.fetch_add(1, std::memory_order_release);
+        m_counter.fetch_add(1, std::memory_order_acquire);
     }
 
     /**
