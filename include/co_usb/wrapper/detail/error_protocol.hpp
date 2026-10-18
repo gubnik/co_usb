@@ -1,6 +1,7 @@
 #pragma once
 
-#include <boost/capy/io_task.hpp>
+#include <boost/capy/results.hpp>
+#include <boost/capy/task.hpp>
 #include <concepts>
 #include <optional>
 #include <system_error>
@@ -168,7 +169,7 @@ static_assert(ErrorProtocol<as_expected_t, int>, "Not an error protocol");
 
 struct as_io_result_t
 {
-    template <typename ValTy> using return_type = boost::capy::io_result<std::optional<ValTy>>;
+    template <typename ValTy> using return_type = boost::capy::results<std::optional<ValTy>>;
 
     constexpr explicit as_io_result_t () noexcept
     {
@@ -190,7 +191,8 @@ static_assert(ErrorProtocol<as_io_result_t, int>, "Not an error protocol");
 
 struct as_io_task_t
 {
-    template <typename ValTy> using return_type = boost::capy::io_task<std::optional<ValTy>>;
+    template <typename ValTy>
+    using return_type = boost::capy::task<boost::capy::results<std::optional<ValTy>>>;
 
     constexpr explicit as_io_task_t () noexcept
     {

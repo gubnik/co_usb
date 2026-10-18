@@ -11,16 +11,15 @@
 #include "co_usb/wrapper/device_ref.hpp"
 #include "co_usb/wrapper/device_triplet.hpp"
 #include <algorithm>
-#include <boost/capy/concept/io_awaitable.hpp>
+#include <boost/capy/concept/context_awaitable.hpp>
 #include <boost/capy/continuation.hpp>
 #include <boost/capy/ex/async_mutex.hpp>
+#include <boost/capy/ex/await_context.hpp>
 #include <boost/capy/ex/executor_ref.hpp>
-#include <boost/capy/ex/io_env.hpp>
 #include <boost/capy/ex/run.hpp>
 #include <boost/capy/ex/run_async.hpp>
 #include <boost/capy/ex/this_coro.hpp>
-#include <boost/capy/io_result.hpp>
-#include <boost/capy/io_task.hpp>
+#include <boost/capy/results.hpp>
 #include <boost/capy/task.hpp>
 #include <coroutine>
 #include <libusb.h>
@@ -82,7 +81,7 @@ struct device_acceptor
         {
             lock.unlock();
             res->op_res->ec = std::make_error_code(std::errc::operation_canceled);
-            res->env->executor.post(res->cont);
+            res->aw_ctx->executor.post(res->cont);
             lock.lock();
         }
         m_resumptions.clear();
@@ -144,7 +143,7 @@ struct device_acceptor
                     }
                     resumption_t *r = self.m_resumptions.front();
                     r->op_res->dev_ref = device_ref{dev};
-                    r->env->executor.post(r->cont);
+                    r->aw_ctx->executor.post(r->cont);
                     self.m_resumptions.erase(self.m_resumptions.begin());
                 }
                 return 0;
@@ -168,7 +167,7 @@ struct device_acceptor
         return {};
     }
 
-    auto accept () -> boost::capy::io_task<device_ref>
+    auto accept () -> boost::capy::task<boost::capy::results<device_ref>>
     {
         auto exec = co_await boost::capy::this_coro::executor;
         auto stop = co_await boost::capy::this_coro::stop_token;
@@ -179,10 +178,10 @@ struct device_acceptor
         auto stop_fn = [this, op_res_ptr = &op_res, res = &res] () mutable
         {
             std::unique_lock lock{m_mutex};
-            if (res->env && res->cont.h)
+            if (res->aw_ctx && res->cont.h)
             {
                 res->op_res->ec = std::make_error_code(std::errc::operation_canceled);
-                res->env->executor.post(res->cont);
+                res->aw_ctx->executor.post(res->cont);
                 auto it =
                     std::find_if(m_resumptions.begin(), m_resumptions.end(),
                                  [res_ptr = res] (resumption_t *res) { return res == res_ptr; });
@@ -212,7 +211,7 @@ struct device_acceptor
 
     struct resumption_t
     {
-        boost::capy::io_env const *env{nullptr};
+        boost::capy::await_context const *aw_ctx{nullptr};
         boost::capy::continuation cont{.h = nullptr};
         op_result *op_res{nullptr};
     };
@@ -243,9 +242,9 @@ struct device_acceptor
         }
 
         inline std::coroutine_handle<> await_suspend (std::coroutine_handle<> h,
-                                                      boost::capy::io_env const *env)
+                                                      boost::capy::await_context const *aw_ctx)
         {
-            if (env->stop_token.stop_requested())
+            if (aw_ctx->stop_token.stop_requested())
             {
                 std::unique_lock lock{acceptor_ptr->m_mutex};
                 op_res->ec = std::make_error_code(std::errc::operation_canceled);
@@ -260,12 +259,13 @@ struct device_acceptor
                 return h;
             }
 
-            *res = resumption_t{env, boost::capy::continuation{h}, op_res};
+            *res = resumption_t{aw_ctx, boost::capy::continuation{.h = h, .owner = aw_ctx->owner},
+                                op_res};
             acceptor_ptr->m_resumptions.emplace_back(res);
             return std::noop_coroutine();
         }
 
-        inline boost::capy::io_result<device_ref> await_resume ()
+        inline boost::capy::results<device_ref> await_resume ()
         {
             std::unique_lock lock{acceptor_ptr->m_mutex};
             if (op_res->ec)

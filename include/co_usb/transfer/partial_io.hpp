@@ -16,7 +16,8 @@
 #include <boost/capy/buffers.hpp>
 #include <boost/capy/ex/executor_ref.hpp>
 #include <boost/capy/ex/this_coro.hpp>
-#include <boost/capy/io_task.hpp>
+#include <boost/capy/results.hpp>
+#include <boost/capy/task.hpp>
 
 namespace co_usb::transfer
 {
@@ -71,7 +72,7 @@ template <detail::TransferSequence TSeq> struct partial_io_base
      * @returns result of the operation
      */
     template <detail::AnyBufferSequence BuffersTy>
-    auto submit (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    auto submit (BuffersTy const &buffers) -> boost::capy::task<boost::capy::results<size_t>>
     {
         auto exec = co_await boost::capy::this_coro::executor;
         auto stop = co_await boost::capy::this_coro::stop_token;
@@ -116,7 +117,8 @@ struct direction_partial_io_base
      */
     template <boost::capy::MutableBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::in)
-    inline auto read_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    inline auto read_some (BuffersTy const &buffers)
+        -> boost::capy::task<boost::capy::results<size_t>>
     {
         return m_stream.submit(buffers);
     }
@@ -128,7 +130,8 @@ struct direction_partial_io_base
      */
     template <boost::capy::ConstBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::out)
-    inline auto write_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    inline auto write_some (BuffersTy const &buffers)
+        -> boost::capy::task<boost::capy::results<size_t>>
     {
         return m_stream.submit(buffers);
     }

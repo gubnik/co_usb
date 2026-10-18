@@ -11,7 +11,8 @@
 #include "co_usb/transfer/endpoint.hpp"
 #include "co_usb/transfer/operations.hpp"
 #include "co_usb/transfer/partial_io.hpp"
-#include <boost/capy/io_task.hpp>
+#include <boost/capy/results.hpp>
+#include <boost/capy/task.hpp>
 #include <memory_resource>
 
 namespace co_usb::transfer
@@ -65,7 +66,8 @@ template <detail::TransferSequence TSeq> struct complete_io_base : public partia
     }
 
     template <detail::AnyBufferSequence BuffersTy>
-    auto complete_submit (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    auto complete_submit (BuffersTy const &buffers)
+        -> boost::capy::task<boost::capy::results<size_t>>
     {
         auto exec = co_await boost::capy::this_coro::executor;
         auto stop = co_await boost::capy::this_coro::stop_token;
@@ -119,7 +121,8 @@ template <TransferSequence TSeq, endpoint_direction EpDirection> struct directio
      */
     template <boost::capy::MutableBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::in)
-    inline auto read_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    inline auto read_some (BuffersTy const &buffers)
+        -> boost::capy::task<boost::capy::results<size_t>>
     {
         return m_raw.submit(buffers);
     }
@@ -132,14 +135,15 @@ template <TransferSequence TSeq, endpoint_direction EpDirection> struct directio
      */
     template <boost::capy::MutableBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::in)
-    inline auto read (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    inline auto read (BuffersTy const &buffers) -> boost::capy::task<boost::capy::results<size_t>>
     {
         return m_raw.complete_submit(buffers);
     }
 
     template <boost::capy::ConstBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::out)
-    inline auto write_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    inline auto write_some (BuffersTy const &buffers)
+        -> boost::capy::task<boost::capy::results<size_t>>
     {
         return m_raw.submit(buffers);
     }
@@ -152,7 +156,7 @@ template <TransferSequence TSeq, endpoint_direction EpDirection> struct directio
      */
     template <boost::capy::ConstBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::out)
-    inline auto write (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    inline auto write (BuffersTy const &buffers) -> boost::capy::task<boost::capy::results<size_t>>
     {
         return m_raw.complete_submit(buffers);
     }
@@ -167,7 +171,8 @@ template <TransferSequence TSeq, endpoint_direction EpDirection> struct directio
      */
     template <boost::capy::ConstBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::out)
-    inline auto write_eof (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    inline auto write_eof (BuffersTy const &buffers)
+        -> boost::capy::task<boost::capy::results<size_t>>
     {
         return m_raw.complete_submit(buffers);
     }
@@ -179,7 +184,7 @@ template <TransferSequence TSeq, endpoint_direction EpDirection> struct directio
      */
     template <boost::capy::ConstBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::out)
-    inline auto write_eof () -> boost::capy::io_task<>
+    inline auto write_eof () -> boost::capy::task<boost::capy::results<>>
     {
         co_return {{}};
     }

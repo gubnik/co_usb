@@ -11,10 +11,10 @@
 #include "co_usb/transfer/status.hpp"
 #include "co_usb/usb_error.hpp"
 #include <boost/capy/buffers.hpp>
-#include <boost/capy/concept/io_awaitable.hpp>
+#include <boost/capy/concept/context_awaitable.hpp>
 #include <boost/capy/continuation.hpp>
-#include <boost/capy/ex/io_env.hpp>
-#include <boost/capy/io_result.hpp>
+#include <boost/capy/ex/await_context.hpp>
+#include <boost/capy/results.hpp>
 #include <cassert>
 #include <coroutine>
 #include <libusb.h>
@@ -34,7 +34,7 @@ template <detail::TransferSequence TSeq, AnyBufferSequence BuffersTy> struct seq
     {
         std::mutex mutex;
 
-        boost::capy::io_env const *io_env;
+        boost::capy::await_context const *aw_ctx;
         boost::capy::continuation cont;
 
         std::error_code ec;
@@ -50,7 +50,7 @@ template <detail::TransferSequence TSeq, AnyBufferSequence BuffersTy> struct seq
         {
             if (self.await_state->in_flight == 0)
             {
-                self.await_state->io_env->executor.post(self.await_state->cont);
+                self.await_state->aw_ctx->executor.post(self.await_state->cont);
             }
         };
         self.await_state->in_flight--;
@@ -133,15 +133,15 @@ template <detail::TransferSequence TSeq, AnyBufferSequence BuffersTy> struct seq
     }
 
     inline std::coroutine_handle<> await_suspend (std::coroutine_handle<> h,
-                                                  boost::capy::io_env const *io_env)
+                                                  boost::capy::await_context const *aw_ctx)
     {
-        if (io_env->stop_token.stop_requested())
+        if (aw_ctx->stop_token.stop_requested())
         {
             await_state->ec = make_transfer_status(status::cancelled);
             return h;
         }
-        await_state->io_env = io_env;
-        await_state->cont = {h};
+        await_state->aw_ctx = aw_ctx;
+        await_state->cont = {.h = h, .owner = aw_ctx->owner};
         sequence_view<TSeq> &v = *view;
         const tfer_iter_t end = v.end() + submission_size;
         for (tfer_iter_t iter = v.begin(); iter != end; iter++)
@@ -170,7 +170,7 @@ template <detail::TransferSequence TSeq, AnyBufferSequence BuffersTy> struct seq
         return std::noop_coroutine();
     }
 
-    inline boost::capy::io_result<size_t> await_resume ()
+    inline boost::capy::results<size_t> await_resume ()
     {
         return {await_state->ec, await_state->total};
     }
@@ -184,10 +184,10 @@ template <detail::TransferSequence TSeq, AnyBufferSequence BuffersTy> struct seq
     size_t submission_size{0};
 };
 
-static_assert(
-    boost::capy::IoAwaitable<sequence_awaitable<libusb_transfer *, boost::capy::mutable_buffer>>,
-    "Not a proper IoAwaitable");
-static_assert(boost::capy::IoAwaitable<
+static_assert(boost::capy::ContextAwaitable<
+                  sequence_awaitable<libusb_transfer *, boost::capy::mutable_buffer>>,
+              "Not a proper IoAwaitable");
+static_assert(boost::capy::ContextAwaitable<
                   sequence_awaitable<std::vector<libusb_transfer *>, boost::capy::const_buffer>>,
               "Not a proper IoAwaitable");
 

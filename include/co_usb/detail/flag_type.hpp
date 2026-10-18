@@ -11,7 +11,9 @@ namespace co_usb::detail
  * @tparam E enumeration type
  * @tparam Tag tag type, unused
  */
-template <typename E, typename Tag> struct flag_type
+template <typename E, typename Tag>
+    requires(std::is_enum_v<E>)
+struct flag_type
 {
     using storage_t = std::underlying_type_t<E>;
     storage_t bits{0};

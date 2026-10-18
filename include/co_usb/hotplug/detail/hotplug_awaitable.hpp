@@ -5,13 +5,13 @@
 
 #pragma once
 
-#include "boost/capy/concept/io_awaitable.hpp"
+#include "boost/capy/concept/context_awaitable.hpp"
 #include "boost/capy/continuation.hpp"
-#include "boost/capy/ex/io_env.hpp"
+#include "boost/capy/ex/await_context.hpp"
 #include "co_usb/hotplug/flags.hpp"
 #include "co_usb/usb_error.hpp"
 #include "co_usb/wrapper/device_ref.hpp"
-#include <boost/capy/io_result.hpp>
+#include <boost/capy/results.hpp>
 #include <system_error>
 
 namespace co_usb::hotplug::detail
@@ -42,7 +42,7 @@ struct hotplug_awaitable
 
     struct resumption_t
     {
-        boost::capy::io_env const *io_env = nullptr;
+        boost::capy::await_context const *aw_ctx = nullptr;
         boost::capy::continuation cont;
         op_result *op_res;
     };
@@ -73,15 +73,15 @@ struct hotplug_awaitable
      * @return @p h on submission error or on cancellation
      */
     std::coroutine_handle<> await_suspend (std::coroutine_handle<> h,
-                                           boost::capy::io_env const *env)
+                                           boost::capy::await_context const *aw_ctx)
     {
-        if (env->stop_token.stop_requested())
+        if (aw_ctx->stop_token.stop_requested())
         {
             op_res->ec = std::make_error_code(std::errc::operation_canceled);
             return h;
         }
-        res->cont = {h};
-        res->io_env = env;
+        res->cont = {.h = h, .owner = aw_ctx->owner};
+        res->aw_ctx = aw_ctx;
         res->op_res = op_res;
         auto r = libusb_hotplug_register_callback(
             ctx, events, flags, vid, pid, dev_class,
@@ -91,7 +91,7 @@ struct hotplug_awaitable
                 resumption_t *res = (resumption_t *)user_data;
                 res->op_res->event = event_type(ev);
                 res->op_res->dev = device_ref{dev};
-                res->io_env->executor.post(res->cont);
+                res->aw_ctx->executor.post(res->cont);
                 return 1;
             },
             res, handle);
@@ -103,7 +103,7 @@ struct hotplug_awaitable
         return std::noop_coroutine();
     }
 
-    boost::capy::io_result<event_type, device_ref> await_resume ()
+    boost::capy::results<event_type, device_ref> await_resume ()
     {
         if (op_res->ec)
         {
@@ -123,6 +123,6 @@ struct hotplug_awaitable
     int dev_class;
 };
 
-static_assert(boost::capy::IoAwaitable<hotplug_awaitable>, "Not an IoAwaitable");
+static_assert(boost::capy::ContextAwaitable<hotplug_awaitable>, "Not an IoAwaitable");
 
 } // namespace co_usb::hotplug::detail
