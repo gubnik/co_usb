@@ -8,13 +8,13 @@
 #include "co_usb/ev/any_event_handler.hpp"
 #include "co_usb/ev/detail/event_handler.hpp"
 #include "co_usb/ev/event_handler_ref.hpp"
+#include "co_usb/ev/handlers.hpp"
 #include "co_usb/usb_error.hpp"
 #include <boost/capy/ex/execution_context.hpp>
 #include <boost/capy/ex/executor_ref.hpp>
 #include <concepts>
 #include <libusb.h>
 #include <span>
-#include <stdexcept>
 #include <stop_token>
 #include <system_error>
 #include <utility>
@@ -35,20 +35,10 @@ namespace co_usb::ev::detail
  * @details A service to run an @ref co_usb::ev::details::EventHandler responsible for
  * storing libusb context, the handler itself and the stop source for the service.
  *
- * @par Why not an executor?
- *
- * An executor at its essence is a driver for executing ready coroutines. A libusb event handler
- * is just about handling libusb-specific events not necesserily bound to a coroutine. Making the
- * event handler logic bound to a specific library-provided executor would lock the executor choice
- * on a single one which may not be the most effecient one. A separate service on the other hand
- * provides flexibility in executor choice and does not limit the user in the choice of a specific
- * handler.
- *
  * @par Creating the service
- * Unlike in `usb_asio` library, the service will not be automatically created with
- * the creation of any object that may require it. This is because `co_usb` does not
- * have a default event handler, on purpose. Choice of a handler is fully placed on the
- * user of the library via @ref co_usb::ev::context and @ref co_usb::make_context.
+ * The service will be automatically created with the creation of any object that requires it.
+ * To customize `libusb_context` options, or provide a custom allocator, or a custom event handler,
+ * use @ref co_usb::ev::context.
  *
  * @code
  * int main (int argc, char **argv)
@@ -59,9 +49,6 @@ namespace co_usb::ev::detail
  *     co_usb::ev::context usb_ctx = co_usb::make_context<handler_type>(...);
  * }
  * @endcode
- *
- * Attempts to use any of `co_usb` features that require a handler or a context will result in
- * immedeate std::runtime_error exception.
  *
  * @par Switching the event handler
  *
@@ -209,7 +196,18 @@ struct handler_service : public boost::capy::execution_context::service
      */
     auto start () -> bool
     {
-        return m_handler.start(m_usb_ctx, m_stop.get_token());
+        if (m_started)
+        {
+            return true;
+        }
+        bool ok = m_handler.start(m_usb_ctx, m_stop.get_token());
+        m_started = ok;
+        return ok;
+    }
+
+    auto started () const -> bool
+    {
+        return m_started;
     }
 
     /**
@@ -236,6 +234,7 @@ struct handler_service : public boost::capy::execution_context::service
     any_event_handler m_handler;
     std::stop_source m_stop;
     libusb_context *m_usb_ctx{nullptr};
+    bool m_started{false};
 };
 
 /**
@@ -247,10 +246,19 @@ struct handler_service : public boost::capy::execution_context::service
  */
 inline auto get_handler_service (boost::capy::executor_ref exec) -> handler_service &
 {
-    handler_service *srv = exec.context().find_service<handler_service>();
-    if (!srv)
-        throw std::runtime_error{"co_usb handler service is not present"};
-    return *srv;
+    handler_service &srv = exec.context().use_service<handler_service>();
+    if (srv.started())
+    {
+        return srv;
+    }
+    std::error_code ec = srv.init_context();
+    if (ec)
+    {
+        throw std::system_error{ec};
+    }
+    srv.emplace_handler<refcounted_event_handler>();
+    srv.start();
+    return srv;
 }
 
 /**
