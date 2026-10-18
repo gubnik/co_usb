@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "co_usb/ev/detail/event_handler.hpp"
+#include "co_usb/ev/concepts/event_handler.hpp"
 #include "co_usb/usb_error.hpp"
 #include <atomic>
 #include <thread>
@@ -90,8 +90,7 @@ struct trivial_event_handler
     std::thread m_thread;
 };
 
-static_assert(detail::EventHandler<trivial_event_handler>, "Not a proper usb event handler");
-static_assert(detail::EventHandler<trivial_event_handler>, "Not a proper usb event handler");
+static_assert(EventHandler<trivial_event_handler>, "Not a proper usb event handler");
 
 /**
  * @ingroup event_handler
@@ -183,7 +182,6 @@ struct refcounted_event_handler
     std::thread m_thread;
 };
 
-static_assert(detail::EventHandler<refcounted_event_handler>, "Not a proper usb event handler");
-static_assert(detail::EventHandler<refcounted_event_handler>, "Not a proper usb event handler");
+static_assert(EventHandler<refcounted_event_handler>, "Not a proper usb event handler");
 
 } // namespace co_usb::ev

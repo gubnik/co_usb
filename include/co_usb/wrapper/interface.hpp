@@ -6,8 +6,8 @@
 #pragma once
 
 #include "co_usb/usb_error.hpp"
-#include "co_usb/wrapper/detail/device_handle_source.hpp"
-#include "co_usb/wrapper/detail/error_protocol.hpp"
+#include "co_usb/wrapper/concepts/device_handle_source.hpp"
+#include "co_usb/wrapper/concepts/error_protocol.hpp"
 #include "co_usb/wrapper/error_protocol.hpp"
 #include <libusb.h>
 #include <system_error>
@@ -23,7 +23,7 @@ namespace co_usb
  * @details This type assumes the interface is already claimed at the point of construction. The
  * destructor will attempt to release the interface and may throw if the release operation fails.
  *
- * @note Satisfies @ref detail::DeviceHandleSource.
+ * @note Satisfies @ref DeviceHandleSource.
  *
  * @see co_usb::claim_interface
  */
@@ -102,8 +102,8 @@ struct interface
         return m_interface_num;
     }
 
-    explicit interface (detail::DeviceHandleSource auto const &devh_src, int interface_num)
-        : m_devh(detail::device_handle_of(devh_src)), m_interface_num(interface_num)
+    explicit interface (DeviceHandleSource auto const &devh_src, int interface_num)
+        : m_devh(device_handle_of(devh_src)), m_interface_num(interface_num)
     {
     }
 
@@ -111,7 +111,7 @@ struct interface
     libusb_device_handle *m_devh{nullptr};
     int m_interface_num;
 };
-static_assert(detail::DeviceHandleSource<interface>, "Not a proper device handle source");
+static_assert(DeviceHandleSource<interface>, "Not a proper device handle source");
 
 /**
  * @ingroup wrapper
@@ -119,15 +119,15 @@ static_assert(detail::DeviceHandleSource<interface>, "Not a proper device handle
  * @brief Claims the interface and returns a @ref interface or reports an error per error protocol
  * implementation.
  *
- * @tparam ErrorTy @ref detail::ErrorProtocol
+ * @tparam ErrorTy @ref ErrorProtocol
  */
-template <detail::ErrorProtocol<interface> ErrTy>
-auto claim_interface (detail::DeviceHandleSource auto const &devh_src, int interface_num,
+template <ErrorProtocol<interface> ErrTy>
+auto claim_interface (DeviceHandleSource auto const &devh_src, int interface_num,
                       ErrTy &&errp = as_exception()) ->
     typename ErrTy::template return_type<interface>
 {
 
-    libusb_device_handle *devh = detail::device_handle_of(devh_src);
+    libusb_device_handle *devh = device_handle_of(devh_src);
 
     int r = libusb_claim_interface(devh, interface_num);
     if (r != LIBUSB_SUCCESS)
@@ -144,7 +144,7 @@ auto claim_interface (detail::DeviceHandleSource auto const &devh_src, int inter
  *
  * @throws std::system_error on operation failure.
  */
-inline auto claim_interface (detail::DeviceHandleSource auto const &devh_src, int interface_num)
+inline auto claim_interface (DeviceHandleSource auto const &devh_src, int interface_num)
     -> interface
 {
     return claim_interface(devh_src, interface_num, as_exception());

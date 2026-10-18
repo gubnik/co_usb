@@ -6,8 +6,8 @@
 #pragma once
 
 #include "co_usb/usb_error.hpp"
-#include "co_usb/wrapper/detail/device_handle_source.hpp"
-#include "co_usb/wrapper/detail/error_protocol.hpp"
+#include "co_usb/wrapper/concepts/device_handle_source.hpp"
+#include "co_usb/wrapper/concepts/error_protocol.hpp"
 #include "co_usb/wrapper/error_protocol.hpp"
 #include <libusb.h>
 #include <system_error>
@@ -23,7 +23,7 @@ namespace co_usb
  * @details This type assumes the driver is already detached at the point of construction. The
  * destructor will attempt to release the interface and may throw if the attach operation fails.
  *
- * @note Satisfies @ref detail::DeviceHandleSource.
+ * @note Satisfies @ref DeviceHandleSource.
  *
  * @see co_usb::detach_driver
  */
@@ -95,8 +95,8 @@ struct driver_guard
         return m_interface_num;
     }
 
-    explicit driver_guard (detail::DeviceHandleSource auto const &devh_src, int driver_guard_num)
-        : m_devh(detail::device_handle_of(devh_src)), m_interface_num(driver_guard_num)
+    explicit driver_guard (DeviceHandleSource auto const &devh_src, int driver_guard_num)
+        : m_devh(device_handle_of(devh_src)), m_interface_num(driver_guard_num)
     {
     }
 
@@ -104,7 +104,7 @@ struct driver_guard
     libusb_device_handle *m_devh{nullptr};
     int m_interface_num;
 };
-static_assert(detail::DeviceHandleSource<driver_guard>, "Not a proper device handle source");
+static_assert(DeviceHandleSource<driver_guard>, "Not a proper device handle source");
 
 /**
  * @ingroup wrapper
@@ -112,14 +112,14 @@ static_assert(detail::DeviceHandleSource<driver_guard>, "Not a proper device han
  * @brief Detaches the kernel driver and returns a @ref driver_guard or reports an error per error
  * protocol implementation.
  *
- * @tparam ErrorTy @ref detail::ErrorProtocol
+ * @tparam ErrorTy @ref ErrorProtocol
  */
-template <detail::ErrorProtocol<driver_guard> ErrTy>
-auto detach_driver (detail::DeviceHandleSource auto const &devh_src, int interface_num,
+template <ErrorProtocol<driver_guard> ErrTy>
+auto detach_driver (DeviceHandleSource auto const &devh_src, int interface_num,
                     ErrTy &&errp = as_exception()) ->
     typename ErrTy::template return_type<driver_guard>
 {
-    libusb_device_handle *devh = detail::device_handle_of(devh_src);
+    libusb_device_handle *devh = device_handle_of(devh_src);
 
     int r = libusb_detach_kernel_driver(devh, interface_num);
     if (r != LIBUSB_SUCCESS)
@@ -137,7 +137,7 @@ auto detach_driver (detail::DeviceHandleSource auto const &devh_src, int interfa
  *
  * @throws std::system_error on operation failure.
  */
-inline auto detach_driver (detail::DeviceHandleSource auto const &devh_src, int interface_num)
+inline auto detach_driver (DeviceHandleSource auto const &devh_src, int interface_num)
     -> driver_guard
 {
     return detach_driver(devh_src, interface_num, as_exception());

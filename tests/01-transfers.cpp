@@ -17,7 +17,7 @@ struct devh_provider
 };
 
 static devh_provider iface{};
-static_assert(co_usb::detail::DeviceHandleSource<devh_provider>, "Not a Device Source");
+static_assert(co_usb::DeviceHandleSource<devh_provider>, "Not a Device Source");
 
 using tfer_seq_t = std::vector<co_usb::transfer::resource>;
 

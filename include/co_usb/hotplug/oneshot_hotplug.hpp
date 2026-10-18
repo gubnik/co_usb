@@ -11,8 +11,8 @@
 #include "co_usb/wrapper/device_ref.hpp"
 #include "co_usb/wrapper/device_triplet.hpp"
 #include <boost/capy/ex/this_coro.hpp>
-#include <boost/capy/io_result.hpp>
-#include <boost/capy/io_task.hpp>
+#include <boost/capy/results.hpp>
+#include <boost/capy/task.hpp>
 #include <libusb.h>
 #include <stop_token>
 
@@ -30,7 +30,7 @@ namespace co_usb::hotplug
  * due to noticably less performance overhead and ease-of-use.
  */
 inline auto oneshot_hotplug (event_type events, flag_type flags, device_triplet triplet)
-    -> boost::capy::io_task<event_type, device_ref>
+    -> boost::capy::task<boost::capy::results<event_type, device_ref>>
 {
     auto exec = co_await boost::capy::this_coro::executor;
     auto stop = co_await boost::capy::this_coro::stop_token;
@@ -46,7 +46,7 @@ inline auto oneshot_hotplug (event_type events, flag_type flags, device_triplet 
                                        return;
                                    libusb_hotplug_deregister_callback(ctx, handle);
                                    op_res.ec = std::make_error_code(std::errc::operation_canceled);
-                                   res.io_env->executor.post(res.cont);
+                                   res.aw_ctx->executor.post(res.cont);
                                }};
     co_return co_await detail::hotplug_awaitable(ctx, &handle, &op_res, &res, events.bits,
                                                  flags.bits, triplet.vid, triplet.pid,

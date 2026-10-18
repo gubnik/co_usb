@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "co_usb/transfer/detail/transfer_sequence.hpp"
+#include "co_usb/transfer/concepts/transfer_sequence.hpp"
 #include <libusb.h>
 #include <memory>
 
@@ -40,6 +40,6 @@ struct resource
     std::unique_ptr<libusb_transfer, deleter_t> m_utfer{nullptr, libusb_free_transfer};
 };
 
-static_assert(detail::TransferResource<resource>, "Not a proper transfer resource");
+static_assert(TransferResource<resource>, "Not a proper transfer resource");
 
 } // namespace co_usb::transfer

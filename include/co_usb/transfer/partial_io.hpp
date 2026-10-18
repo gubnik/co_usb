@@ -7,16 +7,17 @@
 
 #include "co_usb/ev/detail/handler_service.hpp"
 #include "co_usb/ev/event_handler_ref.hpp"
+#include "co_usb/transfer/concepts/transfer_sequence.hpp"
 #include "co_usb/transfer/detail/any_buffer_sequence.hpp"
 #include "co_usb/transfer/detail/sequence_awaitable.hpp"
-#include "co_usb/transfer/detail/transfer_sequence.hpp"
 #include "co_usb/transfer/endpoint.hpp"
 #include "co_usb/transfer/operations.hpp"
 #include "co_usb/transfer/sequence_view.hpp"
 #include <boost/capy/buffers.hpp>
 #include <boost/capy/ex/executor_ref.hpp>
 #include <boost/capy/ex/this_coro.hpp>
-#include <boost/capy/io_task.hpp>
+#include <boost/capy/results.hpp>
+#include <boost/capy/task.hpp>
 
 namespace co_usb::transfer
 {
@@ -58,7 +59,7 @@ namespace detail
  * @see co_usb::ev::event_handler_ref
  * @see co_usb::ev::detail::handler_service
  */
-template <detail::TransferSequence TSeq> struct partial_io_base
+template <TransferSequence TSeq> struct partial_io_base
 {
     explicit partial_io_base (boost::capy::executor_ref exec, TSeq const &tfer_seq)
         : m_ev_ref(::co_usb::ev::detail::get_handler_service(exec).handler()), m_view(tfer_seq)
@@ -71,7 +72,7 @@ template <detail::TransferSequence TSeq> struct partial_io_base
      * @returns result of the operation
      */
     template <detail::AnyBufferSequence BuffersTy>
-    auto submit (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    auto submit (BuffersTy const &buffers) -> boost::capy::task<boost::capy::results<size_t>>
     {
         auto exec = co_await boost::capy::this_coro::executor;
         auto stop = co_await boost::capy::this_coro::stop_token;
@@ -82,7 +83,7 @@ template <detail::TransferSequence TSeq> struct partial_io_base
                                   const auto end = m_view.begin() + transfers_used;
                                   for (auto iter = m_view.begin(); iter != end; iter++)
                                   {
-                                      libusb_transfer *tfer = detail::transfer_of(*iter);
+                                      libusb_transfer *tfer = transfer_of(*iter);
                                       cancel_transfer(tfer);
                                   }
                               }};
@@ -101,8 +102,7 @@ template <detail::TransferSequence TSeq> struct partial_io_base
  *
  * @brief Provides Capy ReadStream-/WriteStream-compliant interface for partial transfer I/O.
  */
-template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
-struct direction_partial_io_base
+template <TransferSequence TSeq, endpoint_direction EpDirection> struct direction_partial_io_base
 {
     explicit direction_partial_io_base (boost::capy::executor_ref exec, TSeq const &tfer_seq)
         : m_stream(exec, tfer_seq)
@@ -116,7 +116,8 @@ struct direction_partial_io_base
      */
     template <boost::capy::MutableBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::in)
-    inline auto read_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    inline auto read_some (BuffersTy const &buffers)
+        -> boost::capy::task<boost::capy::results<size_t>>
     {
         return m_stream.submit(buffers);
     }
@@ -128,7 +129,8 @@ struct direction_partial_io_base
      */
     template <boost::capy::ConstBufferSequence BuffersTy>
         requires(EpDirection == endpoint_direction::out)
-    inline auto write_some (BuffersTy const &buffers) -> boost::capy::io_task<size_t>
+    inline auto write_some (BuffersTy const &buffers)
+        -> boost::capy::task<boost::capy::results<size_t>>
     {
         return m_stream.submit(buffers);
     }
@@ -146,7 +148,7 @@ struct direction_partial_io_base
  *
  * @note Control transfers are only valid for endpoints 0x00 (OUT) and 0x80 (IN).
  */
-template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
+template <TransferSequence TSeq, endpoint_direction EpDirection>
 struct control_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
 {
     explicit control_partial_io (
@@ -165,7 +167,7 @@ struct control_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
  * partial I/O operations.
  */
 
-template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
+template <TransferSequence TSeq, endpoint_direction EpDirection>
 struct bulk_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
 {
     explicit bulk_partial_io (boost::capy::executor_ref exec, TSeq const &tfer_seq,
@@ -183,7 +185,7 @@ struct bulk_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
  * @brief Prefills the transfer sequence as interrupt transfers and provides
  * partial I/O operations.
  */
-template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
+template <TransferSequence TSeq, endpoint_direction EpDirection>
 struct interrupt_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
 {
     explicit interrupt_partial_io (
@@ -205,7 +207,7 @@ struct interrupt_partial_io : detail::direction_partial_io_base<TSeq, EpDirectio
  * number of iso packets valid for a given `iso_packets` value.
  */
 
-template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
+template <TransferSequence TSeq, endpoint_direction EpDirection>
 struct isochronous_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
 {
     explicit isochronous_partial_io (
@@ -225,7 +227,7 @@ struct isochronous_partial_io : detail::direction_partial_io_base<TSeq, EpDirect
  *
  * @note Requires `libusb_alloc_streams` to be called for a given `stream_id`.
  */
-template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
+template <TransferSequence TSeq, endpoint_direction EpDirection>
 struct bulk_stream_partial_io : detail::direction_partial_io_base<TSeq, EpDirection>
 {
     explicit bulk_stream_partial_io (
@@ -242,7 +244,7 @@ struct bulk_stream_partial_io : detail::direction_partial_io_base<TSeq, EpDirect
  *
  * @brief Write specialization of @ref co_usb::transfer::control_partial_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using control_out = control_partial_io<TSeq, endpoint_direction::out>;
 
 /**
@@ -250,7 +252,7 @@ using control_out = control_partial_io<TSeq, endpoint_direction::out>;
  *
  * @brief Read specialization of @ref co_usb::transfer::control_partial_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using control_in = control_partial_io<TSeq, endpoint_direction::in>;
 
 /**
@@ -258,23 +260,21 @@ using control_in = control_partial_io<TSeq, endpoint_direction::in>;
  *
  * @brief Write specialization of @ref co_usb::transfer::bulk_partial_io.
  */
-template <detail::TransferSequence TSeq>
-using bulk_out = bulk_partial_io<TSeq, endpoint_direction::out>;
+template <TransferSequence TSeq> using bulk_out = bulk_partial_io<TSeq, endpoint_direction::out>;
 
 /**
  * @ingroup transfer
  *
  * @brief Read specialization of @ref co_usb::transfer::bulk_partial_io.
  */
-template <detail::TransferSequence TSeq>
-using bulk_in = bulk_partial_io<TSeq, endpoint_direction::in>;
+template <TransferSequence TSeq> using bulk_in = bulk_partial_io<TSeq, endpoint_direction::in>;
 
 /**
  * @ingroup transfer
  *
  * @brief Write specialization of @ref co_usb::transfer::interrupt_partial_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using interrupt_out = interrupt_partial_io<TSeq, endpoint_direction::out>;
 
 /**
@@ -282,7 +282,7 @@ using interrupt_out = interrupt_partial_io<TSeq, endpoint_direction::out>;
  *
  * @brief Read specialization of @ref co_usb::transfer::interrupt_partial_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using interrupt_in = interrupt_partial_io<TSeq, endpoint_direction::in>;
 
 /**
@@ -290,7 +290,7 @@ using interrupt_in = interrupt_partial_io<TSeq, endpoint_direction::in>;
  *
  * @brief Write specialization of @ref co_usb::transfer::isochronous_partial_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using isochronous_out = isochronous_partial_io<TSeq, endpoint_direction::out>;
 
 /**
@@ -298,7 +298,7 @@ using isochronous_out = isochronous_partial_io<TSeq, endpoint_direction::out>;
  *
  * @brief Read specialization of @ref co_usb::transfer::isochronous_partial_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using isochronous_in = isochronous_partial_io<TSeq, endpoint_direction::in>;
 
 /**
@@ -306,7 +306,7 @@ using isochronous_in = isochronous_partial_io<TSeq, endpoint_direction::in>;
  *
  * @brief Write specialization of @ref co_usb::transfer::bulk_stream_partial_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using bulk_stream_out = bulk_stream_partial_io<TSeq, endpoint_direction::out>;
 
 /**
@@ -314,7 +314,7 @@ using bulk_stream_out = bulk_stream_partial_io<TSeq, endpoint_direction::out>;
  *
  * @brief Read specialization of @ref co_usb::transfer::bulk_stream_partial_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using bulk_stream_in = bulk_stream_partial_io<TSeq, endpoint_direction::in>;
 
 } // namespace co_usb::transfer

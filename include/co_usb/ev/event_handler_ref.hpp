@@ -6,7 +6,7 @@
 #pragma once
 
 #include "co_usb/ev/any_event_handler.hpp"
-#include "co_usb/ev/detail/event_handler.hpp"
+#include "co_usb/ev/concepts/event_handler.hpp"
 #include <concepts>
 #include <utility>
 
@@ -36,14 +36,14 @@ struct event_handler_ref
     {
     }
 
-    template <detail::EventHandler HandlerTy>
+    template <EventHandler HandlerTy>
         requires(!std::same_as<HandlerTy, event_handler_ref>)
     event_handler_ref(HandlerTy &handler) : m_original(&handler), m_vtable(make_vtable(handler))
     {
         ref();
     }
 
-    template <detail::EventHandler HandlerTy>
+    template <EventHandler HandlerTy>
         requires(!std::same_as<HandlerTy, event_handler_ref>)
     event_handler_ref &operator=(HandlerTy &handler)
     {
@@ -153,7 +153,7 @@ struct event_handler_ref
         stop_fn_t stop_fn{nullptr};
     };
 
-    template <detail::EventHandler HandlerTy>
+    template <EventHandler HandlerTy>
         requires(!std::same_as<HandlerTy, event_handler_ref>)
     auto make_vtable (HandlerTy &handler) -> vtable
     {
@@ -173,6 +173,6 @@ struct event_handler_ref
     vtable m_vtable;
 };
 
-static_assert(detail::EventHandler<event_handler_ref>, "Not a proper USB event handler");
+static_assert(EventHandler<event_handler_ref>, "Not a proper USB event handler");
 
 } // namespace co_usb::ev
