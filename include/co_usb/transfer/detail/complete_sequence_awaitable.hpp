@@ -5,16 +5,16 @@
 
 #pragma once
 
+#include "co_usb/transfer/concepts/transfer_sequence.hpp"
 #include "co_usb/transfer/detail/any_buffer_sequence.hpp"
-#include "co_usb/transfer/detail/transfer_sequence.hpp"
 #include "co_usb/transfer/sequence_view.hpp"
 #include "co_usb/transfer/status.hpp"
 #include "co_usb/usb_error.hpp"
 #include <boost/capy/buffers.hpp>
-#include <boost/capy/concept/io_awaitable.hpp>
+#include <boost/capy/concept/context_awaitable.hpp>
 #include <boost/capy/continuation.hpp>
-#include <boost/capy/ex/io_env.hpp>
-#include <boost/capy/io_result.hpp>
+#include <boost/capy/ex/await_context.hpp>
+#include <boost/capy/results.hpp>
 #include <cassert>
 #include <coroutine>
 #include <libusb.h>
@@ -26,8 +26,7 @@
 namespace co_usb::transfer::detail
 {
 
-template <detail::TransferSequence TSeq, AnyBufferSequence BuffersTy>
-struct complete_sequence_awaitable
+template <TransferSequence TSeq, AnyBufferSequence BuffersTy> struct complete_sequence_awaitable
 {
     using tfer_iter_t = sequence_view<TSeq>::iterator_type;
     using buf_iter_t = decltype(boost::capy::begin(std::declval<BuffersTy const &>()));
@@ -49,7 +48,7 @@ struct complete_sequence_awaitable
         std::mutex mutex;
         std::pmr::unordered_map<libusb_transfer *, transfer_progress_t> states;
 
-        boost::capy::io_env const *io_env;
+        boost::capy::await_context const *aw_ctx;
         boost::capy::continuation cont;
 
         std::error_code ec;
@@ -66,7 +65,7 @@ struct complete_sequence_awaitable
         {
             if (self.await_state->in_flight == 0)
             {
-                self.await_state->io_env->executor.post(self.await_state->cont);
+                self.await_state->aw_ctx->executor.post(self.await_state->cont);
             }
         };
         self.await_state->in_flight--;
@@ -172,15 +171,15 @@ struct complete_sequence_awaitable
     }
 
     inline std::coroutine_handle<> await_suspend (std::coroutine_handle<> h,
-                                                  boost::capy::io_env const *io_env)
+                                                  boost::capy::await_context const *aw_ctx)
     {
-        if (io_env->stop_token.stop_requested())
+        if (aw_ctx->stop_token.stop_requested())
         {
             await_state->ec = make_transfer_status(status::cancelled);
             return h;
         }
-        await_state->io_env = io_env;
-        await_state->cont = {h};
+        await_state->aw_ctx = aw_ctx;
+        await_state->cont = {.h = h, .owner = aw_ctx->owner};
         sequence_view<TSeq> &v = *view;
         const tfer_iter_t end = v.end() + submission_size;
         for (tfer_iter_t iter = v.begin(); iter != end; iter++)
@@ -212,7 +211,7 @@ struct complete_sequence_awaitable
         return std::noop_coroutine();
     }
 
-    inline boost::capy::io_result<size_t> await_resume ()
+    inline boost::capy::results<size_t> await_resume ()
     {
         size_t total{0};
         for (auto const &[_, state] : await_state->states)
@@ -232,11 +231,12 @@ struct complete_sequence_awaitable
     size_t single_transfer_limit{0};
 };
 
-static_assert(boost::capy::IoAwaitable<
+static_assert(boost::capy::ContextAwaitable<
                   complete_sequence_awaitable<libusb_transfer *, boost::capy::mutable_buffer>>,
               "Not a proper IoAwaitable");
-static_assert(boost::capy::IoAwaitable<complete_sequence_awaitable<std::vector<libusb_transfer *>,
-                                                                   boost::capy::const_buffer>>,
-              "Not a proper IoAwaitable");
+static_assert(
+    boost::capy::ContextAwaitable<
+        complete_sequence_awaitable<std::vector<libusb_transfer *>, boost::capy::const_buffer>>,
+    "Not a proper IoAwaitable");
 
 } // namespace co_usb::transfer::detail

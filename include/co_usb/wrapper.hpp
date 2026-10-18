@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "co_usb/wrapper/detail/device_handle_source.hpp"
-#include "co_usb/wrapper/detail/error_protocol.hpp"
+#include "co_usb/wrapper/concepts/device_handle_source.hpp"
+#include "co_usb/wrapper/concepts/error_protocol.hpp"
 #include "co_usb/wrapper/device_handle.hpp"
 #include "co_usb/wrapper/device_ref.hpp"
 #include "co_usb/wrapper/device_triplet.hpp"

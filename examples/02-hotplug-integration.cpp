@@ -128,7 +128,7 @@ int main (int argc, char **argv)
 
     boost::capy::run_async(
         tp.get_executor(), [] () {}, [] (std::exception_ptr e) {})(
-        [] (co_usb::ev::context &ctx) -> boost::capy::task<>
+        [] (boost::capy::thread_pool &tp) -> boost::capy::task<>
         {
             // !! HACK ALERT
             // It is not recommended to do timed cancellation this way. Capy provides async_waker
@@ -139,9 +139,9 @@ int main (int argc, char **argv)
             // old removed API
             // auto [ec] = co_await boost::capy::delay(std::chrono::seconds{1});
 
-            ctx.request_stop();
+            tp.stop();
             co_return;
-        }(ctx));
+        }(tp));
 
     // start the acceptor loop with event handler stop token
     // this allows to gracefully exit with correct handling order

@@ -5,8 +5,8 @@
 
 #pragma once
 
+#include "co_usb/transfer/concepts/transfer_sequence.hpp"
 #include "co_usb/transfer/detail/iterator.hpp"
-#include "co_usb/transfer/detail/transfer_sequence.hpp"
 #include <libusb.h>
 #include <utility>
 #include <vector>
@@ -24,7 +24,7 @@ namespace co_usb::transfer
  *
  * @note Cannot bind to a temporary view.
  */
-template <detail::TransferSequence Seq> struct sequence_view
+template <TransferSequence Seq> struct sequence_view
 {
     using iterator_type = decltype(detail::transfer_begin(std::declval<Seq const &>()));
 
@@ -61,9 +61,8 @@ template <detail::TransferSequence Seq> struct sequence_view
 };
 
 template <class Seq> sequence_view(Seq &) -> sequence_view<Seq>;
-static_assert(detail::TransferSequence<sequence_view<libusb_transfer *>>,
-              "Not a proper transfer sequence");
-static_assert(detail::TransferSequence<sequence_view<std::vector<libusb_transfer *>>>,
+static_assert(TransferSequence<sequence_view<libusb_transfer *>>, "Not a proper transfer sequence");
+static_assert(TransferSequence<sequence_view<std::vector<libusb_transfer *>>>,
               "Not a proper transfer sequence");
 
 } // namespace co_usb::transfer
