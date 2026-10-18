@@ -6,7 +6,7 @@
 #pragma once
 
 #include "co_usb/ev/any_event_handler.hpp"
-#include "co_usb/ev/detail/event_handler.hpp"
+#include "co_usb/ev/concepts/event_handler.hpp"
 #include "co_usb/ev/event_handler_ref.hpp"
 #include "co_usb/ev/handlers.hpp"
 #include "co_usb/usb_error.hpp"
@@ -142,7 +142,7 @@ struct handler_service : public boost::capy::execution_context::service
      *
      * @return `event_handler_ref` referencing the stored handler.
      */
-    template <detail::EventHandler HandlerTy, typename... Args>
+    template <EventHandler HandlerTy, typename... Args>
         requires(!std::same_as<HandlerTy, any_event_handler> &&
                  !std::same_as<HandlerTy, event_handler_ref> &&
                  std::constructible_from<HandlerTy, Args...>)

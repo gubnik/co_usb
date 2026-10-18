@@ -5,8 +5,8 @@
 
 #pragma once
 
+#include "co_usb/transfer/concepts/transfer_sequence.hpp"
 #include "co_usb/transfer/detail/any_buffer_sequence.hpp"
-#include "co_usb/transfer/detail/transfer_sequence.hpp"
 #include "co_usb/transfer/sequence_view.hpp"
 #include "co_usb/transfer/status.hpp"
 #include "co_usb/usb_error.hpp"
@@ -24,7 +24,7 @@
 namespace co_usb::transfer::detail
 {
 
-template <detail::TransferSequence TSeq, AnyBufferSequence BuffersTy> struct sequence_awaitable
+template <TransferSequence TSeq, AnyBufferSequence BuffersTy> struct sequence_awaitable
 {
     using tfer_iter_t = sequence_view<TSeq>::iterator_type;
     using buf_iter_t = decltype(boost::capy::begin(std::declval<BuffersTy const &>()));

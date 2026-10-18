@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "co_usb/ev/detail/event_handler.hpp"
+#include "co_usb/ev/concepts/event_handler.hpp"
 #include <concepts>
 #include <memory_resource>
 #include <type_traits>
@@ -35,7 +35,7 @@ struct any_event_handler
     {
     }
 
-    template <detail::EventHandler HandlerTy, typename... Args>
+    template <EventHandler HandlerTy, typename... Args>
         requires(!std::same_as<HandlerTy, any_event_handler> &&
                  !std::same_as<HandlerTy, event_handler_ref> &&
                  std::constructible_from<HandlerTy, Args...>)
@@ -45,7 +45,7 @@ struct any_event_handler
     {
     }
 
-    template <detail::EventHandler HandlerTy, typename... Args>
+    template <EventHandler HandlerTy, typename... Args>
         requires(!std::same_as<HandlerTy, any_event_handler> &&
                  !std::same_as<HandlerTy, event_handler_ref> &&
                  std::constructible_from<HandlerTy, Args...>)
@@ -55,7 +55,7 @@ struct any_event_handler
     {
     }
 
-    template <detail::EventHandler HandlerTy, typename... Args>
+    template <EventHandler HandlerTy, typename... Args>
         requires(!std::same_as<HandlerTy, any_event_handler> &&
                  !std::same_as<HandlerTy, event_handler_ref> &&
                  std::constructible_from<HandlerTy, Args...>)
@@ -67,7 +67,7 @@ struct any_event_handler
         m_vtable = make_vtable<HandlerTy>();
     }
 
-    template <detail::EventHandler HandlerTy, typename... Args>
+    template <EventHandler HandlerTy, typename... Args>
         requires(!std::same_as<HandlerTy, any_event_handler> &&
                  !std::same_as<HandlerTy, event_handler_ref> &&
                  std::constructible_from<HandlerTy, Args...>)
@@ -163,7 +163,7 @@ struct any_event_handler
         size_t align;
     };
 
-    template <detail::EventHandler HandlerTy, typename... Args>
+    template <EventHandler HandlerTy, typename... Args>
     auto construct_storage (std::pmr::memory_resource *memres, Args &&...args) -> void *
     {
         using handler_t = std::remove_cvref_t<HandlerTy>;
@@ -182,7 +182,7 @@ struct any_event_handler
         return ptr;
     }
 
-    template <detail::EventHandler HandlerTy> static auto make_vtable () -> vtable
+    template <EventHandler HandlerTy> static auto make_vtable () -> vtable
     {
         return vtable{
             .start_fn = +[] (void *orig, libusb_context *ctx, std::stop_token stop) -> bool
@@ -212,6 +212,6 @@ struct any_event_handler
     std::pmr::memory_resource *m_memres = std::pmr::get_default_resource();
     void *m_storage{nullptr};
 };
-static_assert(detail::EventHandler<any_event_handler>, "Not a proper USB event handler");
+static_assert(EventHandler<any_event_handler>, "Not a proper USB event handler");
 
 } // namespace co_usb::ev

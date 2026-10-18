@@ -12,7 +12,7 @@ struct devh_provider
         return mock<libusb_device_handle *>();
     }
 };
-static_assert(co_usb::detail::DeviceHandleSource<devh_provider>, "Not a Device Source");
+static_assert(co_usb::DeviceHandleSource<devh_provider>, "Not a Device Source");
 
 static devh_provider iface{};
 

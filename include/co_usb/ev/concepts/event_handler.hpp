@@ -9,7 +9,7 @@
 #include <stop_token>
 #include <utility>
 
-namespace co_usb::ev::detail
+namespace co_usb::ev
 {
 
 /**
@@ -48,4 +48,4 @@ concept EventHandler = requires(Ty handler) {
     { handler.stop() } -> std::same_as<void>;
 };
 
-} // namespace co_usb::ev::detail
+} // namespace co_usb::ev

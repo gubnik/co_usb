@@ -5,7 +5,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace co_usb::detail
+namespace co_usb
 {
 
 /**
@@ -86,4 +86,4 @@ template <DeviceHandleSource Ty> auto device_handle_of (Ty &&devh_src) -> libusb
     return device_handle_of(std::forward<Ty>(devh_src).devh());
 }
 
-} // namespace co_usb::detail
+} // namespace co_usb

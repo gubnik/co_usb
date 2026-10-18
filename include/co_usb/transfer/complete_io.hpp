@@ -5,9 +5,9 @@
 
 #pragma once
 
+#include "co_usb/transfer/concepts/transfer_sequence.hpp"
 #include "co_usb/transfer/detail/any_buffer_sequence.hpp"
 #include "co_usb/transfer/detail/complete_sequence_awaitable.hpp"
-#include "co_usb/transfer/detail/transfer_sequence.hpp"
 #include "co_usb/transfer/endpoint.hpp"
 #include "co_usb/transfer/operations.hpp"
 #include "co_usb/transfer/partial_io.hpp"
@@ -55,7 +55,7 @@ namespace detail
  * @see co_usb::transfer::raw_transfer_stream
  * @see co_usb::ev::event_handler_ref
  */
-template <detail::TransferSequence TSeq> struct complete_io_base : public partial_io_base<TSeq>
+template <TransferSequence TSeq> struct complete_io_base : public partial_io_base<TSeq>
 {
     explicit complete_io_base (boost::capy::executor_ref exec, TSeq const &tfer_seq,
                                size_t single_transfer_limit,
@@ -79,7 +79,7 @@ template <detail::TransferSequence TSeq> struct complete_io_base : public partia
                                   const auto end = this->m_view.begin() + transfers_used;
                                   for (auto iter = this->m_view.begin(); iter != end; iter++)
                                   {
-                                      libusb_transfer *tfer = detail::transfer_of(*iter);
+                                      libusb_transfer *tfer = transfer_of(*iter);
                                       cancel_transfer(tfer);
                                   }
                               }};
@@ -203,7 +203,7 @@ template <TransferSequence TSeq, endpoint_direction EpDirection> struct directio
  *
  * @note Control transfers are only valid for endpoints 0x00 (OUT) and 0x80 (IN).
  */
-template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
+template <TransferSequence TSeq, endpoint_direction EpDirection>
 struct control_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
     explicit control_complete_io (
@@ -224,7 +224,7 @@ struct control_complete_io : detail::direction_complete_io_base<TSeq, EpDirectio
  * @brief Prefills the transfer sequence as bulk transfers and provides
  * complete I/O operations.
  */
-template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
+template <TransferSequence TSeq, endpoint_direction EpDirection>
 struct bulk_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
     explicit bulk_complete_io (boost::capy::executor_ref exec, TSeq const &tfer_seq,
@@ -244,7 +244,7 @@ struct bulk_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
  * @brief Prefills the transfer sequence as interrupt transfers and provides
  * complete I/O operations.
  */
-template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
+template <TransferSequence TSeq, endpoint_direction EpDirection>
 struct interrupt_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
     explicit interrupt_complete_io (
@@ -268,7 +268,7 @@ struct interrupt_complete_io : detail::direction_complete_io_base<TSeq, EpDirect
  * @note Requires all transfers in a transfer sequence to be allocated with the
  * number of iso packets valid for a given `iso_packets` value.
  */
-template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
+template <TransferSequence TSeq, endpoint_direction EpDirection>
 struct isochronous_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
     explicit isochronous_complete_io (
@@ -291,7 +291,7 @@ struct isochronous_complete_io : detail::direction_complete_io_base<TSeq, EpDire
  *
  * @note Requires `libusb_alloc_streams` to be called for a given `stream_id`.
  */
-template <detail::TransferSequence TSeq, endpoint_direction EpDirection>
+template <TransferSequence TSeq, endpoint_direction EpDirection>
 struct bulk_stream_complete_io : detail::direction_complete_io_base<TSeq, EpDirection>
 {
     explicit bulk_stream_complete_io (
@@ -311,7 +311,7 @@ struct bulk_stream_complete_io : detail::direction_complete_io_base<TSeq, EpDire
  *
  * @brief Write specialization of @ref co_usb::transfer::control_complete_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using control_sink = control_complete_io<TSeq, endpoint_direction::out>;
 
 /**
@@ -319,7 +319,7 @@ using control_sink = control_complete_io<TSeq, endpoint_direction::out>;
  *
  * @brief Read specialization of @ref co_usb::transfer::control_complete_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using control_source = control_complete_io<TSeq, endpoint_direction::in>;
 
 /**
@@ -327,23 +327,21 @@ using control_source = control_complete_io<TSeq, endpoint_direction::in>;
  *
  * @brief Write specialization of @ref co_usb::transfer::bulk_complete_io.
  */
-template <detail::TransferSequence TSeq>
-using bulk_sink = bulk_complete_io<TSeq, endpoint_direction::out>;
+template <TransferSequence TSeq> using bulk_sink = bulk_complete_io<TSeq, endpoint_direction::out>;
 
 /**
  * @ingroup transfer
  *
  * @brief Read specialization of @ref co_usb::transfer::bulk_complete_io.
  */
-template <detail::TransferSequence TSeq>
-using bulk_source = bulk_complete_io<TSeq, endpoint_direction::in>;
+template <TransferSequence TSeq> using bulk_source = bulk_complete_io<TSeq, endpoint_direction::in>;
 
 /**
  * @ingroup transfer
  *
  * @brief Write specialization of @ref co_usb::transfer::interrupt_complete_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using interrupt_sink = interrupt_complete_io<TSeq, endpoint_direction::out>;
 
 /**
@@ -351,7 +349,7 @@ using interrupt_sink = interrupt_complete_io<TSeq, endpoint_direction::out>;
  *
  * @brief Read specialization of @ref co_usb::transfer::interrupt_complete_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using interrupt_source = interrupt_complete_io<TSeq, endpoint_direction::in>;
 
 /**
@@ -359,7 +357,7 @@ using interrupt_source = interrupt_complete_io<TSeq, endpoint_direction::in>;
  *
  * @brief Write specialization of @ref co_usb::transfer::isochronous_complete_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using isochronous_sink = isochronous_complete_io<TSeq, endpoint_direction::out>;
 
 /**
@@ -367,7 +365,7 @@ using isochronous_sink = isochronous_complete_io<TSeq, endpoint_direction::out>;
  *
  * @brief Read specialization of @ref co_usb::transfer::isochronous_complete_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using isochronous_source = isochronous_complete_io<TSeq, endpoint_direction::in>;
 
 /**
@@ -375,7 +373,7 @@ using isochronous_source = isochronous_complete_io<TSeq, endpoint_direction::in>
  *
  * @brief Write specialization of @ref co_usb::transfer::bulk_stream_complete_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using bulk_stream_sink = bulk_stream_complete_io<TSeq, endpoint_direction::out>;
 
 /**
@@ -383,7 +381,7 @@ using bulk_stream_sink = bulk_stream_complete_io<TSeq, endpoint_direction::out>;
  *
  * @brief Read specialization of @ref co_usb::transfer::bulk_stream_complete_io.
  */
-template <detail::TransferSequence TSeq>
+template <TransferSequence TSeq>
 using bulk_stream_source = bulk_stream_complete_io<TSeq, endpoint_direction::in>;
 
 } // namespace co_usb::transfer

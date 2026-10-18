@@ -5,8 +5,9 @@
 
 #pragma once
 
+#include "co_usb/ev/concepts/event_handler.hpp"
 #include "co_usb/ev/detail/handler_service.hpp"
-#include "co_usb/wrapper/detail/error_protocol.hpp"
+#include "co_usb/wrapper/concepts/error_protocol.hpp"
 #include "co_usb/wrapper/error_protocol.hpp"
 #include <libusb.h>
 #include <memory_resource>
@@ -56,7 +57,7 @@ namespace co_usb::ev
  * event handlers or services is unsupported within a single executor on a level of Capy. Creating
  * multiple single-threaded event handlers is unsupported by libusb and will break. If the goal was
  * to implement a multi-threaded event handling - provide a custom implementation of @ref
- * co_usb::ev::detail::EventHandler that properly manages the locking of libusb events.
+ * co_usb::EventHandler that properly manages the locking of libusb events.
  */
 struct context
 {
@@ -115,8 +116,7 @@ inline auto raw_context (::co_usb::ev::detail::handler_service *srv)
  * @param errp Error protocol for reporting an error.
  * @param args Arguments for constructing a handler in service storage.
  */
-template <ev::detail::EventHandler HandlerTy, ::co_usb::detail::ErrorProtocol<ev::context> ErrorTy,
-          typename... Args>
+template <ev::EventHandler HandlerTy, ErrorProtocol<ev::context> ErrorTy, typename... Args>
 inline auto make_context (boost::capy::executor_ref exec, std::pmr::memory_resource *memres,
                           ErrorTy &&errp, Args &&...args) -> ev::context
 {
@@ -145,12 +145,12 @@ inline auto make_context (boost::capy::executor_ref exec, std::pmr::memory_resou
  * @param args Arguments for constructing a handler in service storage.
  */
 
-template <ev::detail::EventHandler HandlerTy, typename... Args>
+template <ev::EventHandler HandlerTy, typename... Args>
 inline auto make_context (boost::capy::executor_ref exec, std::pmr::memory_resource *memres,
                           Args &&...args) -> ev::context
 {
-    return make_context<HandlerTy, detail::as_exception_t, Args...>(exec, memres, as_exception(),
-                                                                    std::forward<Args>(args)...);
+    return make_context<HandlerTy, as_exception_t, Args...>(exec, memres, as_exception(),
+                                                            std::forward<Args>(args)...);
 }
 
 /**
@@ -165,8 +165,7 @@ inline auto make_context (boost::capy::executor_ref exec, std::pmr::memory_resou
  * @param args Arguments for constructing a handler in service storage.
  */
 
-template <ev::detail::EventHandler HandlerTy, ::co_usb::detail::ErrorProtocol<ev::context> ErrorTy,
-          typename... Args>
+template <ev::EventHandler HandlerTy, ErrorProtocol<ev::context> ErrorTy, typename... Args>
 inline auto make_context (boost::capy::executor_ref exec, ErrorTy &&errp, Args &&...args)
     -> ev::context
 {
@@ -187,10 +186,10 @@ inline auto make_context (boost::capy::executor_ref exec, ErrorTy &&errp, Args &
  * @param args Arguments for constructing a handler in service storage.
  */
 
-template <ev::detail::EventHandler HandlerTy, typename... Args>
+template <ev::EventHandler HandlerTy, typename... Args>
 inline auto make_context (boost::capy::executor_ref exec, Args &&...args) -> ev::context
 {
-    return make_context<HandlerTy, detail::as_exception_t, Args...>(
+    return make_context<HandlerTy, as_exception_t, Args...>(
         exec, std::pmr::get_default_resource(), as_exception(), std::forward<Args>(args)...);
 }
 
@@ -206,8 +205,7 @@ inline auto make_context (boost::capy::executor_ref exec, Args &&...args) -> ev:
  * @param errp Error protocol for reporting an error.
  * @param args Arguments for constructing a handler in service storage.
  */
-template <ev::detail::EventHandler HandlerTy, ::co_usb::detail::ErrorProtocol<ev::context> ErrorTy,
-          typename... Args>
+template <ev::EventHandler HandlerTy, ErrorProtocol<ev::context> ErrorTy, typename... Args>
 inline auto make_context_with_options (boost::capy::executor_ref exec,
                                        std::span<const libusb_init_option> options,
                                        std::pmr::memory_resource *memres, ErrorTy &&errp,
@@ -239,13 +237,13 @@ inline auto make_context_with_options (boost::capy::executor_ref exec,
  * @param memres Allocator for @ref co_usb::ev::any_event_handler storage.
  * @param args Arguments for constructing a handler in service storage.
  */
-template <ev::detail::EventHandler HandlerTy, typename... Args>
+template <ev::EventHandler HandlerTy, typename... Args>
 inline auto make_context_with_options (boost::capy::executor_ref exec,
                                        std::span<const libusb_init_option> options,
                                        std::pmr::memory_resource *memres, Args &&...args)
     -> ev::context
 {
-    return make_context_with_options<HandlerTy, detail::as_exception_t, Args...>(
+    return make_context_with_options<HandlerTy, as_exception_t, Args...>(
         exec, options, memres, as_exception(), std::forward<Args>(args)...);
 }
 
@@ -262,8 +260,7 @@ inline auto make_context_with_options (boost::capy::executor_ref exec,
  * @param errp Error protocol for reporting an error.
  * @param args Arguments for constructing a handler in service storage.
  */
-template <ev::detail::EventHandler HandlerTy, ::co_usb::detail::ErrorProtocol<ev::context> ErrorTy,
-          typename... Args>
+template <ev::EventHandler HandlerTy, ErrorProtocol<ev::context> ErrorTy, typename... Args>
 inline auto make_context_with_options (boost::capy::executor_ref exec,
                                        std::span<const libusb_init_option> options, ErrorTy &&errp,
                                        Args &&...args) -> ev::context
@@ -272,8 +269,6 @@ inline auto make_context_with_options (boost::capy::executor_ref exec,
         exec, options, std::pmr::get_default_resource(), std::forward<ErrorTy>(errp),
         std::forward<Args>(args)...);
 }
-
-template <ev::detail::EventHandler HandlerTy, typename... Args>
 
 /**
  * @ingroup event_handler
@@ -288,11 +283,12 @@ template <ev::detail::EventHandler HandlerTy, typename... Args>
  * @param options Init options for `libusb_context`.
  * @param args Arguments for constructing a handler in service storage.
  */
+template <ev::EventHandler HandlerTy, typename... Args>
 inline auto make_context_with_options (boost::capy::executor_ref exec,
                                        std::span<const libusb_init_option> options, Args &&...args)
     -> ev::context
 {
-    return make_context_with_options<HandlerTy, detail::as_exception_t, Args...>(
+    return make_context_with_options<HandlerTy, as_exception_t, Args...>(
         exec, options, std::pmr::get_default_resource(), as_exception(),
         std::forward<Args>(args)...);
 }

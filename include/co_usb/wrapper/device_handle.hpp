@@ -7,7 +7,7 @@
 
 #include "co_usb/ev/detail/handler_service.hpp"
 #include "co_usb/usb_error.hpp"
-#include "co_usb/wrapper/detail/error_protocol.hpp"
+#include "co_usb/wrapper/concepts/error_protocol.hpp"
 #include "co_usb/wrapper/device_ref.hpp"
 #include "co_usb/wrapper/device_triplet.hpp"
 #include "co_usb/wrapper/error_protocol.hpp"
@@ -24,7 +24,7 @@ namespace co_usb
  *
  * @brief RAII wrapper around libusb_device_handle*.
  *
- * @note Satisfies @ref detail::DeviceHandleSource.
+ * @note Satisfies @ref DeviceHandleSource.
  *
  * @details Wraps device handle and ensures its lifetime via internal unique pointer.
  * Destructor closes the device.
@@ -75,7 +75,7 @@ struct device_handle
  *
  * @tparam ErrorTy @ref detail::ErrorProtocol
  */
-template <detail::ErrorProtocol<device_handle> ErrTy>
+template <ErrorProtocol<device_handle> ErrTy>
 auto open_device (boost::capy::executor_ref exec, device_triplet triplet, ErrTy &&errp) ->
     typename ErrTy::template return_type<device_handle>
 {
@@ -109,7 +109,7 @@ inline auto open_device (boost::capy::executor_ref exec, device_triplet triplet)
  *
  * @tparam ErrorTy @ref detail::ErrorProtocol
  */
-template <detail::ErrorProtocol<device_handle> ErrTy>
+template <ErrorProtocol<device_handle> ErrTy>
 auto open_device (device_ref dev_ref, ErrTy &&errp) ->
     typename ErrTy::template return_type<device_handle>
 {
